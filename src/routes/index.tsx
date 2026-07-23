@@ -296,16 +296,16 @@ function Hero() {
       <img src={heroImg} alt="Sunlit greenhouse filled with lush plants" className="absolute inset-0 h-full w-full object-cover" />
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/25 to-black/60" />
       <div className="relative z-10 mx-auto max-w-4xl px-6 pt-24 text-center text-ivory fade-up">
-        <p className="mb-12 flex items-center justify-center gap-2 text-[0.7rem] uppercase tracking-[0.35em] text-ivory/85">
+        <p className="mb-6 flex items-center justify-center gap-2 text-[0.7rem] uppercase tracking-[0.35em] text-ivory/85">
           <Leaf className="h-3.5 w-3.5" /> Welcome to Egrow
         </p>
         <h1 className="font-serif text-6xl leading-[1.02] tracking-tight text-ivory md:text-8xl">
           Bring Nature <em className="not-italic block font-light">Home.</em>
         </h1>
-        <p className="mx-auto mt-14 max-w-xl text-base text-ivory/85 md:text-lg">
+        <p className="mx-auto mt-7 max-w-xl text-base text-ivory/85 md:text-lg">
           Healthy Plants. Beautiful Pottery. Expert Guidance.
         </p>
-        <div className="mt-16 flex flex-wrap items-center justify-center gap-6">
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <a href="#visit" className="btn-primary">Visit Nursery</a>
           <a href="#stories" className="btn-ghost">Buy Plants</a>
           <a href="#transform" className="text-ivory border-b border-ivory pb-1 text-sm hover:text-moss hover:border-moss transition">
@@ -331,8 +331,8 @@ function About() {
     { year: "2026", title: "And Beyond", note: "Continuing to grow, together." },
   ];
   return (
-    <section id="about" className="relative py-48">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-20 px-8 md:grid-cols-12 md:gap-16 lg:px-12">
+    <section id="about" className="relative py-24">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-8 md:grid-cols-12 md:gap-8 lg:px-12">
         <div className="md:col-span-4">
           <div className="relative mx-auto max-w-[360px]">
             <div className="overflow-hidden rounded-t-[220px] rounded-b-[220px] shadow-xl">
@@ -342,18 +342,18 @@ function About() {
         </div>
         <div className="md:col-span-5">
           <Eyebrow>Our Story</Eyebrow>
-          <h2 className="mt-5 font-serif text-5xl leading-[1.1] md:text-6xl">
+          <h2 className="mt-3 font-serif text-5xl leading-[1.1] md:text-6xl">
             From a Passion,<br />To a Green Legacy.
           </h2>
-          <p className="mt-8 max-w-md text-base leading-relaxed text-charcoal/80">
+          <p className="mt-4 max-w-md text-base leading-relaxed text-charcoal/80">
             What began as a small dream to bring more plants into people's lives has grown into a space filled with greenery, learning and love. Every plant we tend is chosen for how it makes a home feel.
           </p>
-          <a href="#stories" className="btn-link mt-10">Know Our Journey →</a>
+          <a href="#stories" className="btn-link mt-5">Know Our Journey →</a>
         </div>
         <div className="md:col-span-3">
           <ol className="relative border-l border-olive/30 pl-6">
             {timeline.map((t, i) => (
-              <li key={i} className="relative mb-8 last:mb-0">
+              <li key={i} className="relative mb-4 last:mb-0">
                 <span className="absolute -left-[31px] top-1 grid h-4 w-4 place-items-center rounded-full border border-olive bg-ivory">
                   <span className="h-1.5 w-1.5 rounded-full bg-olive" />
                 </span>
@@ -380,18 +380,18 @@ function WhyEgrow() {
     { title: "Local & Trusted", note: "A neighbourhood nursery, proudly rooted.", icon: IconHeart },
   ];
   return (
-    <section className="relative bg-sage py-44">
+    <section className="relative bg-sage py-20">
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
-        <div className="mb-24 max-w-2xl">
+        <div className="mb-12 max-w-2xl">
           <Eyebrow>Why Egrow</Eyebrow>
-          <h2 className="mt-4 font-serif text-5xl leading-[1.05] md:text-6xl">More Than Just Plants.</h2>
+          <h2 className="mt-3 font-serif text-5xl leading-[1.05] md:text-6xl">More Than Just Plants.</h2>
         </div>
-        <div className="grid grid-cols-2 gap-x-12 gap-y-20 md:grid-cols-5">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-5">
           {items.map((it, i) => {
             const Icon = it.icon;
             return (
               <div key={i} className="group text-center transition-transform duration-500 hover:-translate-y-1">
-                <div className="mx-auto mb-6 grid h-16 w-16 place-items-center rounded-full border border-olive/30 text-olive transition-all group-hover:bg-ivory group-hover:shadow-lg">
+                <div className="mx-auto mb-3 grid h-16 w-16 place-items-center rounded-full border border-olive/30 text-olive transition-all group-hover:bg-ivory group-hover:shadow-lg">
                   <Icon className="h-8 w-8" />
                 </div>
                 <div className="font-serif text-lg text-forest">{it.title}</div>
@@ -431,11 +431,11 @@ function GrowingStories() {
   ];
   const [active, setActive] = useState<number | null>(null);
   return (
-    <section id="stories" className="relative py-48">
+    <section id="stories" className="relative py-24">
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
-        <div className="mb-24 text-center">
+        <div className="mb-12 text-center">
           <Eyebrow>Growing Stories</Eyebrow>
-          <h2 className="mt-4 font-serif text-5xl leading-[1.05] md:text-6xl">Stories That Inspire Growth.</h2>
+          <h2 className="mt-3 font-serif text-5xl leading-[1.05] md:text-6xl">Stories That Inspire Growth.</h2>
         </div>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
           {stories.map((s, i) => {
@@ -495,16 +495,16 @@ function PlantCalendar() {
     setTimeout(() => { setMonth(i); setFlip(false); }, 350);
   };
   return (
-    <section id="calendar" className="relative bg-sage py-48">
+    <section id="calendar" className="relative bg-sage py-24">
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
-        <div className="grid grid-cols-1 gap-20 md:grid-cols-12">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-12">
           <div className="md:col-span-4">
             <Eyebrow>Plant Calendar</Eyebrow>
-            <h2 className="mt-4 font-serif text-5xl leading-[1.05] md:text-6xl">The Right Plant, Right Month.</h2>
-            <p className="mt-6 max-w-sm text-charcoal/80">
+            <h2 className="mt-3 font-serif text-5xl leading-[1.05] md:text-6xl">The Right Plant, Right Month.</h2>
+            <p className="mt-3 max-w-sm text-charcoal/80">
               Every plant has its season to shine. Turn the pages of our botanical journal to find the perfect green companion for every month of the year.
             </p>
-            <a href="#gallery" className="btn-primary mt-8">Explore All Months →</a>
+            <a href="#gallery" className="btn-primary mt-4">Explore All Months →</a>
           </div>
           <div className="md:col-span-8">
             {/* book */}
@@ -581,20 +581,20 @@ function Transform() {
     { title: "Sunlit Balcony", area: "120 sq ft • Andheri", note: "A bare apartment balcony turned into a lush retreat.", before: t2before, after: t2after },
   ];
   return (
-    <section id="transform" className="relative py-48">
+    <section id="transform" className="relative py-24">
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
-        <div className="mx-auto mb-24 max-w-2xl text-center">
+        <div className="mx-auto mb-12 max-w-2xl text-center">
           <Eyebrow>Transform Your Space</Eyebrow>
-          <h2 className="mt-4 font-serif text-5xl leading-[1.05] md:text-6xl">From Ordinary to Extraordinary.</h2>
-          <p className="mt-6 text-charcoal/80">
+          <h2 className="mt-3 font-serif text-5xl leading-[1.05] md:text-6xl">From Ordinary to Extraordinary.</h2>
+          <p className="mt-3 text-charcoal/80">
             We transform balconies, terraces and outdoor spaces into beautiful green retreats you'll love spending time in.
           </p>
         </div>
-        <div className="grid grid-cols-1 gap-14 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-7 md:grid-cols-2">
           {projects.map((p) => (
             <div key={p.title}>
               <BeforeAfter before={p.before} after={p.after} />
-              <div className="mt-6">
+              <div className="mt-3">
                 <div className="font-serif text-2xl text-forest">{p.title}</div>
                 <div className="mt-1 text-xs uppercase tracking-widest text-olive">{p.area}</div>
                 <p className="mt-3 text-sm text-charcoal/75">{p.note}</p>
@@ -602,9 +602,9 @@ function Transform() {
             </div>
           ))}
         </div>
-        <div className="mt-16 flex flex-wrap items-center justify-center gap-8">
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <a href="#visit" className="btn-primary">See All Transformations →</a>
-          <div className="flex flex-wrap items-center gap-x-10 gap-y-4 text-center">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-4 text-center">
             {[
               ["50+", "Spaces Transformed"],
               ["20+", "Plant Varieties"],
@@ -673,18 +673,18 @@ function Gallery() {
   ];
   const [open, setOpen] = useState<string | null>(null);
   return (
-    <section id="gallery" className="relative bg-sage py-48">
+    <section id="gallery" className="relative bg-sage py-24">
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
-        <div className="mb-20 grid grid-cols-1 items-end gap-6 md:grid-cols-2">
+        <div className="mb-10 grid grid-cols-1 items-end gap-3 md:grid-cols-2">
           <div>
             <Eyebrow>Gallery</Eyebrow>
-            <h2 className="mt-4 font-serif text-5xl leading-[1.05] md:text-6xl">Moments That Bloom.</h2>
+            <h2 className="mt-3 font-serif text-5xl leading-[1.05] md:text-6xl">Moments That Bloom.</h2>
           </div>
           <p className="max-w-md text-charcoal/80 md:justify-self-end">
             A glimpse of greenery, growth and beautiful spaces. Follow along as we tend, plant, and share the everyday poetry of the nursery.
           </p>
         </div>
-        <div className="grid auto-rows-[200px] grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
+        <div className="grid auto-rows-[200px] grid-cols-2 gap-2 md:grid-cols-4 md:gap-3">
           {imgs.map((im, i) => (
             <button
               key={i}
@@ -695,7 +695,7 @@ function Gallery() {
             </button>
           ))}
         </div>
-        <div className="mt-12 text-center">
+        <div className="mt-6 text-center">
           <a href="#" className="btn-ghost">Follow Our Journey →</a>
         </div>
       </div>
@@ -712,28 +712,28 @@ function Gallery() {
 
 function PlanVisit() {
   return (
-    <section id="visit" className="relative py-48 scroll-mt-16" style={{}}>
+    <section id="visit" className="relative py-24 scroll-mt-16" style={{}}>
       <a id="contact" className="absolute -top-8" />
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
-        <div className="mb-24 max-w-2xl">
+        <div className="mb-12 max-w-2xl">
           <Eyebrow>Let's Plan Your Green Space</Eyebrow>
-          <h2 className="mt-4 font-serif text-5xl leading-[1.05] md:text-6xl">Let's Plan<br/>Your Green Space.</h2>
-          <p className="mt-6 text-charcoal/80">
+          <h2 className="mt-3 font-serif text-5xl leading-[1.05] md:text-6xl">Let's Plan<br/>Your Green Space.</h2>
+          <p className="mt-3 text-charcoal/80">
             We'd love to welcome you. Visit our nursery or reach out to plan your perfect green space — we'll bring the plants, pottery and expertise.
           </p>
         </div>
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-12">
           {/* visit card */}
-          <div className="md:col-span-4 rounded-3xl bg-ivory p-8 shadow-sm">
+          <div className="md:col-span-4 rounded-3xl bg-ivory p-6 shadow-sm">
             <div className="font-serif text-2xl text-forest">Visit Us</div>
-            <p className="mt-3 text-sm text-charcoal/75">Come explore our nursery and experience the joy of greenery.</p>
-            <ul className="mt-6 space-y-3 text-sm">
+            <p className="mt-2 text-sm text-charcoal/75">Come explore our nursery and experience the joy of greenery.</p>
+            <ul className="mt-3 space-y-2 text-sm">
               <li className="flex items-start gap-3"><Leaf className="mt-0.5 h-4 w-4 text-olive" /> 123 Greenway, Nature Street, Green City, 1100</li>
               <li className="flex items-start gap-3"><Leaf className="mt-0.5 h-4 w-4 text-olive" /> +91 98765 43210</li>
               <li className="flex items-start gap-3"><Leaf className="mt-0.5 h-4 w-4 text-olive" /> hello@egrow.com</li>
               <li className="flex items-start gap-3"><Leaf className="mt-0.5 h-4 w-4 text-olive" /> 9:00 AM – 7:00 PM (Everyday)</li>
             </ul>
-            <div className="mt-6 flex gap-3">
+            <div className="mt-4 flex gap-3">
               <a href="#" className="btn-primary">Get Directions</a>
               <a href="https://wa.me/919876543210" className="btn-ghost">WhatsApp</a>
             </div>
@@ -755,10 +755,10 @@ function PlanVisit() {
             </div>
           </div>
           {/* form */}
-          <div className="md:col-span-4 rounded-3xl bg-ivory p-8 shadow-sm">
+          <div className="md:col-span-4 rounded-3xl bg-ivory p-6 shadow-sm">
             <div className="font-serif text-2xl text-forest">Book a Visit</div>
-            <p className="mt-3 text-sm text-charcoal/75">Choose your preferred date and let's meet.</p>
-            <form className="mt-6 space-y-4 text-sm" onSubmit={(e) => e.preventDefault()}>
+            <p className="mt-2 text-sm text-charcoal/75">Choose your preferred date and let's meet.</p>
+            <form className="mt-3 space-y-3 text-sm" onSubmit={(e) => e.preventDefault()}>
               <Field label="Your Name" placeholder="Enter your name" />
               <Field label="Phone Number" placeholder="Enter phone number" />
               <Field label="Preferred Date" placeholder="Select date" type="date" />
@@ -786,16 +786,16 @@ function Field({ label, placeholder, type = "text" }: { label: string; placehold
 function Footer() {
   return (
     <footer className="relative bg-forest text-ivory">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-20 md:grid-cols-5">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-6 py-10 md:grid-cols-5">
         <div className="md:col-span-2">
           <div className="flex items-center gap-2">
             <Leaf className="h-6 w-6" />
             <span className="font-serif text-2xl">Egrow</span>
           </div>
-          <p className="mt-5 max-w-xs text-sm text-ivory/70">
+          <p className="mt-3 max-w-xs text-sm text-ivory/70">
             Bringing nature home with healthy plants, beautiful spaces and expert care.
           </p>
-          <div className="mt-6 flex gap-3">
+          <div className="mt-3 flex gap-3">
             {["IG","FB","PI","YT"].map(s => (
               <a key={s} href="#" className="grid h-9 w-9 place-items-center rounded-full border border-ivory/25 text-xs hover:bg-ivory hover:text-forest transition">{s}</a>
             ))}
@@ -806,7 +806,7 @@ function Footer() {
         <FooterCol title="Contact" items={["hello@egrow.com","+91 98765 43210","123 Greenway","Green City, 1100"]} />
       </div>
       <div className="border-t border-ivory/15">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-6 py-6 text-xs text-ivory/60">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-6 py-4 text-xs text-ivory/60">
           <div>© 2026 Egrow. All rights reserved.</div>
           <div className="flex gap-6"><a href="#" className="hover:text-ivory">Privacy Policy</a><a href="#" className="hover:text-ivory">Terms & Conditions</a></div>
         </div>
