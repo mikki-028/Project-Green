@@ -15,7 +15,6 @@ import g3 from "@/assets/gallery-3.jpg";
 import g4 from "@/assets/gallery-4.jpg";
 import g5 from "@/assets/gallery-5.jpg";
 import g6 from "@/assets/gallery-6.jpg";
-import vine from "@/assets/vine.png";
 import pMonstera from "@/assets/plant-monstera.jpg";
 import pAreca from "@/assets/plant-areca.jpg";
 import pPeace from "@/assets/plant-peace-lily.jpg";
@@ -38,18 +37,11 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-ivory text-charcoal">
+    <div id="home" className="relative min-h-screen overflow-x-hidden bg-ivory text-charcoal">
       <Nav />
       <Hero />
       <div className="relative">
-        {/* continuous vine spine */}
-        <img
-          src={vine}
-          alt=""
-          aria-hidden="true"
-          className="pointer-events-none absolute left-0 top-0 hidden h-full w-[180px] object-cover object-top opacity-70 md:block"
-          style={{ mixBlendMode: "multiply" }}
-        />
+        <VineSpine />
         <About />
         <WhyEgrow />
         <GrowingStories />
@@ -102,13 +94,14 @@ function Nav() {
           <span className={`font-serif text-2xl leading-none ${scrolled ? "text-forest" : "text-ivory"}`}>Egrow</span>
         </a>
         <nav className={`hidden items-center gap-8 text-sm md:flex ${scrolled ? "text-forest" : "text-ivory"}`}>
+          <a href="#home" className="hover:text-olive transition">Home</a>
           <a href="#about" className="hover:text-olive transition">About</a>
-          <a href="#stories" className="hover:text-olive transition">Explore</a>
-          <a href="#calendar" className="hover:text-olive transition">Plant Care</a>
+          <a href="#stories" className="hover:text-olive transition">Stories</a>
+          <a href="#calendar" className="hover:text-olive transition">Calendar</a>
           <a href="#gallery" className="hover:text-olive transition">Gallery</a>
-          <a href="#visit" className="hover:text-olive transition">Visit</a>
+          <a href="#contact" className="hover:text-olive transition">Contact</a>
         </nav>
-        <a href="#visit" className="btn-ghost hidden md:inline-flex">Plan Your Green Space</a>
+        <a href="#contact" className="btn-ghost hidden md:inline-flex">Plan Your Green Space</a>
       </div>
     </header>
   );
