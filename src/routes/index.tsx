@@ -739,7 +739,7 @@ type JournalPlant = {
   benefits: string;
   care: { light: string; water: string; upkeep: string };
   tip: string;
-  img: string;
+  img?: string;
 };
 
 type JournalMonth = {
