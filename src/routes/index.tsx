@@ -1109,11 +1109,11 @@ function StackEdge({ side, thickness }: { side: "left" | "right"; thickness: num
           key={i}
           className="absolute inset-y-0 rounded-[2px]"
           style={{
-            [side]: `${-i * 1.2}px` as string & Record<never, never>,
+            ...(side === "left" ? { left: `${-i * 1.2}px` } : { right: `${-i * 1.2}px` }),
             width: "3px",
             background: i % 2 === 0 ? "#e8dfc7" : "#efe6cf",
             boxShadow: i === layers.length - 1 ? "0 0 0 1px rgba(60,70,50,0.08)" : undefined,
-          } as React.CSSProperties}
+          }}
         />
       ))}
     </div>
