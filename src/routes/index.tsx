@@ -712,28 +712,28 @@ function Gallery() {
 
 function PlanVisit() {
   return (
-    <section id="visit" className="relative py-48 scroll-mt-16" style={{}}>
+    <section id="visit" className="relative py-24 scroll-mt-16" style={{}}>
       <a id="contact" className="absolute -top-8" />
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
-        <div className="mb-24 max-w-2xl">
+        <div className="mb-12 max-w-2xl">
           <Eyebrow>Let's Plan Your Green Space</Eyebrow>
-          <h2 className="mt-4 font-serif text-5xl leading-[1.05] md:text-6xl">Let's Plan<br/>Your Green Space.</h2>
-          <p className="mt-6 text-charcoal/80">
+          <h2 className="mt-3 font-serif text-5xl leading-[1.05] md:text-6xl">Let's Plan<br/>Your Green Space.</h2>
+          <p className="mt-3 text-charcoal/80">
             We'd love to welcome you. Visit our nursery or reach out to plan your perfect green space — we'll bring the plants, pottery and expertise.
           </p>
         </div>
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-12">
           {/* visit card */}
-          <div className="md:col-span-4 rounded-3xl bg-ivory p-8 shadow-sm">
+          <div className="md:col-span-4 rounded-3xl bg-ivory p-6 shadow-sm">
             <div className="font-serif text-2xl text-forest">Visit Us</div>
-            <p className="mt-3 text-sm text-charcoal/75">Come explore our nursery and experience the joy of greenery.</p>
-            <ul className="mt-6 space-y-3 text-sm">
+            <p className="mt-2 text-sm text-charcoal/75">Come explore our nursery and experience the joy of greenery.</p>
+            <ul className="mt-3 space-y-2 text-sm">
               <li className="flex items-start gap-3"><Leaf className="mt-0.5 h-4 w-4 text-olive" /> 123 Greenway, Nature Street, Green City, 1100</li>
               <li className="flex items-start gap-3"><Leaf className="mt-0.5 h-4 w-4 text-olive" /> +91 98765 43210</li>
               <li className="flex items-start gap-3"><Leaf className="mt-0.5 h-4 w-4 text-olive" /> hello@egrow.com</li>
               <li className="flex items-start gap-3"><Leaf className="mt-0.5 h-4 w-4 text-olive" /> 9:00 AM – 7:00 PM (Everyday)</li>
             </ul>
-            <div className="mt-6 flex gap-3">
+            <div className="mt-4 flex gap-3">
               <a href="#" className="btn-primary">Get Directions</a>
               <a href="https://wa.me/919876543210" className="btn-ghost">WhatsApp</a>
             </div>
@@ -755,10 +755,10 @@ function PlanVisit() {
             </div>
           </div>
           {/* form */}
-          <div className="md:col-span-4 rounded-3xl bg-ivory p-8 shadow-sm">
+          <div className="md:col-span-4 rounded-3xl bg-ivory p-6 shadow-sm">
             <div className="font-serif text-2xl text-forest">Book a Visit</div>
-            <p className="mt-3 text-sm text-charcoal/75">Choose your preferred date and let's meet.</p>
-            <form className="mt-6 space-y-4 text-sm" onSubmit={(e) => e.preventDefault()}>
+            <p className="mt-2 text-sm text-charcoal/75">Choose your preferred date and let's meet.</p>
+            <form className="mt-3 space-y-3 text-sm" onSubmit={(e) => e.preventDefault()}>
               <Field label="Your Name" placeholder="Enter your name" />
               <Field label="Phone Number" placeholder="Enter phone number" />
               <Field label="Preferred Date" placeholder="Select date" type="date" />
