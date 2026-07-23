@@ -380,18 +380,18 @@ function WhyEgrow() {
     { title: "Local & Trusted", note: "A neighbourhood nursery, proudly rooted.", icon: IconHeart },
   ];
   return (
-    <section className="relative bg-sage py-44">
+    <section className="relative bg-sage py-20">
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
-        <div className="mb-24 max-w-2xl">
+        <div className="mb-12 max-w-2xl">
           <Eyebrow>Why Egrow</Eyebrow>
-          <h2 className="mt-4 font-serif text-5xl leading-[1.05] md:text-6xl">More Than Just Plants.</h2>
+          <h2 className="mt-3 font-serif text-5xl leading-[1.05] md:text-6xl">More Than Just Plants.</h2>
         </div>
-        <div className="grid grid-cols-2 gap-x-12 gap-y-20 md:grid-cols-5">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-5">
           {items.map((it, i) => {
             const Icon = it.icon;
             return (
               <div key={i} className="group text-center transition-transform duration-500 hover:-translate-y-1">
-                <div className="mx-auto mb-6 grid h-16 w-16 place-items-center rounded-full border border-olive/30 text-olive transition-all group-hover:bg-ivory group-hover:shadow-lg">
+                <div className="mx-auto mb-3 grid h-16 w-16 place-items-center rounded-full border border-olive/30 text-olive transition-all group-hover:bg-ivory group-hover:shadow-lg">
                   <Icon className="h-8 w-8" />
                 </div>
                 <div className="font-serif text-lg text-forest">{it.title}</div>
