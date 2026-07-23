@@ -495,16 +495,16 @@ function PlantCalendar() {
     setTimeout(() => { setMonth(i); setFlip(false); }, 350);
   };
   return (
-    <section id="calendar" className="relative bg-sage py-48">
+    <section id="calendar" className="relative bg-sage py-24">
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
-        <div className="grid grid-cols-1 gap-20 md:grid-cols-12">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-12">
           <div className="md:col-span-4">
             <Eyebrow>Plant Calendar</Eyebrow>
-            <h2 className="mt-4 font-serif text-5xl leading-[1.05] md:text-6xl">The Right Plant, Right Month.</h2>
-            <p className="mt-6 max-w-sm text-charcoal/80">
+            <h2 className="mt-3 font-serif text-5xl leading-[1.05] md:text-6xl">The Right Plant, Right Month.</h2>
+            <p className="mt-3 max-w-sm text-charcoal/80">
               Every plant has its season to shine. Turn the pages of our botanical journal to find the perfect green companion for every month of the year.
             </p>
-            <a href="#gallery" className="btn-primary mt-8">Explore All Months →</a>
+            <a href="#gallery" className="btn-primary mt-4">Explore All Months →</a>
           </div>
           <div className="md:col-span-8">
             {/* book */}
