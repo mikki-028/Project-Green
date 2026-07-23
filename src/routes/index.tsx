@@ -15,7 +15,6 @@ import g3 from "@/assets/gallery-3.jpg";
 import g4 from "@/assets/gallery-4.jpg";
 import g5 from "@/assets/gallery-5.jpg";
 import g6 from "@/assets/gallery-6.jpg";
-import vine from "@/assets/vine.png";
 import pMonstera from "@/assets/plant-monstera.jpg";
 import pAreca from "@/assets/plant-areca.jpg";
 import pPeace from "@/assets/plant-peace-lily.jpg";
@@ -38,18 +37,11 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-ivory text-charcoal">
+    <div id="home" className="relative min-h-screen overflow-x-hidden bg-ivory text-charcoal">
       <Nav />
       <Hero />
       <div className="relative">
-        {/* continuous vine spine */}
-        <img
-          src={vine}
-          alt=""
-          aria-hidden="true"
-          className="pointer-events-none absolute left-0 top-0 hidden h-full w-[180px] object-cover object-top opacity-70 md:block"
-          style={{ mixBlendMode: "multiply" }}
-        />
+        <VineSpine />
         <About />
         <WhyEgrow />
         <GrowingStories />
@@ -83,6 +75,43 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
   );
 }
 
+/* ---------------- Vine Spine ---------------- */
+
+function VineSpine() {
+  return (
+    <svg
+      aria-hidden="true"
+      className="pointer-events-none absolute left-0 top-0 hidden h-full w-[140px] text-olive/40 md:block"
+      viewBox="0 0 140 3000"
+      preserveAspectRatio="none"
+      fill="none"
+    >
+      <path
+        d="M70 0 C 40 200, 100 380, 60 560 S 20 940, 80 1120 S 110 1500, 50 1680 S 30 2060, 90 2240 S 60 2620, 70 3000"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
+      {Array.from({ length: 22 }).map((_, i) => {
+        const y = 60 + i * 135;
+        const left = i % 2 === 0;
+        const cx = left ? 40 : 100;
+        const rot = left ? -30 : 30;
+        return (
+          <g key={i} transform={`translate(${cx} ${y}) rotate(${rot})`} className="text-sage">
+            <path
+              d="M0 0 C 10 -6, 22 -4, 26 6 C 22 12, 10 12, 0 6 Z"
+              fill="currentColor"
+              opacity="0.55"
+            />
+            <path d="M0 3 L 24 3" stroke="var(--color-olive)" strokeOpacity="0.35" strokeWidth="0.6" />
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
 /* ---------------- Nav ---------------- */
 
 function Nav() {
@@ -102,13 +131,14 @@ function Nav() {
           <span className={`font-serif text-2xl leading-none ${scrolled ? "text-forest" : "text-ivory"}`}>Egrow</span>
         </a>
         <nav className={`hidden items-center gap-8 text-sm md:flex ${scrolled ? "text-forest" : "text-ivory"}`}>
+          <a href="#home" className="hover:text-olive transition">Home</a>
           <a href="#about" className="hover:text-olive transition">About</a>
-          <a href="#stories" className="hover:text-olive transition">Explore</a>
-          <a href="#calendar" className="hover:text-olive transition">Plant Care</a>
+          <a href="#stories" className="hover:text-olive transition">Stories</a>
+          <a href="#calendar" className="hover:text-olive transition">Calendar</a>
           <a href="#gallery" className="hover:text-olive transition">Gallery</a>
-          <a href="#visit" className="hover:text-olive transition">Visit</a>
+          <a href="#contact" className="hover:text-olive transition">Contact</a>
         </nav>
-        <a href="#visit" className="btn-ghost hidden md:inline-flex">Plan Your Green Space</a>
+        <a href="#contact" className="btn-ghost hidden md:inline-flex">Plan Your Green Space</a>
       </div>
     </header>
   );
@@ -122,16 +152,16 @@ function Hero() {
       <img src={heroImg} alt="Sunlit greenhouse filled with lush plants" className="absolute inset-0 h-full w-full object-cover" />
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/25 to-black/60" />
       <div className="relative z-10 mx-auto max-w-4xl px-6 pt-24 text-center text-ivory fade-up">
-        <p className="mb-6 flex items-center justify-center gap-2 text-[0.7rem] uppercase tracking-[0.35em] text-ivory/85">
+        <p className="mb-12 flex items-center justify-center gap-2 text-[0.7rem] uppercase tracking-[0.35em] text-ivory/85">
           <Leaf className="h-3.5 w-3.5" /> Welcome to Egrow
         </p>
         <h1 className="font-serif text-6xl leading-[1.02] tracking-tight text-ivory md:text-8xl">
           Bring Nature <em className="not-italic block font-light">Home.</em>
         </h1>
-        <p className="mx-auto mt-8 max-w-xl text-base text-ivory/85 md:text-lg">
+        <p className="mx-auto mt-14 max-w-xl text-base text-ivory/85 md:text-lg">
           Healthy Plants. Beautiful Pottery. Expert Guidance.
         </p>
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+        <div className="mt-16 flex flex-wrap items-center justify-center gap-6">
           <a href="#visit" className="btn-primary">Visit Nursery</a>
           <a href="#stories" className="btn-ghost">Buy Plants</a>
           <a href="#transform" className="text-ivory border-b border-ivory pb-1 text-sm hover:text-moss hover:border-moss transition">
@@ -157,8 +187,8 @@ function About() {
     { year: "2026", title: "And Beyond", note: "Continuing to grow, together." },
   ];
   return (
-    <section id="about" className="relative py-32">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-16 px-6 md:grid-cols-12 md:gap-10">
+    <section id="about" className="relative py-48">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-20 px-8 md:grid-cols-12 md:gap-16 lg:px-12">
         <div className="md:col-span-4">
           <div className="relative mx-auto max-w-[360px]">
             <div className="overflow-hidden rounded-t-[220px] rounded-b-[220px] shadow-xl">
@@ -206,13 +236,13 @@ function WhyEgrow() {
     { title: "Local & Trusted", note: "A neighbourhood nursery, proudly rooted.", icon: IconHeart },
   ];
   return (
-    <section className="relative bg-sage py-28">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="mb-16 max-w-2xl">
+    <section className="relative bg-sage py-44">
+      <div className="mx-auto max-w-7xl px-8 lg:px-12">
+        <div className="mb-24 max-w-2xl">
           <Eyebrow>Why Egrow</Eyebrow>
           <h2 className="mt-4 font-serif text-5xl leading-[1.05] md:text-6xl">More Than Just Plants.</h2>
         </div>
-        <div className="grid grid-cols-2 gap-x-8 gap-y-14 md:grid-cols-5">
+        <div className="grid grid-cols-2 gap-x-12 gap-y-20 md:grid-cols-5">
           {items.map((it, i) => {
             const Icon = it.icon;
             return (
@@ -257,9 +287,9 @@ function GrowingStories() {
   ];
   const [active, setActive] = useState<number | null>(null);
   return (
-    <section id="stories" className="relative py-32">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="mb-16 text-center">
+    <section id="stories" className="relative py-48">
+      <div className="mx-auto max-w-7xl px-8 lg:px-12">
+        <div className="mb-24 text-center">
           <Eyebrow>Growing Stories</Eyebrow>
           <h2 className="mt-4 font-serif text-5xl leading-[1.05] md:text-6xl">Stories That Inspire Growth.</h2>
         </div>
@@ -321,9 +351,9 @@ function PlantCalendar() {
     setTimeout(() => { setMonth(i); setFlip(false); }, 350);
   };
   return (
-    <section id="calendar" className="relative bg-sage py-32">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-12">
+    <section id="calendar" className="relative bg-sage py-48">
+      <div className="mx-auto max-w-7xl px-8 lg:px-12">
+        <div className="grid grid-cols-1 gap-20 md:grid-cols-12">
           <div className="md:col-span-4">
             <Eyebrow>Plant Calendar</Eyebrow>
             <h2 className="mt-4 font-serif text-5xl leading-[1.05] md:text-6xl">The Right Plant, Right Month.</h2>
@@ -407,9 +437,9 @@ function Transform() {
     { title: "Sunlit Balcony", area: "120 sq ft • Andheri", note: "A bare apartment balcony turned into a lush retreat.", before: t2before, after: t2after },
   ];
   return (
-    <section id="transform" className="relative py-32">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="mx-auto mb-16 max-w-2xl text-center">
+    <section id="transform" className="relative py-48">
+      <div className="mx-auto max-w-7xl px-8 lg:px-12">
+        <div className="mx-auto mb-24 max-w-2xl text-center">
           <Eyebrow>Transform Your Space</Eyebrow>
           <h2 className="mt-4 font-serif text-5xl leading-[1.05] md:text-6xl">From Ordinary to Extraordinary.</h2>
           <p className="mt-6 text-charcoal/80">
@@ -499,9 +529,9 @@ function Gallery() {
   ];
   const [open, setOpen] = useState<string | null>(null);
   return (
-    <section id="gallery" className="relative bg-sage py-32">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="mb-14 grid grid-cols-1 items-end gap-6 md:grid-cols-2">
+    <section id="gallery" className="relative bg-sage py-48">
+      <div className="mx-auto max-w-7xl px-8 lg:px-12">
+        <div className="mb-20 grid grid-cols-1 items-end gap-6 md:grid-cols-2">
           <div>
             <Eyebrow>Gallery</Eyebrow>
             <h2 className="mt-4 font-serif text-5xl leading-[1.05] md:text-6xl">Moments That Bloom.</h2>
@@ -538,9 +568,10 @@ function Gallery() {
 
 function PlanVisit() {
   return (
-    <section id="visit" className="relative py-32">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="mb-16 max-w-2xl">
+    <section id="visit" className="relative py-48 scroll-mt-16" style={{}}>
+      <a id="contact" className="absolute -top-8" />
+      <div className="mx-auto max-w-7xl px-8 lg:px-12">
+        <div className="mb-24 max-w-2xl">
           <Eyebrow>Let's Plan Your Green Space</Eyebrow>
           <h2 className="mt-4 font-serif text-5xl leading-[1.05] md:text-6xl">Let's Plan<br/>Your Green Space.</h2>
           <p className="mt-6 text-charcoal/80">
