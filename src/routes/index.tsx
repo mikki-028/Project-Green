@@ -431,11 +431,11 @@ function GrowingStories() {
   ];
   const [active, setActive] = useState<number | null>(null);
   return (
-    <section id="stories" className="relative py-48">
+    <section id="stories" className="relative py-24">
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
-        <div className="mb-24 text-center">
+        <div className="mb-12 text-center">
           <Eyebrow>Growing Stories</Eyebrow>
-          <h2 className="mt-4 font-serif text-5xl leading-[1.05] md:text-6xl">Stories That Inspire Growth.</h2>
+          <h2 className="mt-3 font-serif text-5xl leading-[1.05] md:text-6xl">Stories That Inspire Growth.</h2>
         </div>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
           {stories.map((s, i) => {
