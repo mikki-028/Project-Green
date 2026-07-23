@@ -786,16 +786,16 @@ function Field({ label, placeholder, type = "text" }: { label: string; placehold
 function Footer() {
   return (
     <footer className="relative bg-forest text-ivory">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-20 md:grid-cols-5">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-6 py-10 md:grid-cols-5">
         <div className="md:col-span-2">
           <div className="flex items-center gap-2">
             <Leaf className="h-6 w-6" />
             <span className="font-serif text-2xl">Egrow</span>
           </div>
-          <p className="mt-5 max-w-xs text-sm text-ivory/70">
+          <p className="mt-3 max-w-xs text-sm text-ivory/70">
             Bringing nature home with healthy plants, beautiful spaces and expert care.
           </p>
-          <div className="mt-6 flex gap-3">
+          <div className="mt-3 flex gap-3">
             {["IG","FB","PI","YT"].map(s => (
               <a key={s} href="#" className="grid h-9 w-9 place-items-center rounded-full border border-ivory/25 text-xs hover:bg-ivory hover:text-forest transition">{s}</a>
             ))}
@@ -806,7 +806,7 @@ function Footer() {
         <FooterCol title="Contact" items={["hello@egrow.com","+91 98765 43210","123 Greenway","Green City, 1100"]} />
       </div>
       <div className="border-t border-ivory/15">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-6 py-6 text-xs text-ivory/60">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-6 py-4 text-xs text-ivory/60">
           <div>© 2026 Egrow. All rights reserved.</div>
           <div className="flex gap-6"><a href="#" className="hover:text-ivory">Privacy Policy</a><a href="#" className="hover:text-ivory">Terms & Conditions</a></div>
         </div>
