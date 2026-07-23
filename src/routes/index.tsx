@@ -473,7 +473,6 @@ function GrowingStories() {
 /* ---------------- Plant Calendar ---------------- */
 
 function PlantCalendar() {
-function PlantCalendar() {
   return <BotanicalJournal />;
 }
 
