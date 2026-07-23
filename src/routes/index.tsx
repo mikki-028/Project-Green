@@ -78,36 +78,180 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 /* ---------------- Vine Spine ---------------- */
 
 function VineSpine() {
+  // A quiet climbing vine that lives behind content on the left column.
+  // Not decorative border, not repeating: sparse at the top, a few offshoots
+  // through the middle, a small bud near the bottom.
+  const VB_W = 120;
+  const VB_H = 3000;
+
+  // Hand-tuned leaf placements along the stem. `t` is a rough vertical
+  // position (0..1); `side` picks which side of the stem the leaf sits on;
+  // `size` and `rot` add natural variance; `hue` picks a muted sage tone.
+  type LeafSpec = { t: number; side: -1 | 1; size: number; rot: number; hue: string; opacity: number };
+  const leaves: LeafSpec[] = [
+    // sparse top
+    { t: 0.04, side:  1, size: 8,  rot:  20, hue: "#9DB48E", opacity: 0.55 },
+    { t: 0.09, side: -1, size: 7,  rot: -35, hue: "#A8C69F", opacity: 0.5 },
+    { t: 0.16, side:  1, size: 9,  rot:  15, hue: "#8FA982", opacity: 0.6 },
+    // developing middle
+    { t: 0.24, side: -1, size: 10, rot: -25, hue: "#9DB48E", opacity: 0.65 },
+    { t: 0.30, side:  1, size: 11, rot:  30, hue: "#8FA982", opacity: 0.6 },
+    { t: 0.36, side: -1, size: 9,  rot: -15, hue: "#A8C69F", opacity: 0.55 },
+    { t: 0.43, side:  1, size: 12, rot:  22, hue: "#8FA982", opacity: 0.7 },
+    { t: 0.49, side: -1, size: 10, rot: -32, hue: "#9DB48E", opacity: 0.6 },
+    { t: 0.55, side:  1, size: 9,  rot:  18, hue: "#A8C69F", opacity: 0.55 },
+    { t: 0.62, side: -1, size: 11, rot: -20, hue: "#8FA982", opacity: 0.65 },
+    { t: 0.69, side:  1, size: 10, rot:  28, hue: "#9DB48E", opacity: 0.6 },
+    // easing toward the end
+    { t: 0.77, side: -1, size: 9,  rot: -18, hue: "#A8C69F", opacity: 0.55 },
+    { t: 0.84, side:  1, size: 8,  rot:  22, hue: "#9DB48E", opacity: 0.5 },
+    { t: 0.92, side: -1, size: 7,  rot: -28, hue: "#8FA982", opacity: 0.55 },
+  ];
+
+  // Approximate stem x(y) so leaves attach to the stem itself, not to a
+  // fixed column. Matches the cubic curve d="..." below closely enough.
+  const stemX = (y: number) => {
+    const cx = VB_W / 2;
+    return cx + Math.sin(y / 260) * 10 + Math.sin(y / 90) * 2.4;
+  };
+
+  // Single wandering stem — gentle organic curves, no repeating pattern.
+  const stemD = (() => {
+    const pts: string[] = [];
+    const step = 40;
+    for (let y = 0; y <= VB_H; y += step) {
+      const x = stemX(y);
+      pts.push(`${y === 0 ? "M" : "L"}${x.toFixed(2)} ${y}`);
+    }
+    return pts.join(" ");
+  })();
+
+  // Two small offshoots through the middle.
+  const offshoots = [
+    { y: 900, dir: -1, len: 46 },
+    { y: 1780, dir: 1, len: 52 },
+  ];
+
   return (
     <svg
       aria-hidden="true"
-      className="pointer-events-none absolute left-0 top-0 hidden h-full w-[140px] text-olive/40 md:block"
-      viewBox="0 0 140 3000"
+      className="pointer-events-none absolute top-0 z-0 hidden h-full w-[110px] md:block"
+      style={{ left: "24px" }}
+      viewBox={`0 0 ${VB_W} ${VB_H}`}
       preserveAspectRatio="none"
       fill="none"
     >
+      {/* Main climbing stem */}
       <path
-        d="M70 0 C 40 200, 100 380, 60 560 S 20 940, 80 1120 S 110 1500, 50 1680 S 30 2060, 90 2240 S 60 2620, 70 3000"
-        stroke="currentColor"
-        strokeWidth="1.2"
+        d={stemD}
+        stroke="#7A9A6B"
+        strokeOpacity="0.42"
+        strokeWidth="1.1"
         strokeLinecap="round"
+        fill="none"
       />
-      {Array.from({ length: 22 }).map((_, i) => {
-        const y = 60 + i * 135;
-        const left = i % 2 === 0;
-        const cx = left ? 40 : 100;
-        const rot = left ? -30 : 30;
+
+      {/* Subtle inner highlight on stem for hand-drawn feel */}
+      <path
+        d={stemD}
+        stroke="#B7CDAA"
+        strokeOpacity="0.18"
+        strokeWidth="0.5"
+        strokeLinecap="round"
+        fill="none"
+      />
+
+      {/* Middle offshoots */}
+      {offshoots.map((o, i) => {
+        const x0 = stemX(o.y);
+        const x1 = x0 + o.dir * o.len;
+        const midX = x0 + o.dir * (o.len * 0.55);
+        const midY = o.y + 22;
         return (
-          <g key={i} transform={`translate(${cx} ${y}) rotate(${rot})`} className="text-sage">
+          <g key={`off-${i}`}>
             <path
-              d="M0 0 C 10 -6, 22 -4, 26 6 C 22 12, 10 12, 0 6 Z"
-              fill="currentColor"
-              opacity="0.55"
+              d={`M${x0} ${o.y} Q ${midX} ${midY} ${x1} ${o.y + 40}`}
+              stroke="#8FA982"
+              strokeOpacity="0.35"
+              strokeWidth="0.9"
+              strokeLinecap="round"
+              fill="none"
             />
-            <path d="M0 3 L 24 3" stroke="var(--color-olive)" strokeOpacity="0.35" strokeWidth="0.6" />
+            {/* tiny leaf at tip of offshoot */}
+            <g transform={`translate(${x1} ${o.y + 40}) rotate(${o.dir * 25})`}>
+              <path
+                d="M0 0 C 5 -3, 11 -2, 13 3 C 11 6, 5 6, 0 3 Z"
+                fill="#9DB48E"
+                opacity="0.55"
+              />
+            </g>
           </g>
         );
       })}
+
+      {/* Alternating leaves along the stem */}
+      {leaves.map((l, i) => {
+        const y = l.t * VB_H;
+        const x = stemX(y);
+        const rot = l.rot + (l.side === -1 ? 180 : 0);
+        return (
+          <g key={`leaf-${i}`} transform={`translate(${x} ${y}) rotate(${rot})`}>
+            {/* petiole */}
+            <path
+              d={`M0 0 L ${l.size * 0.35} 0`}
+              stroke="#7A9A6B"
+              strokeOpacity="0.4"
+              strokeWidth="0.6"
+              strokeLinecap="round"
+            />
+            {/* leaf blade */}
+            <path
+              d={`M${l.size * 0.35} 0
+                  C ${l.size * 0.9} ${-l.size * 0.55},
+                    ${l.size * 1.7} ${-l.size * 0.35},
+                    ${l.size * 2.1} ${l.size * 0.15}
+                  C ${l.size * 1.7} ${l.size * 0.55},
+                    ${l.size * 0.9} ${l.size * 0.55},
+                    ${l.size * 0.35} 0 Z`}
+              fill={l.hue}
+              opacity={l.opacity}
+            />
+            {/* midrib */}
+            <path
+              d={`M${l.size * 0.35} 0 L ${l.size * 2.0} ${l.size * 0.1}`}
+              stroke="#4F6B44"
+              strokeOpacity="0.28"
+              strokeWidth="0.35"
+              strokeLinecap="round"
+            />
+          </g>
+        );
+      })}
+
+      {/* Fresh sprout / bud near the very bottom */}
+      {(() => {
+        const y = VB_H - 90;
+        const x = stemX(y);
+        return (
+          <g transform={`translate(${x} ${y})`}>
+            <path
+              d="M0 0 C 2 -14, 8 -22, 14 -22"
+              stroke="#8FA982"
+              strokeOpacity="0.5"
+              strokeWidth="0.9"
+              strokeLinecap="round"
+              fill="none"
+            />
+            {/* bud */}
+            <path
+              d="M14 -22 c 2 -4, 8 -4, 9 0 c -2 4, -7 4, -9 0 Z"
+              fill="#B7CDAA"
+              opacity="0.75"
+            />
+            <circle cx="18" cy="-22" r="1.2" fill="#6B8E5A" opacity="0.55" />
+          </g>
+        );
+      })()}
     </svg>
   );
 }
