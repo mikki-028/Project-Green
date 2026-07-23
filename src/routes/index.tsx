@@ -296,16 +296,16 @@ function Hero() {
       <img src={heroImg} alt="Sunlit greenhouse filled with lush plants" className="absolute inset-0 h-full w-full object-cover" />
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/25 to-black/60" />
       <div className="relative z-10 mx-auto max-w-4xl px-6 pt-24 text-center text-ivory fade-up">
-        <p className="mb-12 flex items-center justify-center gap-2 text-[0.7rem] uppercase tracking-[0.35em] text-ivory/85">
+        <p className="mb-6 flex items-center justify-center gap-2 text-[0.7rem] uppercase tracking-[0.35em] text-ivory/85">
           <Leaf className="h-3.5 w-3.5" /> Welcome to Egrow
         </p>
         <h1 className="font-serif text-6xl leading-[1.02] tracking-tight text-ivory md:text-8xl">
           Bring Nature <em className="not-italic block font-light">Home.</em>
         </h1>
-        <p className="mx-auto mt-14 max-w-xl text-base text-ivory/85 md:text-lg">
+        <p className="mx-auto mt-7 max-w-xl text-base text-ivory/85 md:text-lg">
           Healthy Plants. Beautiful Pottery. Expert Guidance.
         </p>
-        <div className="mt-16 flex flex-wrap items-center justify-center gap-6">
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <a href="#visit" className="btn-primary">Visit Nursery</a>
           <a href="#stories" className="btn-ghost">Buy Plants</a>
           <a href="#transform" className="text-ivory border-b border-ivory pb-1 text-sm hover:text-moss hover:border-moss transition">
