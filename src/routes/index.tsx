@@ -729,3 +729,766 @@ function FooterCol({ title, items }: { title: string; items: string[] }) {
     </div>
   );
 }
+
+/* ---------------- Botanical Journal ---------------- */
+
+type JournalPlant = {
+  name: string;
+  latin: string;
+  intro: string;
+  why: string;
+  benefits: string;
+  care: { light: string; water: string; upkeep: string };
+  tip: string;
+  img: string;
+};
+
+type JournalMonth = {
+  name: string;
+  season: string;
+  epigraph: string;
+  plants: JournalPlant[];
+};
+
+const JOURNAL_IMAGES = [pMonstera, pAreca, pPeace, pSnake, pPothos];
+
+const JOURNAL_MONTHS: JournalMonth[] = [
+  {
+    name: "January", season: "Cool, dry mornings across most of India.",
+    epigraph: "The garden rests, and rewards those who plant with patience.",
+    plants: [
+      { name: "Marigold", latin: "Tagetes erecta", intro: "The unmistakable orange of an Indian winter — abundant, cheerful, endlessly generous.", why: "Loves cool sun; blooms peak through January's crisp mornings.", benefits: "Repels garden pests, cut-flower staple, and pollinator magnet.", care: { light: "Full sun, 5–6 hours", water: "Every 2–3 days, deep soak", upkeep: "Deadhead spent blooms weekly" }, tip: "Snip the first flowers early — the plant answers with twice as many by month-end." },
+      { name: "Sweet Alyssum", latin: "Lobularia maritima", intro: "A soft carpet of honey-scented white, best appreciated up close on the balcony rail.", why: "Thrives in cool, bright light and dislikes the heat that comes later.", benefits: "Draws hoverflies and bees; fills gaps beautifully in mixed pots.", care: { light: "Bright sun to light shade", water: "When top inch feels dry", upkeep: "Trim lightly mid-month" }, tip: "Grow it in a shallow terracotta bowl — the scent gathers in the curve." },
+      { name: "Pansy", latin: "Viola × wittrockiana", intro: "Winter's little painted face. Layered, velvety, unmistakable.", why: "Cool nights bring out the deepest colour; heat washes them out.", benefits: "Edible petals for salads and a long, forgiving bloom window.", care: { light: "Morning sun, afternoon shade", water: "Keep evenly moist", upkeep: "Pinch fading flowers" }, tip: "Group three pots of one colour rather than a mix — the effect is quietly striking." },
+      { name: "Coriander", latin: "Coriandrum sativum", intro: "The kitchen's favourite herb, at its most fragrant right now.", why: "Cool weather keeps it leafy; warmth makes it bolt.", benefits: "Cut-and-come-again leaves for months of curries and chutneys.", care: { light: "4–5 hours of gentle sun", water: "Light, frequent watering", upkeep: "Harvest from the outside in" }, tip: "Sow a fresh pinch of seeds every ten days — you'll never run out." },
+    ],
+  },
+  {
+    name: "February", season: "Late winter — bright days, cool evenings.",
+    epigraph: "The last quiet month before everything wakes up at once.",
+    plants: [
+      { name: "Sweet Pea", latin: "Lathyrus odoratus", intro: "Ruffled, fragrant, a florist's secret grown on a modest trellis.", why: "The final cool weeks let vines set flowers before summer arrives.", benefits: "One of the most fragrant cut flowers you can grow at home.", care: { light: "Full morning sun", water: "Deep water twice a week", upkeep: "Tie gently to a bamboo cane" }, tip: "Cut long stems generously — the more you pick, the more it flowers." },
+      { name: "Nasturtium", latin: "Tropaeolum majus", intro: "Round leaves like little lily pads with peppery, edible flowers.", why: "Loves the mild sun of February before things get harsh.", benefits: "Ornamental and edible; a natural companion for vegetables.", care: { light: "Bright sun", water: "Sparingly — hates soggy roots", upkeep: "No feeding needed" }, tip: "Poor soil gives more flowers than rich soil. Resist the urge to fertilise." },
+      { name: "Dianthus", latin: "Dianthus chinensis", intro: "Fringed petals in pinks and crimsons, with a light clove perfume.", why: "Cool nights hold the fragrance; the flowers last for weeks.", benefits: "Compact, tidy, and reliably floriferous on balconies.", care: { light: "5 hours direct sun", water: "Moderate, let surface dry", upkeep: "Snip stems after bloom" }, tip: "Grow in terracotta — it dries evenly and the roots love it." },
+      { name: "Mint", latin: "Mentha spicata", intro: "The runaway herb of Indian kitchens. Give it a pot of its own.", why: "Cool weather brings the sweetest, softest leaves of the year.", benefits: "Endless supply for chutney, chaas, and cold summer drinks ahead.", care: { light: "Bright indirect or morning sun", water: "Keep soil consistently moist", upkeep: "Pinch tips to bush out" }, tip: "Never plant mint with anything else. It always wins the pot." },
+    ],
+  },
+  {
+    name: "March", season: "Spring warmth begins to build.",
+    epigraph: "Fresh starts — the soil is ready, and so are you.",
+    plants: [
+      { name: "Bougainvillea", latin: "Bougainvillea glabra", intro: "The signature papery bracts that define an Indian summer skyline.", why: "March warmth triggers the first great flush of the year.", benefits: "Drought-tolerant once established, and effortlessly showy.", care: { light: "Full sun, all day", water: "Deep but infrequent", upkeep: "Prune lightly after each flush" }, tip: "Neglect makes it bloom. Water it too kindly and you'll get only leaves." },
+      { name: "Hibiscus", latin: "Hibiscus rosa-sinensis", intro: "Wide, open faces that seem to greet the morning.", why: "Warm sun and long days push out blooms almost daily.", benefits: "Traditional in Indian gardens; petals used in hair oils and teas.", care: { light: "Full to filtered sun", water: "Regular, don't let it dry out", upkeep: "Feed monthly with compost" }, tip: "Turn the pot a quarter each week so it flowers evenly on all sides." },
+      { name: "Basil (Tulsi)", latin: "Ocimum tenuiflorum", intro: "Sacred, aromatic, and quietly generous with its leaves.", why: "Warmer days wake it from its winter sulk.", benefits: "Immunity tea, natural mosquito deterrent, and a fragrant companion at the door.", care: { light: "5+ hours of sun", water: "Moderate; let surface dry", upkeep: "Pinch flower spikes as they appear" }, tip: "Snap flower buds early — the leaves stay tender for months longer." },
+      { name: "Portulaca", latin: "Portulaca grandiflora", intro: "Neon little roses that open with the sun and close by evening.", why: "Rising temperatures suit it perfectly.", benefits: "Practically thrives on neglect; ideal for hot balconies.", care: { light: "Direct sun essential", water: "Sparingly, drought-tolerant", upkeep: "None — it takes care of itself" }, tip: "Grow it in the shallowest pot you own. It prefers to feel warm underfoot." },
+    ],
+  },
+  {
+    name: "April", season: "Warm, bright, and lengthening days.",
+    epigraph: "The garden picks up speed. Water early, admire slowly.",
+    plants: [
+      { name: "Jasmine (Mogra)", latin: "Jasminum sambac", intro: "The evening fragrance woven into every Indian summer memory.", why: "Warm April nights bring the first great cascade of flowers.", benefits: "Perfume, garlands, tea — and a garden that greets you after work.", care: { light: "Bright sun, 4–6 hours", water: "Regular; likes even moisture", upkeep: "Prune after each flush" }, tip: "Place it near a doorway or window that opens at dusk." },
+      { name: "Zinnia", latin: "Zinnia elegans", intro: "Bold, geometric, and unfussy — a cutting garden in one plant.", why: "Warmth and long days give the most saturated colour.", benefits: "Excellent cut flower and irresistible to butterflies.", care: { light: "Full sun", water: "At the base, not the leaves", upkeep: "Deadhead often" }, tip: "Cut the very first bloom to trigger side branches — you'll double the display." },
+      { name: "Curry Leaf", latin: "Murraya koenigii", intro: "The scent that defines Indian cooking, grown from a modest pot.", why: "Warm months push out fresh, tender flushes of leaves.", benefits: "A lifetime kitchen staple, always fresher than store-bought.", care: { light: "Full sun to bright shade", water: "Moderate, let soil dry slightly", upkeep: "Snip regularly to bush out" }, tip: "Fertilise once with buttermilk-diluted water — an old grandmother's trick that works." },
+      { name: "Aloe Vera", latin: "Aloe barbadensis", intro: "The medicine plant on every Indian windowsill, more useful in summer than ever.", why: "Loves the growing heat; puts out new pups quickly.", benefits: "Skin soother, sunburn relief, and effortlessly ornamental.", care: { light: "Bright indirect to direct", water: "Only when soil is fully dry", upkeep: "Repot pups every year" }, tip: "If a leaf looks limp, it's overwatered — not thirsty. Wait a week." },
+    ],
+  },
+  {
+    name: "May", season: "Peak summer. Heat management matters.",
+    epigraph: "Move pots to morning-sun corners and water at dawn.",
+    plants: [
+      { name: "Vinca (Sadabahar)", latin: "Catharanthus roseus", intro: "The unshakeable Indian summer flower, bright in the fiercest sun.", why: "Loves 40°C afternoons and rewards you with daily blooms.", benefits: "Extremely low-maintenance and covers pots edge to edge.", care: { light: "Full harsh sun is fine", water: "Only when soil dries", upkeep: "Pinch tips monthly" }, tip: "Don't fuss over it. The more you ignore it, the better it looks." },
+      { name: "Ixora", latin: "Ixora coccinea", intro: "Firework clusters of tiny flowers on glossy evergreen leaves.", why: "Heat brings the biggest, most saturated flower heads of the year.", benefits: "Butterfly favourite and a solid hedge or feature pot.", care: { light: "Bright sun, some afternoon shade", water: "Deep, weekly", upkeep: "Light prune after flowering" }, tip: "Use rainwater when you can — it flowers better than with hard tap water." },
+      { name: "Adenium", latin: "Adenium obesum", intro: "The desert rose with a sculptural swollen stem and trumpet flowers.", why: "It waits all year for these hot, dry weeks.", benefits: "Living sculpture; asks for almost nothing in return.", care: { light: "Direct scorching sun", water: "Sparingly, once weekly at most", upkeep: "Repot every 2 years" }, tip: "The wider and shallower the pot, the fatter the stem grows over time." },
+      { name: "Lemongrass", latin: "Cymbopogon citratus", intro: "A fountain of aromatic blades that ask for almost nothing.", why: "Summer heat is exactly when it grows fastest.", benefits: "Perfect for chai, cold infusions, and a natural mosquito deterrent.", care: { light: "Full sun", water: "Moderate; drought-tolerant", upkeep: "Cut back a third every 6 weeks" }, tip: "Rub a leaf between your palms before watering — it always makes the chore nicer." },
+    ],
+  },
+  {
+    name: "June", season: "Pre-monsoon skies and the first showers.",
+    epigraph: "Every plant tilts a little towards the promise of rain.",
+    plants: [
+      { name: "Monstera", latin: "Monstera deliciosa", intro: "The architectural indoor icon whose new leaves unfurl with theatre.", why: "Warm, humid pre-monsoon air is exactly what it wants.", benefits: "Sculptural presence and easy propagation from cuttings.", care: { light: "Bright indirect light", water: "When top 2 inches dry", upkeep: "Wipe leaves monthly" }, tip: "Give it a mossed pole this month — new leaves will grow noticeably larger." },
+      { name: "Peace Lily", latin: "Spathiphyllum wallisii", intro: "Sculpted white spathes above deep green — quietly graceful indoors.", why: "Loves the rising humidity that arrives with the monsoon.", benefits: "One of the best natural air-purifying houseplants.", care: { light: "Low to medium indirect", water: "Weekly; droops when thirsty", upkeep: "Wipe leaves fortnightly" }, tip: "It literally tells you when it needs water — let it droop once, then rescue it. It won't hold a grudge." },
+      { name: "Areca Palm", latin: "Dypsis lutescens", intro: "Soft feathered fronds that turn a corner into a small oasis.", why: "Pre-monsoon humidity keeps fronds lush and tip-burn-free.", benefits: "Adds humidity indoors and softens hard architecture beautifully.", care: { light: "Bright, indirect", water: "Weekly, avoid waterlogging", upkeep: "Mist during dry spells" }, tip: "Use a saucer of pebbles and water under the pot — it mimics the humidity it craves." },
+      { name: "Coleus", latin: "Coleus scutellarioides", intro: "Grown for its leaves — no two combinations ever repeat.", why: "Warm, humid weeks push out the most vivid leaf colours of the year.", benefits: "Colour without waiting for flowers; brilliant fillers in mixed pots.", care: { light: "Bright indirect to morning sun", water: "Keep evenly moist", upkeep: "Pinch tips weekly" }, tip: "Pinch flower spikes off the moment they appear — the leaves stay bolder for months." },
+    ],
+  },
+  {
+    name: "July", season: "Deep monsoon. Grey skies, green everything.",
+    epigraph: "The garden writes itself. You just have to watch drainage.",
+    plants: [
+      { name: "Fern (Boston)", latin: "Nephrolepis exaltata", intro: "Cascades of feathery fronds that love a rainy verandah corner.", why: "Monsoon humidity is what they wait for all year.", benefits: "Instantly softens a balcony and thrives in filtered light.", care: { light: "Bright indirect only", water: "Keep constantly moist", upkeep: "Trim brown tips" }, tip: "Hang it near a window that catches the rain spray — you'll barely need to water it." },
+      { name: "Colocasia", latin: "Colocasia esculenta", intro: "Enormous heart-shaped leaves that catch and drum with rainfall.", why: "The monsoon is its personal festival.", benefits: "Dramatic tropical presence with almost no effort.", care: { light: "Bright shade to morning sun", water: "Cannot be overwatered now", upkeep: "Remove yellow leaves at base" }, tip: "Sit near it after it rains — the sound of water on those leaves is worth the whole pot." },
+      { name: "Anthurium", latin: "Anthurium andraeanum", intro: "Glossy red or white spathes above lacquered leaves.", why: "Humid weather triggers new blooms indoors.", benefits: "Elegant, long-lasting flowers with minimal fuss.", care: { light: "Bright indirect", water: "When top inch dries", upkeep: "Repot every 2 years" }, tip: "Chunky bark mix, not regular soil — the roots want air more than water." },
+      { name: "Turmeric", latin: "Curcuma longa", intro: "Broad tropical leaves rise from underground rhizomes with monsoon energy.", why: "Plant now, harvest fresh turmeric before winter.", benefits: "Homegrown haldi — freshest you'll ever cook with.", care: { light: "Bright shade to filtered sun", water: "Constantly moist", upkeep: "Feed with compost mid-season" }, tip: "One rhizome from your kitchen shelf will start the whole pot. Bury it two inches deep." },
+    ],
+  },
+  {
+    name: "August", season: "Late monsoon. Warm rain, saturated colour.",
+    epigraph: "Full and generous — the garden gives more than it asks.",
+    plants: [
+      { name: "Rain Lily", latin: "Zephyranthes", intro: "Small white or pink trumpets that appear overnight after rain.", why: "August showers trigger flushes of these surprise blooms.", benefits: "Almost invisible when dormant; unforgettable when they arrive.", care: { light: "Bright sun or filtered light", water: "Water heavily; let dry between", upkeep: "Divide bulbs every 2–3 years" }, tip: "Plant thickly in a shallow pot — a dozen flowers opening at once is the whole point." },
+      { name: "Hydrangea", latin: "Hydrangea macrophylla", intro: "Great mophead flowers in soft blue, pink, or antique green.", why: "Cooler, wetter August weather keeps the blooms lasting for weeks.", benefits: "One of the longest-lasting flower displays possible on a balcony.", care: { light: "Morning sun, afternoon shade", water: "Deeply, twice weekly", upkeep: "Prune after blooming" }, tip: "Bury a few rusty nails at the base for deeper blue flowers next season — an old trick that really does work." },
+      { name: "Torenia", latin: "Torenia fournieri", intro: "The little wishbone flower, cheerful in rain-drenched blues and violets.", why: "Perfect for shady monsoon balconies that lack strong sun.", benefits: "Blooms non-stop from now through October.", care: { light: "Bright shade or morning sun", water: "Keep evenly moist", upkeep: "Trim leggy stems monthly" }, tip: "Grow it under a taller plant — it loves the dappled shade." },
+      { name: "Ginger", latin: "Zingiber officinale", intro: "Slender leafy stalks above the most useful root in your kitchen.", why: "The monsoon is when it grows the fastest.", benefits: "Fresh homegrown adrak for tea, curry, and winter immunity.", care: { light: "Bright shade to filtered sun", water: "Constantly moist", upkeep: "Harvest after 8–10 months" }, tip: "Choose a wide, shallow pot — ginger spreads sideways, not down." },
+    ],
+  },
+  {
+    name: "September", season: "Post-monsoon softness and clearer skies.",
+    epigraph: "The garden takes a long breath. This is the golden month.",
+    plants: [
+      { name: "Chrysanthemum", latin: "Chrysanthemum indicum", intro: "Dense, layered blooms in autumn shades of gold, rust, and cream.", why: "The classic post-monsoon flower — buds set now for October colour.", benefits: "Long-lasting flowers, excellent for cutting, and pollinator-friendly.", care: { light: "Full morning sun", water: "Moderate, avoid wet leaves", upkeep: "Pinch tips until buds appear" }, tip: "Stop pinching by mid-September — every unpinched tip becomes a flower." },
+      { name: "Snake Plant", latin: "Sansevieria trifasciata", intro: "Architectural upright leaves that ask for almost nothing.", why: "As indoor humidity drops, it settles in perfectly.", benefits: "Purifies air overnight and forgives every mistake.", care: { light: "Any light, low is fine", water: "Every 2–3 weeks", upkeep: "Wipe dust off leaves" }, tip: "If you're not sure whether to water — don't. This plant would rather be thirsty than soggy." },
+      { name: "Pothos", latin: "Epipremnum aureum", intro: "The trailing green heart of nearly every Indian home.", why: "Warm, mild September is perfect for propagation.", benefits: "Grows almost anywhere; roots readily in a glass of water.", care: { light: "Anything except harsh sun", water: "When top soil is dry", upkeep: "Trim leggy vines" }, tip: "Take three cuttings this month, root them in water, and gift them by November." },
+      { name: "Croton", latin: "Codiaeum variegatum", intro: "Wildly patterned leaves in reds, yellows, and greens.", why: "Post-monsoon light brings out the most saturated leaf colour.", benefits: "Instant tropical drama without waiting for a flower.", care: { light: "Bright indirect to morning sun", water: "Consistently moist", upkeep: "Wipe leaves fortnightly" }, tip: "The more light it gets, the wilder the colours. A dim corner turns it green." },
+    ],
+  },
+  {
+    name: "October", season: "Festival light, cool mornings, warm afternoons.",
+    epigraph: "The garden dresses up for Diwali without being asked.",
+    plants: [
+      { name: "Marigold", latin: "Tagetes patula", intro: "Festival gold — practically the official flower of the season.", why: "Peak bloom aligns beautifully with the festival month.", benefits: "Cut for torans, garlands, and rangolis; keeps aphids away.", care: { light: "Full sun", water: "Every 2–3 days", upkeep: "Deadhead constantly" }, tip: "Plant a second batch mid-October — you'll have flowers through Diwali and beyond." },
+      { name: "Cosmos", latin: "Cosmos bipinnatus", intro: "Airy daisy-like flowers on tall, swaying stems.", why: "Loves the cooling October weather and long light.", benefits: "Attracts butterflies and self-seeds generously for next year.", care: { light: "Full sun", water: "When soil dries", upkeep: "Stake tall varieties" }, tip: "Let a few flowers go to seed — you'll never have to buy cosmos again." },
+      { name: "Hibiscus", latin: "Hibiscus rosa-sinensis", intro: "The temple flower, at its most consistent this month.", why: "Cooler, kinder sun brings flowers without leaf scorch.", benefits: "Traditional offering flower; leaves used in hair oils.", care: { light: "Full sun to filtered", water: "Regular, deep", upkeep: "Feed monthly" }, tip: "A pinch of Epsom salt in October gives you the largest flowers of the year." },
+      { name: "Petunia", latin: "Petunia × hybrida", intro: "Trumpets in every colour, spilling gracefully over pot edges.", why: "The cool nights of October let the flowers last for days.", benefits: "Cascading colour without much fuss.", care: { light: "6+ hours sun", water: "Regular, don't wet leaves", upkeep: "Deadhead every few days" }, tip: "Trim the whole plant back by a third mid-month — you'll get a second flush for Diwali." },
+    ],
+  },
+  {
+    name: "November", season: "The first properly cool weeks arrive.",
+    epigraph: "Turning inward. Plant now for a garden that surprises you in February.",
+    plants: [
+      { name: "Rose", latin: "Rosa hybrida", intro: "The classic garden queen, at her calm best in cool weather.", why: "Cool nights and mild days give the largest, most fragrant blooms.", benefits: "Cut flowers all winter long with the right pruning.", care: { light: "Full sun, 6+ hours", water: "Deep, twice weekly", upkeep: "Feed with compost monthly" }, tip: "Prune lightly on the first cool morning of November — she'll thank you by January." },
+      { name: "Dahlia", latin: "Dahlia pinnata", intro: "Geometric, sculpted blooms in almost every colour there is.", why: "Cool, bright November is exactly when they set their best flowers.", benefits: "Dramatic cut flowers with a long vase life.", care: { light: "Full sun", water: "Deep, twice weekly", upkeep: "Stake tall varieties early" }, tip: "Support them before they need it — a fallen dahlia stem rarely stands up again." },
+      { name: "Snapdragon", latin: "Antirrhinum majus", intro: "Tall spires of little dragon-mouthed flowers, playful and elegant.", why: "The cool weeks bring the most saturated colours.", benefits: "Classic cut flower and a favourite of children in the garden.", care: { light: "Full morning sun", water: "Moderate, regular", upkeep: "Cut spent spires low" }, tip: "Squeeze the sides of a bloom gently — the flower opens like a puppet's mouth." },
+      { name: "Fenugreek (Methi)", latin: "Trigonella foenum-graecum", intro: "The winter herb that rewards a shallow tray with a month of harvests.", why: "Cool weather keeps it tender and mild.", benefits: "Fresh methi for parathas, dal, and winter tadkas.", care: { light: "4–5 hours of sun", water: "Light, frequent", upkeep: "Harvest at 4 inches" }, tip: "Sow a tray every ten days — you'll have fresh methi all winter." },
+    ],
+  },
+  {
+    name: "December", season: "Cool, still, and quietly beautiful.",
+    epigraph: "The garden slows down. So do you. Both are better for it.",
+    plants: [
+      { name: "Poinsettia", latin: "Euphorbia pulcherrima", intro: "The winter classic — great scarlet bracts that behave like flowers.", why: "Short winter days trigger the famous colour change.", benefits: "The most seasonal indoor plant you can bring home this month.", care: { light: "Bright indirect", water: "Only when top soil dries", upkeep: "Keep away from cold drafts" }, tip: "If a leaf drops, it's usually too much water — not too little. Wait, don't rescue." },
+      { name: "Cyclamen", latin: "Cyclamen persicum", intro: "Butterfly-like flowers hovering above marbled heart-shaped leaves.", why: "December's cool indoor rooms are exactly where it thrives.", benefits: "Weeks of flowers on a compact, tidy plant.", care: { light: "Bright, cool spot", water: "From the base, not the top", upkeep: "Remove yellow leaves at the base" }, tip: "Never water into the crown of the plant — always around the edge of the pot." },
+      { name: "Calendula", latin: "Calendula officinalis", intro: "Cheerful orange and yellow daisies that shrug off the cold.", why: "Cool December is when it flowers most generously.", benefits: "Edible petals for salads and a genuinely healing tradition in balms.", care: { light: "Bright sun", water: "Moderate, let surface dry", upkeep: "Deadhead weekly" }, tip: "Save a handful of petals to dry — they hold their colour beautifully all year." },
+      { name: "Rubber Plant", latin: "Ficus elastica", intro: "Glossy, generous leaves and quiet architectural presence indoors.", why: "As outdoor colour fades, this one holds the room together.", benefits: "One of the easiest large statement plants for Indian homes.", care: { light: "Bright indirect", water: "When top 2 inches dry", upkeep: "Wipe leaves monthly" }, tip: "Turn the pot a quarter each month — it'll grow perfectly upright instead of leaning to the light." },
+    ],
+  },
+];
+
+/** Build a flat list of pages: [cover, ...(month intro + plant pages)...] */
+type PageKind =
+  | { kind: "cover" }
+  | { kind: "month-intro"; monthIndex: number }
+  | { kind: "plant"; monthIndex: number; plantIndex: number };
+
+function buildPages(): PageKind[] {
+  const pages: PageKind[] = [{ kind: "cover" }];
+  JOURNAL_MONTHS.forEach((m, mi) => {
+    pages.push({ kind: "month-intro", monthIndex: mi });
+    m.plants.forEach((_, pi) => pages.push({ kind: "plant", monthIndex: mi, plantIndex: pi }));
+  });
+  return pages;
+}
+
+/** Synthesised paper flip — filtered noise burst played through Web Audio. */
+function usePaperFlipSound() {
+  const ctxRef = useRef<AudioContext | null>(null);
+  const ensureCtx = () => {
+    if (typeof window === "undefined") return null;
+    if (!ctxRef.current) {
+      const AC = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      if (!AC) return null;
+      ctxRef.current = new AC();
+    }
+    if (ctxRef.current.state === "suspended") void ctxRef.current.resume();
+    return ctxRef.current;
+  };
+  return () => {
+    const ctx = ensureCtx();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+    const dur = 0.42;
+    // Noise buffer
+    const buffer = ctx.createBuffer(1, Math.floor(ctx.sampleRate * dur), ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < data.length; i++) {
+      const t = i / data.length;
+      // shaped brownish noise — softer than white
+      data[i] = (Math.random() * 2 - 1) * (1 - t) * (0.35 + 0.65 * Math.pow(1 - t, 1.5));
+    }
+    const src = ctx.createBufferSource();
+    src.buffer = buffer;
+    const hp = ctx.createBiquadFilter();
+    hp.type = "highpass"; hp.frequency.value = 900;
+    const lp = ctx.createBiquadFilter();
+    lp.type = "lowpass"; lp.frequency.value = 4200;
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(0.09, now + 0.04);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+    src.connect(hp).connect(lp).connect(gain).connect(ctx.destination);
+    src.start(now);
+    src.stop(now + dur);
+  };
+}
+
+function BotanicalJournal() {
+  const pages = useRef(buildPages()).current;
+  const total = pages.length;
+  const [index, setIndex] = useState(0);
+  const [flipping, setFlipping] = useState<null | "next" | "prev">(null);
+  const [pendingIndex, setPendingIndex] = useState<number | null>(null);
+  const playFlip = usePaperFlipSound();
+  const touchStartX = useRef<number | null>(null);
+
+  const FLIP_MS = 900;
+
+  const goTo = (target: number) => {
+    if (flipping) return;
+    const clamped = Math.max(0, Math.min(total - 1, target));
+    if (clamped === index) return;
+    const dir = clamped > index ? "next" : "prev";
+    setFlipping(dir);
+    setPendingIndex(clamped);
+    playFlip();
+    window.setTimeout(() => {
+      setIndex(clamped);
+      setFlipping(null);
+      setPendingIndex(null);
+    }, FLIP_MS);
+  };
+
+  const next = () => goTo(index + 1);
+  const prev = () => goTo(index - 1);
+
+  const jumpToMonth = (mi: number) => {
+    // first plant of that month = cover(1) + all previous months' (1 intro + plants) + 1 (skip intro)
+    let target = 1; // past cover
+    for (let i = 0; i < mi; i++) target += 1 + JOURNAL_MONTHS[i].plants.length;
+    target += 1; // skip month-intro to first plant
+    goTo(target);
+  };
+
+  const onTouchStart = (e: React.TouchEvent) => { touchStartX.current = e.touches[0].clientX; };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current == null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(dx) < 40) return;
+    if (dx < 0) next(); else prev();
+  };
+
+  // Progress used for the "book thickness" illusion
+  const progress = total <= 1 ? 0 : index / (total - 1);
+  const leftStack = Math.round(4 + progress * 14);
+  const rightStack = Math.round(4 + (1 - progress) * 14);
+
+  // Current month index for the tab strip
+  const currentPage = pages[index];
+  const currentMonth = currentPage.kind === "cover" ? -1 : currentPage.monthIndex;
+
+  // The page we're flipping AWAY from (front of the flipping sheet)
+  const flipFrontPage = flipping ? pages[index] : null;
+  const flipBackPage = flipping && pendingIndex != null ? pages[pendingIndex] : null;
+
+  return (
+    <section id="calendar" className="relative bg-sage py-24">
+      <div className="mx-auto max-w-7xl px-6 md:px-10">
+        <div className="mx-auto max-w-2xl text-center">
+          <Eyebrow>Seasonal Journal</Eyebrow>
+          <h2 className="mt-3 font-serif text-5xl leading-[1.05] md:text-6xl">A Botanical Journal, Kept by Season.</h2>
+          <p className="mt-4 text-charcoal/75">
+            Turn the pages of our field notebook to find plants that naturally thrive across an Indian year — one carefully chosen companion at a time.
+          </p>
+        </div>
+
+        {/* Month strip */}
+        <div className="mx-auto mt-10 flex max-w-3xl flex-wrap items-center justify-center gap-2 rounded-full bg-ivory/70 px-3 py-2 shadow-sm backdrop-blur-sm">
+          {JOURNAL_MONTHS.map((m, i) => (
+            <button
+              key={m.name}
+              onClick={() => jumpToMonth(i)}
+              className={`rounded-full px-3 py-1.5 text-xs tracking-wide transition md:text-sm ${
+                i === currentMonth ? "bg-olive text-ivory shadow-sm" : "text-charcoal/70 hover:text-forest"
+              }`}
+            >
+              {m.name.slice(0, 3)}
+            </button>
+          ))}
+        </div>
+
+        {/* Book */}
+        <div className="mt-12 flex flex-col items-center">
+          <div
+            className="relative w-full max-w-[980px] select-none"
+            style={{ perspective: "2400px" }}
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}
+          >
+            {/* Under-book shadow */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -bottom-6 left-8 right-8 h-8 rounded-full bg-forest/25 blur-2xl"
+            />
+
+            {/* Book body */}
+            <div className="relative mx-auto aspect-[16/10.5] w-full">
+              {/* Left stack (finished pages) */}
+              <StackEdge side="left" thickness={leftStack} />
+              {/* Right stack (remaining pages) */}
+              <StackEdge side="right" thickness={rightStack} />
+
+              {/* Inner spread frame */}
+              <div className="absolute inset-0 overflow-hidden rounded-[10px] bg-[#f5efdf] shadow-[0_40px_80px_-30px_rgba(30,45,30,0.55)] ring-1 ring-forest/10">
+                {/* Static spread — the current visible pages */}
+                <StaticSpread page={currentPage} />
+
+                {/* Spine seam */}
+                <div className="pointer-events-none absolute inset-y-0 left-1/2 hidden w-[26px] -translate-x-1/2 bg-gradient-to-r from-transparent via-forest/25 to-transparent md:block" />
+                <div className="pointer-events-none absolute inset-y-0 left-1/2 hidden w-px -translate-x-1/2 bg-forest/25 md:block" />
+
+                {/* Flipping sheet overlay */}
+                {flipping && flipFrontPage && flipBackPage && (
+                  <FlippingSheet
+                    direction={flipping}
+                    front={flipFrontPage}
+                    back={flipBackPage}
+                    durationMs={FLIP_MS}
+                  />
+                )}
+
+                {/* Edge click zones */}
+                <button
+                  aria-label="Previous page"
+                  onClick={prev}
+                  className="absolute inset-y-0 left-0 z-30 w-1/6 cursor-w-resize focus:outline-none"
+                />
+                <button
+                  aria-label="Next page"
+                  onClick={next}
+                  className="absolute inset-y-0 right-0 z-30 w-1/6 cursor-e-resize focus:outline-none"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Controls */}
+          <div className="mt-8 flex items-center gap-4 text-sm text-charcoal/70">
+            <button
+              onClick={prev}
+              disabled={index === 0 || !!flipping}
+              className="grid h-10 w-10 place-items-center rounded-full border border-forest/25 text-forest transition hover:bg-forest hover:text-ivory disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-forest"
+            >‹</button>
+            <div className="font-serif italic text-charcoal/60">
+              {currentPage.kind === "cover"
+                ? "Cover"
+                : `${JOURNAL_MONTHS[currentPage.monthIndex].name} · Page ${index} of ${total - 1}`}
+            </div>
+            <button
+              onClick={next}
+              disabled={index === total - 1 || !!flipping}
+              className="grid h-10 w-10 place-items-center rounded-full border border-forest/25 text-forest transition hover:bg-forest hover:text-ivory disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-forest"
+            >›</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function StackEdge({ side, thickness }: { side: "left" | "right"; thickness: number }) {
+  const layers = Array.from({ length: thickness });
+  return (
+    <div
+      aria-hidden
+      className={`pointer-events-none absolute inset-y-1 ${side === "left" ? "left-0" : "right-0"} w-2`}
+      style={{ zIndex: 1 }}
+    >
+      {layers.map((_, i) => (
+        <div
+          key={i}
+          className="absolute inset-y-0 rounded-[2px]"
+          style={{
+            [side]: `${-i * 1.2}px` as string & Record<never, never>,
+            width: "3px",
+            background: i % 2 === 0 ? "#e8dfc7" : "#efe6cf",
+            boxShadow: i === layers.length - 1 ? "0 0 0 1px rgba(60,70,50,0.08)" : undefined,
+          } as React.CSSProperties}
+        />
+      ))}
+    </div>
+  );
+}
+
+/** Two-page spread showing the *current* resting page. */
+function StaticSpread({ page }: { page: PageKind }) {
+  // For "cover" we render a single-cover treatment across the whole spread.
+  if (page.kind === "cover") {
+    return <CoverSpread />;
+  }
+  if (page.kind === "month-intro") {
+    const m = JOURNAL_MONTHS[page.monthIndex];
+    return (
+      <div className="absolute inset-0 grid grid-cols-1 md:grid-cols-2">
+        <PaperPage side="left"><MonthIntroLeft month={m} /></PaperPage>
+        <PaperPage side="right"><MonthIntroRight month={m} /></PaperPage>
+      </div>
+    );
+  }
+  const m = JOURNAL_MONTHS[page.monthIndex];
+  const p = m.plants[page.plantIndex];
+  return (
+    <div className="absolute inset-0 grid grid-cols-1 md:grid-cols-2">
+      <PaperPage side="left"><PlantPageImage plant={p} month={m} /></PaperPage>
+      <PaperPage side="right"><PlantPageText plant={p} month={m} index={page.plantIndex} total={m.plants.length} /></PaperPage>
+    </div>
+  );
+}
+
+/** A single flipping sheet: front face shows the outgoing page-half, back face the incoming one. */
+function FlippingSheet({
+  direction, front, back, durationMs,
+}: {
+  direction: "next" | "prev";
+  front: PageKind;
+  back: PageKind;
+  durationMs: number;
+}) {
+  // Which side of the spread is turning
+  const turningRight = direction === "next";
+  // Face content — we show just the relevant half of each page
+  return (
+    <div
+      className={`absolute inset-y-0 z-20 ${turningRight ? "right-0 left-1/2" : "left-0 right-1/2"}`}
+      style={{ perspective: "2400px" }}
+    >
+      <div
+        className="relative h-full w-full"
+        style={{
+          transformStyle: "preserve-3d",
+          transformOrigin: turningRight ? "left center" : "right center",
+          animation: `${turningRight ? "egrow-flip-next" : "egrow-flip-prev"} ${durationMs}ms cubic-bezier(0.55, 0.05, 0.35, 1) forwards`,
+        }}
+      >
+        {/* FRONT face (outgoing) */}
+        <div
+          className="absolute inset-0 overflow-hidden bg-[#f5efdf]"
+          style={{ backfaceVisibility: "hidden" }}
+        >
+          <HalfFace page={front} side={turningRight ? "right" : "left"} />
+          {/* travelling shadow */}
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background: turningRight
+                ? "linear-gradient(to right, rgba(0,0,0,0) 60%, rgba(0,0,0,0.18) 100%)"
+                : "linear-gradient(to left, rgba(0,0,0,0) 60%, rgba(0,0,0,0.18) 100%)",
+            }}
+          />
+        </div>
+        {/* BACK face (incoming) */}
+        <div
+          className="absolute inset-0 overflow-hidden bg-[#f5efdf]"
+          style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
+        >
+          <HalfFace page={back} side={turningRight ? "left" : "right"} />
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background: turningRight
+                ? "linear-gradient(to left, rgba(0,0,0,0) 60%, rgba(0,0,0,0.15) 100%)"
+                : "linear-gradient(to right, rgba(0,0,0,0) 60%, rgba(0,0,0,0.15) 100%)",
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** Renders just one side (left/right) of a page for the flipping face. */
+function HalfFace({ page, side }: { page: PageKind; side: "left" | "right" }) {
+  if (page.kind === "cover") {
+    return <div className="h-full w-full"><CoverHalf side={side} /></div>;
+  }
+  if (page.kind === "month-intro") {
+    const m = JOURNAL_MONTHS[page.monthIndex];
+    return (
+      <PaperPage side={side} fill>
+        {side === "left" ? <MonthIntroLeft month={m} /> : <MonthIntroRight month={m} />}
+      </PaperPage>
+    );
+  }
+  const m = JOURNAL_MONTHS[page.monthIndex];
+  const p = m.plants[page.plantIndex];
+  return (
+    <PaperPage side={side} fill>
+      {side === "left"
+        ? <PlantPageImage plant={p} month={m} />
+        : <PlantPageText plant={p} month={m} index={page.plantIndex} total={m.plants.length} />}
+    </PaperPage>
+  );
+}
+
+function PaperPage({ side, children, fill = false }: { side: "left" | "right"; children: React.ReactNode; fill?: boolean }) {
+  return (
+    <div
+      className={`relative h-full ${fill ? "w-full" : ""} overflow-hidden`}
+      style={{
+        background:
+          "radial-gradient(120% 90% at 50% 0%, #fbf6e6 0%, #f4ecd5 60%, #eee2c2 100%)",
+      }}
+    >
+      {/* subtle paper grain */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.35] mix-blend-multiply"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(115deg, rgba(120,100,60,0.05) 0 1px, transparent 1px 3px), radial-gradient(circle at 20% 30%, rgba(120,100,60,0.06), transparent 60%), radial-gradient(circle at 80% 70%, rgba(120,100,60,0.05), transparent 55%)",
+        }}
+      />
+      {/* deckled edge */}
+      <div
+        aria-hidden
+        className={`pointer-events-none absolute inset-y-0 ${side === "left" ? "left-0" : "right-0"} w-2`}
+        style={{
+          background:
+            side === "left"
+              ? "linear-gradient(to right, rgba(60,50,30,0.14), transparent)"
+              : "linear-gradient(to left, rgba(60,50,30,0.14), transparent)",
+        }}
+      />
+      {/* spine-side gutter shadow */}
+      <div
+        aria-hidden
+        className={`pointer-events-none absolute inset-y-0 ${side === "left" ? "right-0" : "left-0"} w-10`}
+        style={{
+          background:
+            side === "left"
+              ? "linear-gradient(to right, transparent, rgba(60,50,30,0.16))"
+              : "linear-gradient(to left, transparent, rgba(60,50,30,0.16))",
+        }}
+      />
+      {/* Corner sketches */}
+      <CornerSketch side={side} />
+      <div className="relative z-10 h-full">{children}</div>
+    </div>
+  );
+}
+
+function CornerSketch({ side }: { side: "left" | "right" }) {
+  return (
+    <>
+      <svg
+        aria-hidden
+        viewBox="0 0 60 60"
+        className={`pointer-events-none absolute h-16 w-16 text-olive/40 ${side === "left" ? "left-3 top-3" : "right-3 top-3"}`}
+        fill="none" stroke="currentColor" strokeWidth="0.7" strokeLinecap="round"
+      >
+        <path d="M6 30 C 18 10, 40 8, 54 20" />
+        <path d="M14 24 C 20 22, 24 24, 26 30" />
+        <path d="M28 18 C 34 18, 38 22, 40 28" />
+        <path d="M42 14 C 48 14, 52 18, 54 22" />
+      </svg>
+      <svg
+        aria-hidden
+        viewBox="0 0 60 60"
+        className={`pointer-events-none absolute h-14 w-14 text-olive/30 ${side === "left" ? "left-4 bottom-4" : "right-4 bottom-4"}`}
+        fill="none" stroke="currentColor" strokeWidth="0.7" strokeLinecap="round"
+      >
+        <path d="M8 50 C 20 40, 30 32, 50 20" />
+        <path d="M18 46 C 20 42, 24 40, 28 40" />
+        <path d="M34 34 C 38 30, 42 30, 46 32" />
+      </svg>
+    </>
+  );
+}
+
+function CoverSpread() {
+  return (
+    <div className="absolute inset-0 grid grid-cols-1 md:grid-cols-2">
+      <div className="hidden md:block"><CoverHalf side="left" /></div>
+      <CoverHalf side="right" />
+    </div>
+  );
+}
+
+function CoverHalf({ side }: { side: "left" | "right" }) {
+  // The right half carries the title; the left half is the inside back-cover flap.
+  if (side === "left") {
+    return (
+      <div
+        className="relative h-full w-full"
+        style={{
+          background:
+            "linear-gradient(135deg, #354a35 0%, #2a3d2b 50%, #223022 100%)",
+        }}
+      >
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-30"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.08), transparent 50%), repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 6px)",
+          }}
+        />
+        <div className="absolute inset-0 grid place-items-center p-10 text-center">
+          <div className="text-ivory/70">
+            <div className="font-serif text-2xl italic">Vol. I</div>
+            <div className="mx-auto my-4 h-px w-16 bg-ivory/40" />
+            <div className="text-xs tracking-[0.35em]">EGROW · EST. 2018</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div
+      className="relative h-full w-full"
+      style={{
+        background:
+          "linear-gradient(135deg, #3a5238 0%, #2f4530 55%, #253728 100%)",
+      }}
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-40"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle at 70% 30%, rgba(255,255,255,0.1), transparent 55%), repeating-linear-gradient(-45deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 6px)",
+        }}
+      />
+      <div className="absolute inset-0 grid place-items-center p-8 text-center text-ivory">
+        <div>
+          <svg viewBox="0 0 120 120" className="mx-auto h-16 w-16 text-ivory/70" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round">
+            <path d="M60 20 C 40 40, 40 80, 60 100 C 80 80, 80 40, 60 20 Z" />
+            <path d="M60 20 L 60 100" />
+            <path d="M60 40 C 52 45, 48 55, 50 65" />
+            <path d="M60 40 C 68 45, 72 55, 70 65" />
+            <path d="M60 60 C 52 65, 50 75, 52 85" />
+            <path d="M60 60 C 68 65, 70 75, 68 85" />
+          </svg>
+          <div className="mx-auto my-5 h-px w-20 bg-ivory/40" />
+          <div className="text-xs uppercase tracking-[0.4em] text-ivory/70">Egrow</div>
+          <div className="mt-3 font-serif text-3xl leading-tight md:text-4xl">Seasonal<br />Plant Journal</div>
+          <div className="mx-auto mt-5 h-px w-12 bg-ivory/40" />
+          <div className="mt-4 font-serif text-sm italic text-ivory/70">Turn the page to begin →</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MonthIntroLeft({ month }: { month: JournalMonth }) {
+  return (
+    <div className="flex h-full flex-col justify-between p-10 md:p-14">
+      <div>
+        <div className="text-xs uppercase tracking-[0.4em] text-olive/70">Chapter</div>
+        <h3 className="mt-3 font-serif text-6xl leading-none text-forest md:text-7xl">{month.name}</h3>
+        <div className="mt-4 max-w-xs text-sm italic text-charcoal/75">{month.season}</div>
+      </div>
+      <div className="max-w-xs font-serif text-lg italic leading-snug text-charcoal/80">
+        “{month.epigraph}”
+      </div>
+      <div className="text-[10px] uppercase tracking-[0.35em] text-charcoal/50">Egrow Field Notes</div>
+    </div>
+  );
+}
+
+function MonthIntroRight({ month }: { month: JournalMonth }) {
+  return (
+    <div className="flex h-full flex-col p-10 md:p-14">
+      <div className="text-xs uppercase tracking-[0.35em] text-olive/70">In this chapter</div>
+      <div className="mt-6 space-y-4">
+        {month.plants.map((p, i) => (
+          <div key={p.name} className="flex items-baseline gap-4 border-b border-forest/10 pb-3">
+            <div className="font-serif text-2xl italic text-forest/70">{String(i + 1).padStart(2, "0")}</div>
+            <div>
+              <div className="font-serif text-xl text-forest">{p.name}</div>
+              <div className="text-xs italic text-charcoal/60">{p.latin}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="mt-auto pt-6 text-xs italic text-charcoal/60">
+        Turn the page for each plant, its ideal moment, and a short note from the nursery.
+      </div>
+    </div>
+  );
+}
+
+function PlantPageImage({ plant, month }: { plant: JournalPlant; month: JournalMonth }) {
+  const img = JOURNAL_IMAGES[Math.abs((plant.name.length + month.name.length) % JOURNAL_IMAGES.length)];
+  return (
+    <div className="flex h-full flex-col p-8 md:p-10">
+      <div className="mb-4 flex items-baseline justify-between text-[10px] uppercase tracking-[0.35em] text-charcoal/50">
+        <span>{month.name}</span>
+        <span>Field Plate</span>
+      </div>
+      <div className="relative flex-1 overflow-hidden rounded-md ring-1 ring-forest/15">
+        <img src={img} alt={plant.name} className="h-full w-full object-cover" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,transparent_60%,rgba(60,50,30,0.18)_100%)]" />
+      </div>
+      <div className="mt-5">
+        <div className="font-serif text-3xl italic text-forest md:text-4xl">{plant.name}</div>
+        <div className="mt-1 text-xs italic text-charcoal/60">{plant.latin}</div>
+        <div className="mt-3 h-px w-16 bg-olive/40" />
+        <p className="mt-3 max-w-sm text-sm leading-relaxed text-charcoal/75">{plant.intro}</p>
+      </div>
+    </div>
+  );
+}
+
+function PlantPageText({
+  plant, month, index, total,
+}: { plant: JournalPlant; month: JournalMonth; index: number; total: number }) {
+  return (
+    <div className="flex h-full flex-col p-8 md:p-10">
+      <div className="mb-4 flex items-baseline justify-between text-[10px] uppercase tracking-[0.35em] text-charcoal/50">
+        <span>{month.name} — Plate {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</span>
+        <span>Notes</span>
+      </div>
+      <div className="space-y-4 text-sm leading-relaxed text-charcoal/80">
+        <div>
+          <div className="text-[11px] uppercase tracking-[0.3em] text-olive/80">Why this month</div>
+          <p className="mt-1">{plant.why}</p>
+        </div>
+        <div>
+          <div className="text-[11px] uppercase tracking-[0.3em] text-olive/80">Benefits</div>
+          <p className="mt-1">{plant.benefits}</p>
+        </div>
+        <div>
+          <div className="text-[11px] uppercase tracking-[0.3em] text-olive/80">Care</div>
+          <div className="mt-2 grid grid-cols-3 gap-2">
+            <CareChip label="Light" value={plant.care.light} />
+            <CareChip label="Water" value={plant.care.water} />
+            <CareChip label="Upkeep" value={plant.care.upkeep} />
+          </div>
+        </div>
+      </div>
+      <div className="mt-auto pt-6">
+        <div className="rounded-md border border-olive/30 bg-ivory/60 p-4">
+          <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-olive">
+            <Leaf className="h-3 w-3" /> Egrow Tip
+          </div>
+          <p
+            className="mt-2 text-sm leading-relaxed text-charcoal/85"
+            style={{ fontFamily: "'Caveat', 'Segoe Script', cursive" as string }}
+          >
+            {plant.tip}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CareChip({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-md bg-ivory/60 p-2 ring-1 ring-forest/10">
+      <div className="text-[10px] uppercase tracking-[0.25em] text-olive/80">{label}</div>
+      <div className="mt-1 text-xs leading-snug text-charcoal/80">{value}</div>
+    </div>
+  );
+}
