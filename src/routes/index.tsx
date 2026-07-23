@@ -75,6 +75,43 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
   );
 }
 
+/* ---------------- Vine Spine ---------------- */
+
+function VineSpine() {
+  return (
+    <svg
+      aria-hidden="true"
+      className="pointer-events-none absolute left-0 top-0 hidden h-full w-[140px] text-olive/40 md:block"
+      viewBox="0 0 140 3000"
+      preserveAspectRatio="none"
+      fill="none"
+    >
+      <path
+        d="M70 0 C 40 200, 100 380, 60 560 S 20 940, 80 1120 S 110 1500, 50 1680 S 30 2060, 90 2240 S 60 2620, 70 3000"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
+      {Array.from({ length: 22 }).map((_, i) => {
+        const y = 60 + i * 135;
+        const left = i % 2 === 0;
+        const cx = left ? 40 : 100;
+        const rot = left ? -30 : 30;
+        return (
+          <g key={i} transform={`translate(${cx} ${y}) rotate(${rot})`} className="text-sage">
+            <path
+              d="M0 0 C 10 -6, 22 -4, 26 6 C 22 12, 10 12, 0 6 Z"
+              fill="currentColor"
+              opacity="0.55"
+            />
+            <path d="M0 3 L 24 3" stroke="var(--color-olive)" strokeOpacity="0.35" strokeWidth="0.6" />
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
 /* ---------------- Nav ---------------- */
 
 function Nav() {
