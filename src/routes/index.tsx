@@ -135,7 +135,7 @@ function VineSpine() {
   return (
     <svg
       aria-hidden="true"
-      className="pointer-events-none absolute top-0 z-0 hidden h-full w-[110px] md:block"
+      className="pointer-events-none absolute top-0 z-50 hidden h-full w-[110px] md:block"
       style={{ left: "24px" }}
       viewBox={`0 0 ${VB_W} ${VB_H}`}
       preserveAspectRatio="none"
