@@ -673,18 +673,18 @@ function Gallery() {
   ];
   const [open, setOpen] = useState<string | null>(null);
   return (
-    <section id="gallery" className="relative bg-sage py-48">
+    <section id="gallery" className="relative bg-sage py-24">
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
-        <div className="mb-20 grid grid-cols-1 items-end gap-6 md:grid-cols-2">
+        <div className="mb-10 grid grid-cols-1 items-end gap-3 md:grid-cols-2">
           <div>
             <Eyebrow>Gallery</Eyebrow>
-            <h2 className="mt-4 font-serif text-5xl leading-[1.05] md:text-6xl">Moments That Bloom.</h2>
+            <h2 className="mt-3 font-serif text-5xl leading-[1.05] md:text-6xl">Moments That Bloom.</h2>
           </div>
           <p className="max-w-md text-charcoal/80 md:justify-self-end">
             A glimpse of greenery, growth and beautiful spaces. Follow along as we tend, plant, and share the everyday poetry of the nursery.
           </p>
         </div>
-        <div className="grid auto-rows-[200px] grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
+        <div className="grid auto-rows-[200px] grid-cols-2 gap-2 md:grid-cols-4 md:gap-3">
           {imgs.map((im, i) => (
             <button
               key={i}
@@ -695,7 +695,7 @@ function Gallery() {
             </button>
           ))}
         </div>
-        <div className="mt-12 text-center">
+        <div className="mt-6 text-center">
           <a href="#" className="btn-ghost">Follow Our Journey →</a>
         </div>
       </div>
