@@ -331,8 +331,8 @@ function About() {
     { year: "2026", title: "And Beyond", note: "Continuing to grow, together." },
   ];
   return (
-    <section id="about" className="relative py-48">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-20 px-8 md:grid-cols-12 md:gap-16 lg:px-12">
+    <section id="about" className="relative py-24">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-8 md:grid-cols-12 md:gap-8 lg:px-12">
         <div className="md:col-span-4">
           <div className="relative mx-auto max-w-[360px]">
             <div className="overflow-hidden rounded-t-[220px] rounded-b-[220px] shadow-xl">
@@ -342,18 +342,18 @@ function About() {
         </div>
         <div className="md:col-span-5">
           <Eyebrow>Our Story</Eyebrow>
-          <h2 className="mt-5 font-serif text-5xl leading-[1.1] md:text-6xl">
+          <h2 className="mt-3 font-serif text-5xl leading-[1.1] md:text-6xl">
             From a Passion,<br />To a Green Legacy.
           </h2>
-          <p className="mt-8 max-w-md text-base leading-relaxed text-charcoal/80">
+          <p className="mt-4 max-w-md text-base leading-relaxed text-charcoal/80">
             What began as a small dream to bring more plants into people's lives has grown into a space filled with greenery, learning and love. Every plant we tend is chosen for how it makes a home feel.
           </p>
-          <a href="#stories" className="btn-link mt-10">Know Our Journey →</a>
+          <a href="#stories" className="btn-link mt-5">Know Our Journey →</a>
         </div>
         <div className="md:col-span-3">
           <ol className="relative border-l border-olive/30 pl-6">
             {timeline.map((t, i) => (
-              <li key={i} className="relative mb-8 last:mb-0">
+              <li key={i} className="relative mb-4 last:mb-0">
                 <span className="absolute -left-[31px] top-1 grid h-4 w-4 place-items-center rounded-full border border-olive bg-ivory">
                   <span className="h-1.5 w-1.5 rounded-full bg-olive" />
                 </span>
