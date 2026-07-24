@@ -374,49 +374,348 @@ function IconHeart({ className = "" }: { className?: string }) {
 /* ---------------- Growing Stories ---------------- */
 
 function GrowingStories() {
-  const stories = [
-    { tag: "Editor's Pick", title: "Our Bestselling Plant", img: story1, heights: [520, 380], body: "A vibrant Calathea Triostar that brings colour and calm to any corner. Beloved for its striking foliage and easy temperament." },
-    { tag: "Style Guide", title: "Pottery That Completes Your Space", img: story2, heights: [420, 480], body: "Handcrafted stoneware and terracotta shaped by local artisans. Chosen to complement plants, not compete with them." },
-    { tag: "Plant Guide", title: "Beginner's Favourite", img: story3, heights: [560, 340], body: "A humble Pothos on a sunlit windowsill — the perfect first plant. Forgiving, generous, and endlessly rewarding." },
+  type Story = {
+    tag: string;
+    kicker: string;
+    title: string;
+    dek: string;
+    img: string;
+    palette: {
+      bg: string;
+      ink: string;
+      soft: string;
+      rule: string;
+      accent: string;
+    };
+    article: {
+      lede: string;
+      sections: { heading: string; body: string; list?: string[] }[];
+      tip: { label: string; body: string };
+    };
+  };
+
+  const stories: Story[] = [
+    {
+      tag: "Featured Story",
+      kicker: "Chapter One",
+      title: "Our Bestselling Plant",
+      dek: "A quiet study of the Calathea Triostar — the plant our regulars keep coming back for.",
+      img: story1,
+      palette: {
+        bg: "#2f4a3a",
+        ink: "#f4efe2",
+        soft: "rgba(244,239,226,0.72)",
+        rule: "rgba(244,239,226,0.22)",
+        accent: "#c7d6b4",
+      },
+      article: {
+        lede: "Some plants arrive quietly and rearrange the room. The Calathea Triostar is one of those — striped in cream, blush and deep green, it turns an ordinary corner into something worth pausing beside.",
+        sections: [
+          {
+            heading: "Why it wins hearts",
+            body: "It moves. Leaves lift at dusk and settle again with the morning light, giving the plant a rhythm you begin to notice without meaning to. It is the closest thing we sell to a living painting.",
+          },
+          {
+            heading: "What it gives back",
+            body: "Calming presence, filtered air, and a slow companionship. It thrives in the diffused light of Indian homes and forgives the occasional missed watering with grace.",
+            list: [
+              "Soft, indirect light — a metre from the window",
+              "Water when the top inch of soil feels dry",
+              "Mist once a week; it loves gentle humidity",
+              "Wipe leaves every fortnight to keep the pattern luminous",
+            ],
+          },
+          {
+            heading: "Egrow's recommendation",
+            body: "Pair the Triostar with a matte stoneware pot in warm sand or unglazed terracotta. The muted clay lets the foliage do the talking, and the weight keeps it steady as it grows.",
+          },
+        ],
+        tip: {
+          label: "A small gardener's note",
+          body: "If the leaves curl inward by afternoon, the air is thirstier than the soil. A shallow tray of pebbles and water beneath the pot solves it beautifully.",
+        },
+      },
+    },
+    {
+      tag: "Style Guide",
+      kicker: "Chapter Two",
+      title: "Pottery That Completes Your Space",
+      dek: "On the quiet craft of choosing a vessel — where clay, colour and proportion decide the whole composition.",
+      img: story2,
+      palette: {
+        bg: "#e9d9c3",
+        ink: "#4a3524",
+        soft: "rgba(74,53,36,0.72)",
+        rule: "rgba(74,53,36,0.18)",
+        accent: "#b47a4c",
+      },
+      article: {
+        lede: "A plant is only half the object. The pot is the sentence around it — the punctuation that decides whether the whole thing feels considered or accidental.",
+        sections: [
+          {
+            heading: "The vessels we keep",
+            body: "We work with a small circle of studio potters across Maharashtra and Rajasthan. Every piece is thrown by hand, which means no two are identical and every glaze carries the mark of its maker.",
+          },
+          {
+            heading: "How to pair a pot",
+            body: "Let the foliage lead. Soft, painterly leaves want a quiet, unglazed clay. Bold sculptural plants can carry a heavier glaze or a deeper colour. When in doubt, choose warm neutrals — sand, bone, oxblood, moss.",
+            list: [
+              "Match the pot's height to roughly one-third of the plant",
+              "Let one hero pot anchor a shelf; keep the rest quieter",
+              "Repeat a single material across a room for calm",
+            ],
+          },
+          {
+            heading: "Collections in the studio",
+            body: "Our Sandstone series, the deep Oxblood range, and a growing collection of hand-thrown terracotta from a family kiln outside Jaipur. Each arrives in small batches and rarely stays long.",
+          },
+        ],
+        tip: {
+          label: "A small gardener's note",
+          body: "Unglazed terracotta breathes — perfect for succulents and rooted cuttings. Save your glazed pieces for plants that prefer moisture kept close.",
+        },
+      },
+    },
+    {
+      tag: "Plant Guide",
+      kicker: "Chapter Three",
+      title: "Beginner's Favourite",
+      dek: "The gentlest introduction to green living — a pothos on a sunlit sill, and everything it teaches you.",
+      img: story3,
+      palette: {
+        bg: "#f6f1e4",
+        ink: "#324a2c",
+        soft: "rgba(50,74,44,0.72)",
+        rule: "rgba(50,74,44,0.16)",
+        accent: "#7fa06a",
+      },
+      article: {
+        lede: "Everyone remembers their first plant. For most of our customers, it is a pothos — trailing, generous, almost impossible to disappoint. It is the plant that turns visitors into gardeners.",
+        sections: [
+          {
+            heading: "Why we recommend it first",
+            body: "It reads the room. Bright window or dim study, weekly watering or the occasional forgotten fortnight — the pothos keeps going. It grows visibly, which is its quiet gift to a new plant parent.",
+          },
+          {
+            heading: "A gentle care rhythm",
+            body: "There is no ceremony to it. A little water, a little light, an occasional trim. The plant will show you what it needs long before it complains.",
+            list: [
+              "Any indirect light — even a north-facing window is enough",
+              "Water when the top two inches of soil feel dry",
+              "Trim leggy vines to encourage a fuller shape",
+              "Repot every second year, one size up",
+            ],
+          },
+          {
+            heading: "Varieties to begin with",
+            body: "Golden Pothos for warmth, Marble Queen for a softer, painterly leaf, and Neon for a small burst of chartreuse on a bookshelf. All three are stocked most weeks of the year.",
+          },
+        ],
+        tip: {
+          label: "A small gardener's note",
+          body: "Any cutting with two nodes will root in a glass of water within a fortnight. Your first pothos will quickly become several — and that is how most collections begin.",
+        },
+      },
+    },
   ];
+
   const [active, setActive] = useState<number | null>(null);
+  const story = active !== null ? stories[active] : null;
+
   return (
     <section id="stories" className="relative py-24">
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
-        <div className="mb-12 text-center">
+        <div className="mb-14 max-w-2xl">
           <Eyebrow>Growing Stories</Eyebrow>
-          <h2 className="mt-3 font-serif text-5xl leading-[1.05] md:text-6xl">Stories That Inspire Growth.</h2>
+          <h2 className="mt-4 font-serif text-4xl leading-[1.08] text-forest md:text-5xl">
+            Field notes from the nursery.
+          </h2>
+          <p className="mt-4 max-w-lg text-[0.95rem] leading-relaxed text-charcoal/70">
+            Short editorial pieces on the plants, pottery and small rituals that shape the way we garden. Open any chapter to read the full story.
+          </p>
         </div>
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
-          {stories.map((s, i) => {
-            const isActive = active === i;
-            const isDimmed = active !== null && active !== i;
-            const colSpan = active === null ? "md:col-span-4" : isActive ? "md:col-span-8" : "md:col-span-2";
-            const h = active === null ? s.heights[i % 2] : isActive ? 620 : 360;
-            return (
+
+        {story === null ? (
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
+            {stories.map((s, i) => (
               <button
                 key={i}
-                onClick={() => setActive(isActive ? null : i)}
-                className={`group relative overflow-hidden rounded-3xl text-left transition-all duration-700 ease-[cubic-bezier(.2,.8,.2,1)] ${colSpan} ${isDimmed ? "opacity-70" : ""}`}
-                style={{ height: `${h}px` }}
+                onClick={() => setActive(i)}
+                className="group flex flex-col text-left"
               >
-                <img src={s.img} alt={s.title} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1500ms] group-hover:scale-105" />
-                <div className="absolute inset-0 bg-gradient-to-t from-forest/85 via-forest/25 to-transparent" />
-                <div className="absolute inset-0 flex flex-col justify-end p-8 text-ivory">
-                  <div className="text-[0.7rem] uppercase tracking-[0.25em] text-ivory/80">{s.tag}</div>
-                  <div className="mt-2 font-serif text-2xl md:text-3xl">{s.title}</div>
-                  <div className={`overflow-hidden transition-all duration-500 ${isActive ? "mt-4 max-h-40 opacity-100" : "max-h-0 opacity-0"}`}>
-                    <p className="max-w-lg text-sm leading-relaxed text-ivory/90">{s.body}</p>
-                    <span className="mt-4 inline-block border-b border-ivory pb-0.5 text-xs">Read the full story →</span>
+                <div className="relative aspect-[4/5] overflow-hidden rounded-sm">
+                  <img
+                    src={s.img}
+                    alt={s.title}
+                    loading="lazy"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.03]"
+                  />
+                </div>
+                <div className="mt-6">
+                  <div className="text-[0.66rem] uppercase tracking-[0.28em] text-olive">
+                    {s.tag}
                   </div>
-                  {!isActive && <span className="mt-4 text-xs text-ivory/80">Read More →</span>}
+                  <h3 className="mt-3 font-serif text-[1.7rem] leading-[1.15] text-forest">
+                    {s.title}
+                  </h3>
+                  <p className="mt-3 max-w-sm text-[0.92rem] leading-relaxed text-charcoal/70">
+                    {s.dek}
+                  </p>
+                  <span className="mt-5 inline-block border-b border-forest/40 pb-[2px] text-[0.72rem] uppercase tracking-[0.24em] text-forest transition-colors group-hover:border-olive group-hover:text-olive">
+                    Read the chapter
+                  </span>
                 </div>
               </button>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <StoryArticle story={story} onClose={() => setActive(null)} />
+        )}
       </div>
     </section>
+  );
+}
+
+function StoryArticle({
+  story,
+  onClose,
+}: {
+  story: {
+    tag: string;
+    kicker: string;
+    title: string;
+    dek: string;
+    img: string;
+    palette: { bg: string; ink: string; soft: string; rule: string; accent: string };
+    article: {
+      lede: string;
+      sections: { heading: string; body: string; list?: string[] }[];
+      tip: { label: string; body: string };
+    };
+  };
+  onClose: () => void;
+}) {
+  const { palette, article } = story;
+  return (
+    <article
+      key={story.title}
+      className="fade-up relative overflow-hidden rounded-sm"
+      style={{ background: palette.bg, color: palette.ink }}
+    >
+      <div className="px-8 py-14 md:px-20 md:py-24">
+        <div className="mb-14 flex items-center justify-between">
+          <div
+            className="text-[0.66rem] uppercase tracking-[0.32em]"
+            style={{ color: palette.soft }}
+          >
+            {story.kicker} — {story.tag}
+          </div>
+          <button
+            onClick={onClose}
+            className="text-[0.7rem] uppercase tracking-[0.28em] transition-opacity hover:opacity-70"
+            style={{ color: palette.ink, borderBottom: `1px solid ${palette.rule}`, paddingBottom: 2 }}
+          >
+            Close chapter
+          </button>
+        </div>
+
+        <header className="max-w-3xl">
+          <h3
+            className="font-serif text-[2.6rem] leading-[1.05] md:text-[3.6rem]"
+            style={{ color: palette.ink }}
+          >
+            {story.title}
+          </h3>
+          <p
+            className="mt-6 font-serif text-[1.25rem] leading-[1.55] md:text-[1.35rem]"
+            style={{ color: palette.soft }}
+          >
+            {story.dek}
+          </p>
+        </header>
+
+        <div
+          className="my-12 h-px w-24"
+          style={{ background: palette.rule }}
+        />
+
+        <div className="grid grid-cols-1 gap-x-16 gap-y-10 md:grid-cols-12">
+          <div className="md:col-span-7 md:col-start-1">
+            <p
+              className="font-serif text-[1.15rem] leading-[1.7]"
+              style={{ color: palette.ink }}
+            >
+              {article.lede}
+            </p>
+
+            {article.sections.map((sec, i) => (
+              <section key={i} className="mt-12">
+                <h4
+                  className="text-[0.7rem] uppercase tracking-[0.28em]"
+                  style={{ color: palette.accent }}
+                >
+                  {sec.heading}
+                </h4>
+                <p
+                  className="mt-4 text-[0.98rem] leading-[1.8]"
+                  style={{ color: palette.soft }}
+                >
+                  {sec.body}
+                </p>
+                {sec.list && (
+                  <ul className="mt-5 space-y-2">
+                    {sec.list.map((li, j) => (
+                      <li
+                        key={j}
+                        className="flex gap-3 text-[0.95rem] leading-[1.7]"
+                        style={{ color: palette.soft }}
+                      >
+                        <span style={{ color: palette.accent }}>—</span>
+                        <span>{li}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            ))}
+
+            <aside
+              className="mt-14 border-l pl-6"
+              style={{ borderColor: palette.rule }}
+            >
+              <div
+                className="text-[0.66rem] uppercase tracking-[0.28em]"
+                style={{ color: palette.accent }}
+              >
+                {article.tip.label}
+              </div>
+              <p
+                className="mt-3 font-serif text-[1.1rem] italic leading-[1.65]"
+                style={{ color: palette.ink }}
+              >
+                {article.tip.body}
+              </p>
+            </aside>
+          </div>
+
+          <figure className="md:col-span-5 md:col-start-8 md:pt-4">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-sm">
+              <img
+                src={story.img}
+                alt={story.title}
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+            </div>
+            <figcaption
+              className="mt-4 text-[0.72rem] uppercase tracking-[0.24em]"
+              style={{ color: palette.soft }}
+            >
+              Photographed at the Egrow studio
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </article>
   );
 }
 
