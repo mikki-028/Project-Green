@@ -523,8 +523,47 @@ function GrowingStories() {
   const story = active !== null ? stories[active] : null;
 
   return (
-    <section id="stories" className="relative py-24">
-      <div className="mx-auto max-w-7xl px-8 lg:px-12">
+    <section
+      id="stories"
+      className="relative overflow-hidden py-24"
+      style={
+        story === null
+          ? {
+              backgroundColor: "#c9d6bc",
+              backgroundImage: [
+                "radial-gradient(ellipse at 15% 10%, rgba(255,255,255,0.55), transparent 55%)",
+                "radial-gradient(ellipse at 85% 90%, rgba(47,79,58,0.18), transparent 60%)",
+                "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='4'/><feColorMatrix values='0 0 0 0 0.18  0 0 0 0 0.22  0 0 0 0 0.14  0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")",
+              ].join(", "),
+            }
+          : undefined
+      }
+    >
+      {story === null && (
+        <>
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -left-24 top-10 h-[520px] w-[520px] opacity-[0.13]"
+            style={{
+              background:
+                "radial-gradient(closest-side, #2f4f3a 0%, transparent 70%)",
+              filter: "blur(2px)",
+              transform: "rotate(-18deg)",
+            }}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -right-32 bottom-0 h-[620px] w-[620px] opacity-[0.10]"
+            style={{
+              background:
+                "radial-gradient(closest-side, #2f4f3a 0%, transparent 70%)",
+              filter: "blur(4px)",
+              transform: "rotate(24deg)",
+            }}
+          />
+        </>
+      )}
+      <div className="relative mx-auto max-w-7xl px-8 lg:px-12">
         <div className="mb-14 max-w-2xl">
           <Eyebrow>Growing Stories</Eyebrow>
           <h2 className="mt-4 font-serif text-4xl leading-[1.08] text-forest md:text-5xl">
@@ -536,32 +575,36 @@ function GrowingStories() {
         </div>
 
         {story === null ? (
-          <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             {stories.map((s, i) => (
               <button
                 key={i}
                 onClick={() => setActive(i)}
-                className="group flex flex-col text-left"
+                className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/40 bg-white/25 p-5 text-left shadow-[0_10px_40px_-18px_rgba(47,79,58,0.35)] backdrop-blur-xl backdrop-saturate-150 transition-all duration-500 ease-out hover:-translate-y-1 hover:border-white/60 hover:bg-white/35 hover:shadow-[0_24px_60px_-22px_rgba(47,79,58,0.45)]"
               >
-                <div className="relative aspect-[4/5] overflow-hidden rounded-sm">
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/70 to-transparent"
+                />
+                <div className="relative aspect-[4/5] overflow-hidden rounded-xl">
                   <img
                     src={s.img}
                     alt={s.title}
                     loading="lazy"
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.03]"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.04]"
                   />
                 </div>
-                <div className="mt-6">
-                  <div className="text-[0.66rem] uppercase tracking-[0.28em] text-olive">
+                <div className="mt-6 px-1 pb-1">
+                  <div className="text-[0.62rem] uppercase tracking-[0.32em] text-olive">
                     {s.tag}
                   </div>
-                  <h3 className="mt-3 font-serif text-[1.7rem] leading-[1.15] text-forest">
+                  <h3 className="mt-3 font-serif text-[1.65rem] leading-[1.15] text-forest">
                     {s.title}
                   </h3>
-                  <p className="mt-3 max-w-sm text-[0.92rem] leading-relaxed text-charcoal/70">
+                  <p className="mt-3 max-w-sm text-[0.9rem] leading-relaxed text-charcoal/75">
                     {s.dek}
                   </p>
-                  <span className="mt-5 inline-block border-b border-forest/40 pb-[2px] text-[0.72rem] uppercase tracking-[0.24em] text-forest transition-colors group-hover:border-olive group-hover:text-olive">
+                  <span className="mt-6 inline-block border-b border-forest/40 pb-[2px] text-[0.7rem] uppercase tracking-[0.26em] text-forest transition-colors group-hover:border-olive group-hover:text-olive">
                     Read the chapter
                   </span>
                 </div>
