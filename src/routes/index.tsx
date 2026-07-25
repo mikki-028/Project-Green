@@ -241,10 +241,10 @@ function Nav() {
 /* ---------------- Hero ---------------- */
 
 function Hero() {
-  const videoRef = React.useRef<HTMLVideoElement>(null);
-  const [muted, setMuted] = React.useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [muted, setMuted] = useState(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
     v.muted = true;
