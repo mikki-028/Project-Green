@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import heroImg from "@/assets/hero-greenhouse.jpg";
+import heroVideo from "@/assets/nature_1.mp4.asset.json";
 import aboutImg from "@/assets/about-owner.jpg";
 import story1 from "@/assets/story-1.jpg";
 import story2 from "@/assets/story-2.jpg";
@@ -243,7 +243,15 @@ function Nav() {
 function Hero() {
   return (
     <section className="relative flex min-h-[100svh] items-center justify-center overflow-hidden">
-      <img src={heroImg} alt="Sunlit greenhouse filled with lush plants" className="absolute inset-0 h-full w-full object-cover" />
+      <video
+        src={heroVideo.url}
+        autoPlay
+        loop
+        playsInline
+        preload="auto"
+        className="absolute inset-0 h-full w-full object-cover"
+        aria-label="Ambient botanical nursery footage with natural bird chirping"
+      />
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/25 to-black/60" />
       <div className="relative z-10 mx-auto max-w-4xl px-6 pt-24 text-center text-ivory fade-up">
         <p className="mb-6 flex items-center justify-center gap-2 text-[0.7rem] uppercase tracking-[0.35em] text-ivory/85">
