@@ -241,18 +241,61 @@ function Nav() {
 /* ---------------- Hero ---------------- */
 
 function Hero() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [muted, setMuted] = useState(true);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = true;
+    const tryPlay = () => v.play().catch(() => {});
+    tryPlay();
+    document.addEventListener("touchstart", tryPlay, { once: true, passive: true });
+    document.addEventListener("click", tryPlay, { once: true });
+    return () => {
+      document.removeEventListener("touchstart", tryPlay);
+      document.removeEventListener("click", tryPlay);
+    };
+  }, []);
+
+  const toggleSound = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    const next = !muted;
+    v.muted = next;
+    setMuted(next);
+    if (!next) v.play().catch(() => {});
+  };
+
   return (
     <section className="relative flex min-h-[100svh] items-center justify-center overflow-hidden">
       <video
+        ref={videoRef}
         src={heroVideo.url}
         autoPlay
         loop
         playsInline
+        muted
+        // @ts-ignore - iOS webkit attribute
+        webkit-playsinline="true"
+        // @ts-ignore
+        x5-playsinline="true"
+        disablePictureInPicture
+        disableRemotePlayback
+        controls={false}
         preload="auto"
         className="absolute inset-0 h-full w-full object-cover"
         aria-label="Ambient botanical nursery footage with natural bird chirping"
       />
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/25 to-black/60" />
+      <button
+        type="button"
+        onClick={toggleSound}
+        aria-label={muted ? "Unmute video" : "Mute video"}
+        className="absolute bottom-6 right-6 z-20 rounded-full bg-black/40 px-3 py-2 text-xs uppercase tracking-widest text-ivory backdrop-blur-md border border-white/20 hover:bg-black/60 transition"
+      >
+        {muted ? "Sound on" : "Sound off"}
+      </button>
       <div className="relative z-10 mx-auto max-w-4xl px-6 pt-24 text-center text-ivory fade-up">
         <p className="mb-6 flex items-center justify-center gap-2 text-[0.7rem] uppercase tracking-[0.35em] text-ivory/85">
           <Leaf className="h-3.5 w-3.5" /> Welcome to Egrow
