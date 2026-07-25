@@ -631,32 +631,55 @@ function GrowingStories() {
               <button
                 key={i}
                 onClick={() => setActive(i)}
-                className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/40 bg-white/25 p-5 text-left shadow-[0_10px_40px_-18px_rgba(47,79,58,0.35)] backdrop-blur-xl backdrop-saturate-150 transition-all duration-500 ease-out hover:-translate-y-1 hover:border-white/60 hover:bg-white/35 hover:shadow-[0_24px_60px_-22px_rgba(47,79,58,0.45)]"
+                className="group relative flex aspect-[3/4] flex-col justify-between overflow-hidden rounded-[28px] border border-white/50 bg-white/20 p-8 text-left shadow-[0_20px_60px_-24px_rgba(47,79,58,0.4)] backdrop-blur-2xl backdrop-saturate-150 transition-all duration-500 ease-out hover:-translate-y-1.5 hover:border-white/70 hover:bg-white/30 hover:shadow-[0_32px_80px_-24px_rgba(47,79,58,0.5)]"
               >
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/70 to-transparent"
-                />
-                <div className="relative aspect-[4/5] overflow-hidden rounded-xl">
+                {/* Background image on right half with fade to glass */}
+                <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden rounded-[28px]">
                   <img
                     src={s.img}
-                    alt={s.title}
+                    alt=""
                     loading="lazy"
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.04]"
+                    className="absolute right-0 top-0 h-full w-[72%] object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.06]"
+                  />
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background:
+                        "linear-gradient(to right, rgba(255,255,255,0.78) 0%, rgba(255,255,255,0.55) 32%, rgba(255,255,255,0.15) 55%, rgba(255,255,255,0) 78%)",
+                      backdropFilter: "blur(2px)",
+                    }}
                   />
                 </div>
-                <div className="mt-6 px-1 pb-1">
-                  <div className="text-[0.62rem] uppercase tracking-[0.32em] text-olive">
+                {/* Top highlight */}
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent"
+                />
+
+                {/* Top: small icon chip */}
+                <div className="relative">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/60 bg-white/50 backdrop-blur-md">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2f4f3a" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 2c3 4 5 7 5 11a5 5 0 01-10 0c0-4 2-7 5-11z" />
+                      <path d="M12 13v8" />
+                    </svg>
+                  </div>
+                </div>
+
+                {/* Text block */}
+                <div className="relative max-w-[65%]">
+                  <div className="text-[0.62rem] uppercase tracking-[0.32em] text-forest/70">
                     {s.tag}
                   </div>
-                  <h3 className="mt-3 font-serif text-[1.65rem] leading-[1.15] text-forest">
+                  <h3 className="mt-4 font-serif text-[1.75rem] leading-[1.12] text-forest">
                     {s.title}
                   </h3>
-                  <p className="mt-3 max-w-sm text-[0.9rem] leading-relaxed text-charcoal/75">
+                  <div className="mt-5 h-px w-full bg-forest/15" />
+                  <p className="mt-5 text-[0.88rem] leading-relaxed text-charcoal/80">
                     {s.dek}
                   </p>
-                  <span className="mt-6 inline-block border-b border-forest/40 pb-[2px] text-[0.7rem] uppercase tracking-[0.26em] text-forest transition-colors group-hover:border-olive group-hover:text-olive">
-                    Read the chapter
+                  <span className="mt-8 inline-flex items-center gap-2 text-[0.72rem] uppercase tracking-[0.26em] text-forest transition-colors group-hover:text-olive">
+                    Read Story <span aria-hidden>→</span>
                   </span>
                 </div>
               </button>
