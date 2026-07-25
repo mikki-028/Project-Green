@@ -216,15 +216,19 @@ function Nav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${scrolled ? "backdrop-blur-md bg-ivory/80 border-b border-forest/10" : "bg-transparent"}`}
-    >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+    <header className="fixed inset-x-0 top-5 z-50 flex justify-center px-4">
+      <div
+        className={`mx-auto flex w-full max-w-5xl items-center justify-between rounded-full border px-5 py-3 shadow-lg backdrop-blur-xl transition-all duration-500 md:px-8 md:py-3.5 ${
+          scrolled
+            ? "bg-ivory/85 border-white/40 shadow-black/10 text-forest"
+            : "bg-white/10 border-white/20 shadow-black/5 text-ivory"
+        }`}
+      >
         <a href="#" className="flex items-center gap-2">
           <Leaf className={`h-6 w-6 ${scrolled ? "text-forest" : "text-ivory"}`} />
-          <span className={`font-serif text-2xl leading-none ${scrolled ? "text-forest" : "text-ivory"}`}>Egrow</span>
+          <span className="font-serif text-2xl leading-none">Egrow</span>
         </a>
-        <nav className={`hidden items-center gap-8 text-sm md:flex ${scrolled ? "text-forest" : "text-ivory"}`}>
+        <nav className="hidden items-center gap-6 text-sm md:flex">
           <a href="#home" className="hover:text-olive transition">Home</a>
           <a href="#about" className="hover:text-olive transition">About</a>
           <a href="#stories" className="hover:text-olive transition">Stories</a>
@@ -232,7 +236,9 @@ function Nav() {
           <a href="#gallery" className="hover:text-olive transition">Gallery</a>
           <a href="#contact" className="hover:text-olive transition">Contact</a>
         </nav>
-        <a href="#contact" className="btn-ghost hidden md:inline-flex">Plan Your Green Space</a>
+        <a href="#contact" className={`hidden md:inline-flex ${scrolled ? "btn-ghost" : "btn-ghost bg-white/10 text-ivory border-white/20 hover:bg-white/20 hover:text-ivory"}`}>
+          Plan Your Green Space
+        </a>
       </div>
     </header>
   );
