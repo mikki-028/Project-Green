@@ -217,7 +217,7 @@ function Nav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
   return (
-    <header className="fixed inset-x-0 top-5 z-50 flex justify-center px-4">
+    <header className="fixed inset-x-0 top-5 z-[70] flex justify-center px-4">
       <div
         className={`mx-auto flex w-full max-w-5xl items-center justify-between rounded-full border px-5 py-3 shadow-lg backdrop-blur-xl transition-all duration-500 md:px-8 md:py-3.5 ${
           scrolled
