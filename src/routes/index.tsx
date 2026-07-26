@@ -339,8 +339,23 @@ function About() {
     { year: "2026", title: "And Beyond", note: "Continuing to grow, together." },
   ];
   return (
-    <section id="about" className="relative py-24">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-8 md:grid-cols-12 md:gap-8 lg:px-12">
+    <section id="about" className="relative z-[60] overflow-hidden py-24">
+      {/* Botanical artwork background — covers the entire section and hides the global vine */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 bg-cover bg-center"
+        style={{ backgroundImage: `url(${botanicalBg.url})` }}
+      />
+      {/* Center-clear overlay to keep the heading and content in focus */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 45%, rgba(248,246,241,0.86) 0%, rgba(248,246,241,0.62) 32%, rgba(248,246,241,0.24) 62%, transparent 100%)",
+        }}
+      />
+      <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 gap-10 px-8 md:grid-cols-12 md:gap-8 lg:px-12">
         <div className="md:col-span-4">
           <div className="relative mx-auto max-w-[360px]">
             <div className="overflow-hidden rounded-t-[220px] rounded-b-[220px] shadow-xl">
