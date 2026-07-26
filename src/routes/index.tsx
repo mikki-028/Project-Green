@@ -343,8 +343,8 @@ function About() {
       {/* Botanical artwork background — covers the entire section and hides the global vine */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 z-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${botanicalBg.url})` }}
+        className="pointer-events-none absolute inset-0 z-0 bg-cover"
+        style={{ backgroundImage: `url(${botanicalBg.url})`, backgroundPosition: "center 22%" }}
       />
       {/* Center-clear overlay to keep the heading and content in focus */}
       <div
