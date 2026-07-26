@@ -19,6 +19,7 @@ import pMonstera from "@/assets/plant-monstera.jpg";
 import pAreca from "@/assets/plant-areca.jpg";
 import pPeace from "@/assets/plant-peace-lily.jpg";
 import pSnake from "@/assets/plant-snake.jpg";
+import botanicalBg from "@/assets/botanical-stories-bg.png.asset.json";
 import pPothos from "@/assets/plant-pothos.jpg";
 
 export const Route = createFileRoute("/")({
