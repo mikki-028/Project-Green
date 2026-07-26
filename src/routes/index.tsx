@@ -583,45 +583,24 @@ function GrowingStories() {
   return (
     <section
       id="stories"
-      className="relative overflow-hidden py-24"
-      style={
-        story === null
-          ? {
-              backgroundColor: "#c9d6bc",
-              backgroundImage: [
-                "radial-gradient(ellipse at 15% 10%, rgba(255,255,255,0.55), transparent 55%)",
-                "radial-gradient(ellipse at 85% 90%, rgba(47,79,58,0.18), transparent 60%)",
-                "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='4'/><feColorMatrix values='0 0 0 0 0.18  0 0 0 0 0.22  0 0 0 0 0.14  0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")",
-              ].join(", "),
-            }
-          : undefined
-      }
+      className="relative z-[60] overflow-hidden py-24"
     >
-      {story === null && (
-        <>
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -left-24 top-10 h-[520px] w-[520px] opacity-[0.13]"
-            style={{
-              background:
-                "radial-gradient(closest-side, #2f4f3a 0%, transparent 70%)",
-              filter: "blur(2px)",
-              transform: "rotate(-18deg)",
-            }}
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -right-32 bottom-0 h-[620px] w-[620px] opacity-[0.10]"
-            style={{
-              background:
-                "radial-gradient(closest-side, #2f4f3a 0%, transparent 70%)",
-              filter: "blur(4px)",
-              transform: "rotate(24deg)",
-            }}
-          />
-        </>
-      )}
-      <div className="relative mx-auto max-w-7xl px-8 lg:px-12">
+      {/* Botanical artwork background — covers the entire section and hides the global vine */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 bg-cover bg-center"
+        style={{ backgroundImage: `url(${botanicalBg.url})` }}
+      />
+      {/* Center-clear overlay to keep heading and cards in focus */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 45%, rgba(248,246,241,0.86) 0%, rgba(248,246,241,0.62) 32%, rgba(248,246,241,0.24) 62%, transparent 100%)",
+        }}
+      />
+      <div className="relative z-10 mx-auto max-w-7xl px-8 lg:px-12">
         <div className="mb-14 max-w-2xl">
           <Eyebrow>Growing Stories</Eyebrow>
           <h2 className="mt-4 font-serif text-4xl leading-[1.08] text-forest md:text-5xl">
