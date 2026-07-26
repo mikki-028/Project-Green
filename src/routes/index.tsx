@@ -322,7 +322,7 @@ function Hero() {
         </div>
       </div>
       {/* soft ivory wave */}
-      <svg viewBox="0 0 1440 120" className="absolute -bottom-1 left-0 right-0 w-full text-ivory" preserveAspectRatio="none">
+      <svg viewBox="0 0 1440 120" className="absolute -bottom-1 left-0 right-0 z-[65] w-full text-ivory" preserveAspectRatio="none">
         <path fill="currentColor" d="M0,64 C240,120 480,20 720,48 C960,76 1200,120 1440,72 L1440,120 L0,120 Z" />
       </svg>
     </section>
@@ -343,8 +343,8 @@ function About() {
       {/* Botanical artwork background — covers the entire section and hides the global vine */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 z-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${botanicalBg.url})` }}
+        className="pointer-events-none absolute inset-0 z-0 bg-cover"
+        style={{ backgroundImage: `url(${botanicalBg.url})`, backgroundPosition: "center 22%" }}
       />
       {/* Center-clear overlay to keep the heading and content in focus */}
       <div
