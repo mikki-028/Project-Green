@@ -271,17 +271,28 @@ function Hero() {
       if (!v.paused) return;
       v.play().catch(() => {});
     };
+    const mobileQuery = window.matchMedia("(max-width: 767px)");
+    const selectHeroVideo = () => (mobileQuery.matches ? heroVideoMobile : heroVideo.url);
+    const syncHeroVideoSource = () => {
+      const nextSource = new URL(selectHeroVideo(), window.location.href).href;
+      if (v.currentSrc !== nextSource && v.src !== nextSource) {
+        v.src = nextSource;
+        v.load();
+      }
+      tryPlay();
+    };
     const playWhenVisible = () => {
       if (!document.hidden) tryPlay();
     };
 
-    v.load();
-    tryPlay();
+    syncHeroVideoSource();
+    mobileQuery.addEventListener("change", syncHeroVideoSource);
     window.addEventListener("pageshow", tryPlay);
     document.addEventListener("visibilitychange", playWhenVisible);
     document.addEventListener("touchend", tryPlay, { once: true, passive: true });
     document.addEventListener("click", tryPlay, { once: true });
     return () => {
+      mobileQuery.removeEventListener("change", syncHeroVideoSource);
       window.removeEventListener("pageshow", tryPlay);
       document.removeEventListener("visibilitychange", playWhenVisible);
       document.removeEventListener("touchend", tryPlay);
@@ -300,8 +311,8 @@ function Hero() {
         v.defaultMuted = false;
         v.muted = false;
         v.volume = 1;
-        await v.play();
         setIsMuted(false);
+        await v.play();
       } catch {
         v.defaultMuted = true;
         v.muted = true;
@@ -322,6 +333,7 @@ function Hero() {
     <section className="relative flex min-h-screen min-h-[100svh] items-center justify-center overflow-hidden supports-[height:100dvh]:min-h-[100dvh]">
       <video
         ref={videoRef}
+        src={heroVideo.url}
         autoPlay
         loop
         playsInline
@@ -333,10 +345,7 @@ function Hero() {
         poster={heroVideoPoster}
         className="absolute inset-0 h-full w-full object-cover object-center [transform:translateZ(0)]"
         aria-label="Ambient botanical nursery footage with natural bird chirping"
-      >
-        <source src={heroVideoMobile} type="video/mp4" media="(max-width: 767px)" />
-        <source src={heroVideo.url} type="video/mp4" />
-      </video>
+      />
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/25 to-black/60" />
       <button
         type="button"
