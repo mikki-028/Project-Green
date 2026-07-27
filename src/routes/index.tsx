@@ -286,15 +286,21 @@ function Hero() {
     };
 
     syncHeroVideoSource();
+    v.addEventListener("loadedmetadata", tryPlay);
+    v.addEventListener("canplay", tryPlay);
     mobileQuery.addEventListener("change", syncHeroVideoSource);
     window.addEventListener("pageshow", tryPlay);
     document.addEventListener("visibilitychange", playWhenVisible);
+    document.addEventListener("pointerdown", tryPlay, { once: true, passive: true });
     document.addEventListener("touchend", tryPlay, { once: true, passive: true });
     document.addEventListener("click", tryPlay, { once: true });
     return () => {
+      v.removeEventListener("loadedmetadata", tryPlay);
+      v.removeEventListener("canplay", tryPlay);
       mobileQuery.removeEventListener("change", syncHeroVideoSource);
       window.removeEventListener("pageshow", tryPlay);
       document.removeEventListener("visibilitychange", playWhenVisible);
+      document.removeEventListener("pointerdown", tryPlay);
       document.removeEventListener("touchend", tryPlay);
       document.removeEventListener("click", tryPlay);
     };
@@ -354,9 +360,8 @@ function Hero() {
         aria-pressed={!isMuted}
         className="absolute bottom-5 right-4 z-[66] inline-flex min-h-11 max-w-[calc(100vw-2rem)] items-center gap-2 rounded-full border border-white/25 bg-black/40 px-4 py-3 text-[0.66rem] uppercase tracking-[0.16em] text-ivory shadow-lg backdrop-blur-md transition hover:bg-black/55 hover:shadow-xl sm:bottom-8 sm:right-6 sm:px-5 md:right-8"
       >
-        <span className={`h-2 w-2 rounded-full ${isMuted ? "bg-moss" : "bg-ivory"}`} />
-        <span className="hidden sm:inline">{isMuted ? "Enable sound" : "Sound on"}</span>
-        <span className="sm:hidden">{isMuted ? "Sound" : "On"}</span>
+        <span aria-hidden="true" className={`h-2 w-2 rounded-full ${isMuted ? "bg-moss" : "bg-ivory"}`} />
+        <span>{isMuted ? "Sound" : "Sound on"}</span>
       </button>
       {soundBlocked ? <span className="sr-only" role="status">Sound will start after another tap.</span> : null}
       <div className="relative z-10 mx-auto max-w-4xl px-6 pt-24 text-center text-ivory fade-up">
