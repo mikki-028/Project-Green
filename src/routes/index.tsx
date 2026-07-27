@@ -249,60 +249,107 @@ function Nav() {
 
 function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [muted, setMuted] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
+  const [soundBlocked, setSoundBlocked] = useState(false);
 
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
+
+    v.defaultMuted = true;
     v.muted = true;
-    const tryPlay = () => v.play().catch(() => {});
+    v.playsInline = true;
+    v.setAttribute("playsinline", "");
+    v.setAttribute("webkit-playsinline", "");
+    v.setAttribute("x5-playsinline", "");
+    v.setAttribute("preload", "auto");
+
+    const tryPlay = () => {
+      if (!v.paused) return;
+      v.play().catch(() => {});
+    };
+    const playWhenVisible = () => {
+      if (!document.hidden) tryPlay();
+    };
+
     tryPlay();
-    document.addEventListener("touchstart", tryPlay, { once: true, passive: true });
+    window.addEventListener("pageshow", tryPlay);
+    document.addEventListener("visibilitychange", playWhenVisible);
+    document.addEventListener("touchend", tryPlay, { once: true, passive: true });
     document.addEventListener("click", tryPlay, { once: true });
     return () => {
-      document.removeEventListener("touchstart", tryPlay);
+      window.removeEventListener("pageshow", tryPlay);
+      document.removeEventListener("visibilitychange", playWhenVisible);
+      document.removeEventListener("touchend", tryPlay);
       document.removeEventListener("click", tryPlay);
     };
   }, []);
 
-  const toggleSound = () => {
+  const toggleSound = async () => {
     const v = videoRef.current;
     if (!v) return;
-    const next = !muted;
-    v.muted = next;
-    setMuted(next);
-    if (!next) v.play().catch(() => {});
+
+    setSoundBlocked(false);
+
+    if (isMuted) {
+      try {
+        v.defaultMuted = false;
+        v.muted = false;
+        v.volume = 1;
+        await v.play();
+        setIsMuted(false);
+      } catch {
+        v.defaultMuted = true;
+        v.muted = true;
+        setIsMuted(true);
+        setSoundBlocked(true);
+        v.play().catch(() => {});
+      }
+      return;
+    }
+
+    v.defaultMuted = true;
+    v.muted = true;
+    setIsMuted(true);
+    v.play().catch(() => {});
   };
 
   return (
-    <section className="relative flex min-h-[100svh] items-center justify-center overflow-hidden">
+    <section className="relative flex min-h-screen min-h-[100svh] items-center justify-center overflow-hidden supports-[height:100dvh]:min-h-[100dvh]">
       <video
         ref={videoRef}
-        src={heroVideo.url}
         autoPlay
         loop
         playsInline
-        muted
+        muted={isMuted}
         // @ts-ignore - iOS webkit attribute
-        webkit-playsinline="true"
+        webkit-playsinline=""
         // @ts-ignore
-        x5-playsinline="true"
+        x5-playsinline=""
+        // @ts-ignore - keeps some Android browsers inline instead of fullscreen
+        x5-video-player-type="h5"
         disablePictureInPicture
         disableRemotePlayback
         controls={false}
         preload="auto"
-        className="absolute inset-0 h-full w-full object-cover"
+        className="absolute inset-0 h-full w-full object-cover object-center [transform:translateZ(0)]"
         aria-label="Ambient botanical nursery footage with natural bird chirping"
       />
+        <source src={heroVideo.url} type="video/mp4" />
+      </video>
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/25 to-black/60" />
       <button
         type="button"
         onClick={toggleSound}
-        aria-label={muted ? "Unmute video" : "Mute video"}
-        className="absolute bottom-6 right-6 z-20 rounded-full bg-black/40 px-3 py-2 text-xs uppercase tracking-widest text-ivory backdrop-blur-md border border-white/20 hover:bg-black/60 transition"
+        aria-label={isMuted ? "Enable hero video sound" : "Mute hero video sound"}
+        aria-pressed={!isMuted}
+        className="absolute bottom-20 right-4 z-[66] inline-flex min-h-11 max-w-[calc(100vw-2rem)] items-center gap-2 rounded-full border border-white/25 bg-black/40 px-4 py-3 text-[0.66rem] uppercase tracking-[0.16em] text-ivory shadow-lg backdrop-blur-md transition hover:bg-black/55 hover:shadow-xl sm:bottom-8 sm:right-6 sm:px-5 md:right-8"
       >
-        {muted ? "Sound on" : "Sound off"}
+        <span className={`h-2 w-2 rounded-full ${isMuted ? "bg-moss" : "bg-ivory"}`} />
+        <span className="hidden min-[380px]:inline">{isMuted ? "Enable sound" : "Sound on"}</span>
+        <span className="min-[380px]:hidden">{isMuted ? "Audio" : "On"}</span>
       </button>
+      {soundBlocked ? <span className="sr-only" role="status">Sound will start after another tap.</span> : null}
       <div className="relative z-10 mx-auto max-w-4xl px-6 pt-24 text-center text-ivory fade-up">
         <p className="mb-6 flex items-center justify-center gap-2 text-[0.7rem] uppercase tracking-[0.35em] text-ivory/85">
           <Leaf className="h-3.5 w-3.5" /> Welcome to Egrow
