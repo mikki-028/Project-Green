@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import heroVideo from "@/assets/nature_1.mp4.asset.json";
+import heroVideoMobile from "@/assets/hero-video-mobile.mp4";
+import heroVideoPoster from "@/assets/hero-video-poster.jpg";
 import aboutImg from "@/assets/about-owner.jpg";
 import story1 from "@/assets/story-1.jpg";
 import story2 from "@/assets/story-2.jpg";
@@ -249,60 +251,119 @@ function Nav() {
 
 function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [muted, setMuted] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
+  const [soundBlocked, setSoundBlocked] = useState(false);
 
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
+
+    v.defaultMuted = true;
     v.muted = true;
-    const tryPlay = () => v.play().catch(() => {});
-    tryPlay();
-    document.addEventListener("touchstart", tryPlay, { once: true, passive: true });
+    v.playsInline = true;
+    v.setAttribute("playsinline", "");
+    v.setAttribute("webkit-playsinline", "");
+    v.setAttribute("x5-playsinline", "");
+    v.setAttribute("x5-video-player-type", "h5");
+    v.setAttribute("preload", "auto");
+
+    const tryPlay = () => {
+      if (!v.paused) return;
+      v.play().catch(() => {});
+    };
+    const mobileQuery = window.matchMedia("(max-width: 767px)");
+    const selectHeroVideo = () => (mobileQuery.matches ? heroVideoMobile : heroVideo.url);
+    const syncHeroVideoSource = () => {
+      const nextSource = new URL(selectHeroVideo(), window.location.href).href;
+      if (v.currentSrc !== nextSource && v.src !== nextSource) {
+        v.src = nextSource;
+        v.load();
+      }
+      tryPlay();
+    };
+    const playWhenVisible = () => {
+      if (!document.hidden) tryPlay();
+    };
+
+    syncHeroVideoSource();
+    v.addEventListener("loadedmetadata", tryPlay);
+    v.addEventListener("canplay", tryPlay);
+    mobileQuery.addEventListener("change", syncHeroVideoSource);
+    window.addEventListener("pageshow", tryPlay);
+    document.addEventListener("visibilitychange", playWhenVisible);
+    document.addEventListener("pointerdown", tryPlay, { once: true, passive: true });
+    document.addEventListener("touchend", tryPlay, { once: true, passive: true });
     document.addEventListener("click", tryPlay, { once: true });
     return () => {
-      document.removeEventListener("touchstart", tryPlay);
+      v.removeEventListener("loadedmetadata", tryPlay);
+      v.removeEventListener("canplay", tryPlay);
+      mobileQuery.removeEventListener("change", syncHeroVideoSource);
+      window.removeEventListener("pageshow", tryPlay);
+      document.removeEventListener("visibilitychange", playWhenVisible);
+      document.removeEventListener("pointerdown", tryPlay);
+      document.removeEventListener("touchend", tryPlay);
       document.removeEventListener("click", tryPlay);
     };
   }, []);
 
-  const toggleSound = () => {
+  const toggleSound = async () => {
     const v = videoRef.current;
     if (!v) return;
-    const next = !muted;
-    v.muted = next;
-    setMuted(next);
-    if (!next) v.play().catch(() => {});
+
+    setSoundBlocked(false);
+
+    if (isMuted) {
+      try {
+        v.defaultMuted = false;
+        v.muted = false;
+        v.volume = 1;
+        setIsMuted(false);
+        await v.play();
+      } catch {
+        v.defaultMuted = true;
+        v.muted = true;
+        setIsMuted(true);
+        setSoundBlocked(true);
+        v.play().catch(() => {});
+      }
+      return;
+    }
+
+    v.defaultMuted = true;
+    v.muted = true;
+    setIsMuted(true);
+    v.play().catch(() => {});
   };
 
   return (
-    <section className="relative flex min-h-[100svh] items-center justify-center overflow-hidden">
+    <section className="relative flex min-h-screen min-h-[100svh] items-center justify-center overflow-hidden supports-[height:100dvh]:min-h-[100dvh]">
       <video
         ref={videoRef}
         src={heroVideo.url}
         autoPlay
         loop
         playsInline
-        muted
-        // @ts-ignore - iOS webkit attribute
-        webkit-playsinline="true"
-        // @ts-ignore
-        x5-playsinline="true"
+        muted={isMuted}
         disablePictureInPicture
         disableRemotePlayback
         controls={false}
         preload="auto"
-        className="absolute inset-0 h-full w-full object-cover"
+        poster={heroVideoPoster}
+        className="absolute inset-0 h-full w-full object-cover object-center [transform:translateZ(0)]"
         aria-label="Ambient botanical nursery footage with natural bird chirping"
       />
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/25 to-black/60" />
       <button
         type="button"
         onClick={toggleSound}
-        aria-label={muted ? "Unmute video" : "Mute video"}
-        className="absolute bottom-6 right-6 z-20 rounded-full bg-black/40 px-3 py-2 text-xs uppercase tracking-widest text-ivory backdrop-blur-md border border-white/20 hover:bg-black/60 transition"
+        aria-label={isMuted ? "Enable hero video sound" : "Mute hero video sound"}
+        aria-pressed={!isMuted}
+        className="absolute bottom-5 right-4 z-[66] inline-flex min-h-11 max-w-[calc(100vw-2rem)] items-center gap-2 rounded-full border border-white/25 bg-black/40 px-4 py-3 text-[0.66rem] uppercase tracking-[0.16em] text-ivory shadow-lg backdrop-blur-md transition hover:bg-black/55 hover:shadow-xl sm:bottom-8 sm:right-6 sm:px-5 md:right-8"
       >
-        {muted ? "Sound on" : "Sound off"}
+        <span aria-hidden="true" className={`h-2 w-2 rounded-full ${isMuted ? "bg-moss" : "bg-ivory"}`} />
+        <span>{isMuted ? "Sound" : "Sound on"}</span>
       </button>
+      {soundBlocked ? <span className="sr-only" role="status">Sound will start after another tap.</span> : null}
       <div className="relative z-10 mx-auto max-w-4xl px-6 pt-24 text-center text-ivory fade-up">
         <p className="mb-6 flex items-center justify-center gap-2 text-[0.7rem] uppercase tracking-[0.35em] text-ivory/85">
           <Leaf className="h-3.5 w-3.5" /> Welcome to Egrow
