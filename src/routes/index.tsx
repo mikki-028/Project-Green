@@ -262,6 +262,7 @@ function Hero() {
     v.setAttribute("playsinline", "");
     v.setAttribute("webkit-playsinline", "");
     v.setAttribute("x5-playsinline", "");
+    v.setAttribute("x5-video-player-type", "h5");
     v.setAttribute("preload", "auto");
 
     const tryPlay = () => {
@@ -322,19 +323,13 @@ function Hero() {
         loop
         playsInline
         muted={isMuted}
-        // @ts-ignore - iOS webkit attribute
-        webkit-playsinline=""
-        // @ts-ignore
-        x5-playsinline=""
-        // @ts-ignore - keeps some Android browsers inline instead of fullscreen
-        x5-video-player-type="h5"
         disablePictureInPicture
         disableRemotePlayback
         controls={false}
         preload="auto"
         className="absolute inset-0 h-full w-full object-cover object-center [transform:translateZ(0)]"
         aria-label="Ambient botanical nursery footage with natural bird chirping"
-      />
+      >
         <source src={heroVideo.url} type="video/mp4" />
       </video>
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/25 to-black/60" />
