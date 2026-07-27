@@ -275,8 +275,8 @@ function Hero() {
       if (!document.hidden) tryPlay();
     };
 
-    tryPlay();
     v.load();
+    tryPlay();
     window.addEventListener("pageshow", tryPlay);
     document.addEventListener("visibilitychange", playWhenVisible);
     document.addEventListener("touchend", tryPlay, { once: true, passive: true });
