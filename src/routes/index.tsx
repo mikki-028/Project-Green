@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import heroVideo from "@/assets/nature_1.mp4.asset.json";
+import heroVideoMobile from "@/assets/hero-video-mobile.mp4";
+import heroVideoPoster from "@/assets/hero-video-poster.jpg";
 import aboutImg from "@/assets/about-owner.jpg";
 import story1 from "@/assets/story-1.jpg";
 import story2 from "@/assets/story-2.jpg";
@@ -274,6 +276,7 @@ function Hero() {
     };
 
     tryPlay();
+    v.load();
     window.addEventListener("pageshow", tryPlay);
     document.addEventListener("visibilitychange", playWhenVisible);
     document.addEventListener("touchend", tryPlay, { once: true, passive: true });
@@ -327,9 +330,11 @@ function Hero() {
         disableRemotePlayback
         controls={false}
         preload="auto"
+        poster={heroVideoPoster}
         className="absolute inset-0 h-full w-full object-cover object-center [transform:translateZ(0)]"
         aria-label="Ambient botanical nursery footage with natural bird chirping"
       >
+        <source src={heroVideoMobile} type="video/mp4" media="(max-width: 767px)" />
         <source src={heroVideo.url} type="video/mp4" />
       </video>
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/25 to-black/60" />
@@ -338,11 +343,11 @@ function Hero() {
         onClick={toggleSound}
         aria-label={isMuted ? "Enable hero video sound" : "Mute hero video sound"}
         aria-pressed={!isMuted}
-        className="absolute bottom-20 right-4 z-[66] inline-flex min-h-11 max-w-[calc(100vw-2rem)] items-center gap-2 rounded-full border border-white/25 bg-black/40 px-4 py-3 text-[0.66rem] uppercase tracking-[0.16em] text-ivory shadow-lg backdrop-blur-md transition hover:bg-black/55 hover:shadow-xl sm:bottom-8 sm:right-6 sm:px-5 md:right-8"
+        className="absolute bottom-5 right-4 z-[66] inline-flex min-h-11 max-w-[calc(100vw-2rem)] items-center gap-2 rounded-full border border-white/25 bg-black/40 px-4 py-3 text-[0.66rem] uppercase tracking-[0.16em] text-ivory shadow-lg backdrop-blur-md transition hover:bg-black/55 hover:shadow-xl sm:bottom-8 sm:right-6 sm:px-5 md:right-8"
       >
         <span className={`h-2 w-2 rounded-full ${isMuted ? "bg-moss" : "bg-ivory"}`} />
-        <span className="hidden min-[380px]:inline">{isMuted ? "Enable sound" : "Sound on"}</span>
-        <span className="min-[380px]:hidden">{isMuted ? "Audio" : "On"}</span>
+        <span className="hidden sm:inline">{isMuted ? "Enable sound" : "Sound on"}</span>
+        <span className="sm:hidden">{isMuted ? "Sound" : "On"}</span>
       </button>
       {soundBlocked ? <span className="sr-only" role="status">Sound will start after another tap.</span> : null}
       <div className="relative z-10 mx-auto max-w-4xl px-6 pt-24 text-center text-ivory fade-up">
