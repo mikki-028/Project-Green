@@ -44,7 +44,6 @@ function Index() {
       <Nav />
       <Hero />
       <div className="relative">
-        <VineSpine />
         <About />
         <WhyEgrow />
         <GrowingStories />
@@ -76,137 +75,6 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
       <Leaf className="h-3.5 w-3.5 text-olive" />
       <span>{children}</span>
     </div>
-  );
-}
-
-/* ---------------- Vine Spine ---------------- */
-
-function VineSpine() {
-  // Delicate climbing vine inspired by ivy / pothos — a thin trailing stem
-  // with small heart-shaped leaves clustered in pairs at each node.
-  const VB_W = 140;
-  const VB_H = 3000;
-
-  // Sinuous stem: a gentle horizontal sway down the whole page.
-  const stemX = (y: number) => {
-    const cx = VB_W / 2;
-    return cx + Math.sin(y / 380) * 22 + Math.sin(y / 140) * 4;
-  };
-
-  const stemD = (() => {
-    const pts: string[] = [];
-    for (let y = 0; y <= VB_H; y += 24) {
-      const x = stemX(y);
-      pts.push(`${y === 0 ? "M" : "L"}${x.toFixed(2)} ${y}`);
-    }
-    return pts.join(" ");
-  })();
-
-  // Leaf clusters spaced along the stem. Each node sprouts 2–3 tiny
-  // heart-shaped leaves on short petioles, alternating sides.
-  const NODE_STEP = 62;
-  const nodes: { y: number; side: -1 | 1; count: number; seed: number }[] = [];
-  for (let y = 40, i = 0; y < VB_H - 40; y += NODE_STEP, i++) {
-    nodes.push({
-      y,
-      side: (i % 2 === 0 ? 1 : -1) as -1 | 1,
-      count: 2 + ((i * 7) % 3 === 0 ? 1 : 0), // mostly 2, sometimes 3
-      seed: i,
-    });
-  }
-
-  // A single heart-leaf drawn at origin, tip pointing +x.
-  const HeartLeaf = ({ s, fill, opacity }: { s: number; fill: string; opacity: number }) => (
-    <>
-      <path
-        d={`M0 0
-            C ${s * 0.35} ${-s * 0.75}, ${s * 1.25} ${-s * 0.55}, ${s * 1.55} 0
-            C ${s * 1.25} ${s * 0.55}, ${s * 0.35} ${s * 0.75}, 0 0 Z`}
-        fill={fill}
-        opacity={opacity}
-      />
-      <path
-        d={`M${s * 0.05} 0 L ${s * 1.45} 0`}
-        stroke="#3E5A34"
-        strokeOpacity="0.28"
-        strokeWidth="0.35"
-        strokeLinecap="round"
-      />
-    </>
-  );
-
-  const hues = ["#7E9C6E", "#8FA982", "#6E8A5E", "#A2BD93"];
-
-  return (
-    <svg
-      aria-hidden="true"
-      className="pointer-events-none absolute top-0 z-50 hidden h-full w-[130px] md:block"
-      style={{ left: "10px" }}
-      viewBox={`0 0 ${VB_W} ${VB_H}`}
-      preserveAspectRatio="none"
-      fill="none"
-    >
-      {/* Main climbing stem */}
-      <path d={stemD} stroke="#6E8A5E" strokeOpacity="0.55" strokeWidth="1.1" strokeLinecap="round" fill="none" />
-      <path d={stemD} stroke="#C4D6B7" strokeOpacity="0.28" strokeWidth="0.45" strokeLinecap="round" fill="none" />
-
-      {/* Leaf clusters */}
-      {nodes.map((n) => {
-        const x = stemX(n.y);
-        // Draw `count` leaves fanning out from this node on the chosen side.
-        return (
-          <g key={`n-${n.seed}`}>
-            {Array.from({ length: n.count }).map((_, k) => {
-              // spread the leaves in a small fan
-              const fan = (k - (n.count - 1) / 2) * 22; // degrees between siblings
-              const baseRot = n.side === 1 ? -10 + fan : 190 + fan; // point outward
-              const size = 7 + ((n.seed + k) % 3);
-              const petioleLen = 3 + ((n.seed + k) % 2);
-              const hue = hues[(n.seed + k) % hues.length];
-              const opacity = 0.55 + ((n.seed + k) % 3) * 0.08;
-              const petioleAngle = (baseRot * Math.PI) / 180;
-              const px = Math.cos(petioleAngle) * petioleLen;
-              const py = Math.sin(petioleAngle) * petioleLen;
-              return (
-                <g key={k} transform={`translate(${x} ${n.y})`}>
-                  <path
-                    d={`M0 0 L ${px.toFixed(2)} ${py.toFixed(2)}`}
-                    stroke="#6E8A5E"
-                    strokeOpacity="0.5"
-                    strokeWidth="0.55"
-                    strokeLinecap="round"
-                  />
-                  <g transform={`translate(${px.toFixed(2)} ${py.toFixed(2)}) rotate(${baseRot})`}>
-                    <HeartLeaf s={size} fill={hue} opacity={opacity} />
-                  </g>
-                </g>
-              );
-            })}
-          </g>
-        );
-      })}
-
-      {/* Fresh trailing tip near the bottom */}
-      {(() => {
-        const y = VB_H - 40;
-        const x = stemX(y);
-        return (
-          <g transform={`translate(${x} ${y})`}>
-            <path
-              d="M0 0 C 4 10, 10 16, 18 18"
-              stroke="#8FA982"
-              strokeOpacity="0.55"
-              strokeWidth="0.9"
-              strokeLinecap="round"
-              fill="none"
-            />
-            <g transform="translate(18 18) rotate(30)">
-              <HeartLeaf s={6} fill="#A2BD93" opacity={0.7} />
-            </g>
-          </g>
-        );
-      })()}
-    </svg>
   );
 }
 
@@ -401,7 +269,7 @@ function About() {
     { year: "2026", title: "And Beyond", note: "Continuing to grow, together." },
   ];
   return (
-    <section id="about" className="relative z-[60] overflow-hidden py-24">
+    <section id="about" className="relative z-10 overflow-hidden py-24">
       {/* Botanical artwork background — covers the entire section and hides the global vine */}
       <div
         aria-hidden
@@ -660,7 +528,7 @@ function GrowingStories() {
   return (
     <section
       id="stories"
-      className="relative z-[60] overflow-hidden py-24"
+      className="relative z-10 overflow-hidden py-24"
     >
       {/* Botanical artwork background — covers the entire section and hides the global vine */}
       <div
