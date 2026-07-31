@@ -98,7 +98,7 @@ function Nav() {
       >
         <a href="#" className="flex items-center gap-2">
           <Leaf className={`h-6 w-6 ${scrolled ? "text-forest" : "text-ivory"}`} />
-          <span className="font-serif text-2xl leading-none">Egrow</span>
+          <span className="font-serif text-2xl font-medium leading-none">Egrow</span>
         </a>
         <nav className="hidden items-center gap-6 text-sm md:flex">
           <a href="#home" className="hover:text-olive transition">Home</a>
