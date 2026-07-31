@@ -1093,7 +1093,7 @@ function Footer() {
         <FooterCol title="Contact" items={["hello@egrow.com","+91 98765 43210","123 Greenway","Green City, 1100"]} />
       </div>
       <div className="border-t border-ivory/15">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-6 py-4 text-xs text-ivory/60">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-6 py-4 text-xs leading-snug text-ivory/60">
           <div>© 2026 Egrow. All rights reserved.</div>
           <div className="flex gap-6"><a href="#" className="hover:text-ivory">Privacy Policy</a><a href="#" className="hover:text-ivory">Terms & Conditions</a></div>
         </div>
@@ -1105,8 +1105,8 @@ function Footer() {
 function FooterCol({ title, items }: { title: string; items: string[] }) {
   return (
     <div>
-      <div className="font-serif text-lg text-ivory">{title}</div>
-      <ul className="mt-4 space-y-2 text-sm text-ivory/70">
+      <div className="font-serif text-lg font-medium text-ivory">{title}</div>
+      <ul className="mt-4 space-y-2 text-sm leading-snug text-ivory/70">
         {items.map(i => <li key={i}><a href="#" className="hover:text-ivory transition">{i}</a></li>)}
       </ul>
     </div>
