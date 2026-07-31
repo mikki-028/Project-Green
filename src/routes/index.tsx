@@ -705,7 +705,7 @@ function StoryArticle({
                   {sec.heading}
                 </h4>
                 <p
-                  className="mt-4 text-[0.98rem] leading-[1.8]"
+                  className="mt-4 text-[0.98rem] leading-snug"
                   style={{ color: palette.soft }}
                 >
                   {sec.body}
@@ -715,7 +715,7 @@ function StoryArticle({
                     {sec.list.map((li, j) => (
                       <li
                         key={j}
-                        className="flex gap-3 text-[0.95rem] leading-[1.7]"
+                        className="flex gap-3 text-[0.95rem] leading-snug"
                         style={{ color: palette.soft }}
                       >
                         <span style={{ color: palette.accent }}>—</span>
@@ -738,7 +738,7 @@ function StoryArticle({
                 {article.tip.label}
               </div>
               <p
-                className="mt-3 font-serif text-[1.1rem] italic leading-[1.65]"
+                className="mt-3 font-serif text-[1.1rem] font-medium italic leading-[1.65]"
                 style={{ color: palette.ink }}
               >
                 {article.tip.body}
@@ -785,7 +785,7 @@ function Transform() {
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
         <div className="mx-auto mb-12 max-w-2xl text-center">
           <Eyebrow>Transform Your Space</Eyebrow>
-          <h2 className="mt-3 font-serif text-5xl leading-[1.05] md:text-6xl">From Ordinary to Extraordinary.</h2>
+          <h2 className="mt-3 font-serif text-5xl font-medium leading-[1.05] md:text-6xl">From Ordinary to Extraordinary.</h2>
           <p className="mt-3 text-charcoal/80">
             We transform balconies, terraces and outdoor spaces into beautiful green retreats you'll love spending time in.
           </p>
@@ -795,9 +795,9 @@ function Transform() {
             <div key={p.title}>
               <BeforeAfter before={p.before} after={p.after} />
               <div className="mt-3">
-                <div className="font-serif text-2xl text-forest">{p.title}</div>
+                <div className="font-serif text-2xl font-medium text-forest">{p.title}</div>
                 <div className="mt-1 text-xs uppercase tracking-widest text-olive">{p.area}</div>
-                <p className="mt-3 text-sm text-charcoal/75">{p.note}</p>
+                <p className="mt-3 text-sm leading-snug text-charcoal/75">{p.note}</p>
               </div>
             </div>
           ))}
@@ -812,7 +812,7 @@ function Transform() {
               ["Happy", "Green Families"],
             ].map(([n, l]) => (
               <div key={l}>
-                <div className="font-serif text-3xl text-forest">{n}</div>
+                <div className="font-serif text-3xl font-medium text-forest">{n}</div>
                 <div className="text-[0.7rem] uppercase tracking-widest text-charcoal/60">{l}</div>
               </div>
             ))}
