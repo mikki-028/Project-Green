@@ -51,6 +51,7 @@ function Index() {
         <PlantCalendar />
         <Transform />
         <Gallery />
+        <Reviews />
         <PlanVisit />
       </div>
       <Footer />
@@ -1035,6 +1036,93 @@ function Gallery() {
           <img src={open} alt="Enlarged" className="max-h-[85vh] max-w-[90vw] rounded-2xl object-contain shadow-2xl" />
         </div>
       )}
+    </section>
+  );
+}
+
+/* ---------------- Reviews ---------------- */
+
+function Reviews() {
+  const reviews = [
+    {
+      quote: "Egrow turned our concrete balcony into a little sanctuary. The plants arrived healthy, the pots were exactly our style, and the care tips made everything feel simple.",
+      name: "Aisha Mehta",
+      location: "Bandra, Mumbai",
+      rating: 5,
+    },
+    {
+      quote: "We visited the nursery for one plant and left with a whole terrace plan. The team listened to every detail and designed something that actually fits our life.",
+      name: "Rohan & Priya Desai",
+      location: "Andheri, Mumbai",
+      rating: 5,
+    },
+    {
+      quote: "I have killed many plants before. The Egrow team taught me what I was doing wrong and set me up with a pothos that is still thriving eight months later.",
+      name: "Neha Krishnan",
+      location: "Pune",
+      rating: 5,
+    },
+    {
+      quote: "The pottery collection is beautiful — each piece feels handmade and unique. The Monstera in the sand-glazed pot has become the focal point of our living room.",
+      name: "Vikram Joshi",
+      location: "Bangalore",
+      rating: 5,
+    },
+    {
+      quote: "Professional, warm, and genuinely passionate about plants. They handled everything from selection to placement for our restaurant's green wall.",
+      name: "Sara Thomas",
+      location: "Chennai",
+      rating: 5,
+    },
+    {
+      quote: "Every visit feels like a reset. The nursery is calm, the advice is honest, and you always leave with something that will grow with you.",
+      name: "Arjun Bhatia",
+      location: "Hyderabad",
+      rating: 5,
+    },
+  ];
+
+  return (
+    <section id="reviews" className="relative bg-ivory py-24">
+      <div className="mx-auto max-w-7xl px-8 lg:px-12">
+        <div className="mx-auto mb-14 max-w-2xl text-center">
+          <Eyebrow>Community Voices</Eyebrow>
+          <h2 className="mt-3 font-serif text-5xl leading-[1.05] md:text-6xl">
+            What Green Families Say.
+          </h2>
+          <p className="mt-4 text-charcoal/75">
+            Words from plant lovers, balcony dreamers, and the green spaces we have helped grow.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {reviews.map((r, i) => (
+            <div
+              key={i}
+              className="relative flex flex-col rounded-3xl border border-forest/10 bg-sage p-8 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl"
+            >
+              <div className="mb-5 flex items-center gap-0.5 text-olive">
+                {Array.from({ length: r.rating }).map((_, s) => (
+                  <svg key={s} className="h-4 w-4 fill-current" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                ))}
+              </div>
+              <blockquote className="mb-8 flex-1 text-[1.02rem] leading-relaxed text-charcoal/85">
+                “{r.quote}”
+              </blockquote>
+              <div className="flex items-center gap-4">
+                <div className="grid h-11 w-11 place-items-center rounded-full bg-olive/15 font-serif text-base text-forest">
+                  {r.name.split(" ").map((n) => n[0]).slice(0, 2).join("")}
+                </div>
+                <div>
+                  <div className="font-serif text-base text-forest">{r.name}</div>
+                  <div className="text-xs text-charcoal/60">{r.location}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }
