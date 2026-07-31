@@ -878,7 +878,7 @@ function Gallery() {
         <div className="mb-10 grid grid-cols-1 items-end gap-3 md:grid-cols-2">
           <div>
             <Eyebrow>Gallery</Eyebrow>
-            <h2 className="mt-3 font-serif text-5xl leading-[1.05] md:text-6xl">Moments That Bloom.</h2>
+            <h2 className="mt-3 font-serif text-5xl font-medium leading-[1.05] md:text-6xl">Moments That Bloom.</h2>
           </div>
           <p className="max-w-md text-charcoal/80 md:justify-self-end">
             A glimpse of greenery, growth and beautiful spaces. Follow along as we tend, plant, and share the everyday poetry of the nursery.
@@ -955,7 +955,7 @@ function Reviews() {
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
         <div className="mx-auto mb-14 max-w-2xl text-center">
           <Eyebrow>Community Voices</Eyebrow>
-          <h2 className="mt-3 font-serif text-5xl leading-[1.05] md:text-6xl">
+          <h2 className="mt-3 font-serif text-5xl font-medium leading-[1.05] md:text-6xl">
             What Green Families Say.
           </h2>
           <p className="mt-4 text-charcoal/75">
@@ -983,8 +983,8 @@ function Reviews() {
                   {r.name.split(" ").map((n) => n[0]).slice(0, 2).join("")}
                 </div>
                 <div>
-                  <div className="font-serif text-base text-forest">{r.name}</div>
-                  <div className="text-xs text-charcoal/60">{r.location}</div>
+                  <div className="font-serif text-base font-medium text-forest">{r.name}</div>
+                  <div className="text-xs leading-snug text-charcoal/60">{r.location}</div>
                 </div>
               </div>
             </div>
@@ -1004,7 +1004,7 @@ function PlanVisit() {
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
         <div className="mb-12 max-w-2xl">
           <Eyebrow>Let's Plan Your Green Space</Eyebrow>
-          <h2 className="mt-3 font-serif text-5xl leading-[1.05] md:text-6xl">Let's Plan<br/>Your Green Space.</h2>
+          <h2 className="mt-3 font-serif text-5xl font-medium leading-[1.05] md:text-6xl">Let's Plan<br/>Your Green Space.</h2>
           <p className="mt-3 text-charcoal/80">
             We'd love to welcome you. Visit our nursery or reach out to plan your perfect green space — we'll bring the plants, pottery and expertise.
           </p>
@@ -1012,9 +1012,9 @@ function PlanVisit() {
         <div className="grid grid-cols-1 gap-3 md:grid-cols-12">
           {/* visit card */}
           <div className="md:col-span-4 rounded-3xl bg-ivory p-6 shadow-sm">
-            <div className="font-serif text-2xl text-forest">Visit Us</div>
-            <p className="mt-2 text-sm text-charcoal/75">Come explore our nursery and experience the joy of greenery.</p>
-            <ul className="mt-3 space-y-2 text-sm">
+            <div className="font-serif text-2xl font-medium text-forest">Visit Us</div>
+            <p className="mt-2 text-sm leading-snug text-charcoal/75">Come explore our nursery and experience the joy of greenery.</p>
+            <ul className="mt-3 space-y-2 text-sm leading-snug">
               <li className="flex items-start gap-3"><Leaf className="mt-0.5 h-4 w-4 text-olive" /> 123 Greenway, Nature Street, Green City, 1100</li>
               <li className="flex items-start gap-3"><Leaf className="mt-0.5 h-4 w-4 text-olive" /> +91 98765 43210</li>
               <li className="flex items-start gap-3"><Leaf className="mt-0.5 h-4 w-4 text-olive" /> hello@egrow.com</li>
@@ -1043,9 +1043,9 @@ function PlanVisit() {
           </div>
           {/* form */}
           <div className="md:col-span-4 rounded-3xl bg-ivory p-6 shadow-sm">
-            <div className="font-serif text-2xl text-forest">Book a Visit</div>
-            <p className="mt-2 text-sm text-charcoal/75">Choose your preferred date and let's meet.</p>
-            <form className="mt-3 space-y-3 text-sm" onSubmit={(e) => e.preventDefault()}>
+            <div className="font-serif text-2xl font-medium text-forest">Book a Visit</div>
+            <p className="mt-2 text-sm leading-snug text-charcoal/75">Choose your preferred date and let's meet.</p>
+            <form className="mt-3 space-y-3 text-sm leading-snug" onSubmit={(e) => e.preventDefault()}>
               <Field label="Your Name" placeholder="Enter your name" />
               <Field label="Phone Number" placeholder="Enter phone number" />
               <Field label="Preferred Date" placeholder="Select date" type="date" />
