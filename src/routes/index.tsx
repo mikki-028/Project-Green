@@ -548,10 +548,10 @@ function GrowingStories() {
       <div className="relative z-10 mx-auto max-w-7xl px-8 lg:px-12">
         <div className="mb-14 max-w-2xl">
           <Eyebrow>Growing Stories</Eyebrow>
-          <h2 className="mt-4 font-serif text-4xl leading-[1.08] text-forest md:text-5xl">
+          <h2 className="mt-4 font-serif text-4xl font-medium leading-[1.08] text-forest md:text-5xl">
             Field notes from the nursery.
           </h2>
-          <p className="mt-4 max-w-lg text-[0.95rem] leading-relaxed text-charcoal/70">
+          <p className="mt-4 max-w-lg text-[0.95rem] leading-snug text-charcoal/70">
             Short editorial pieces on the plants, pottery and small rituals that shape the way we garden. Open any chapter to read the full story.
           </p>
         </div>
@@ -602,7 +602,7 @@ function GrowingStories() {
                   <div className="text-[0.62rem] uppercase tracking-[0.32em] text-forest/70">
                     {s.tag}
                   </div>
-                  <h3 className="mt-4 font-serif text-[1.75rem] leading-[1.12] text-forest">
+                  <h3 className="mt-4 font-serif text-[1.75rem] font-medium leading-[1.12] text-forest">
                     {s.title}
                   </h3>
                   <div className="mt-5 h-px w-full bg-forest/15" />
@@ -675,7 +675,7 @@ function StoryArticle({
             {story.title}
           </h3>
           <p
-            className="mt-6 font-serif text-[1.25rem] leading-[1.55] md:text-[1.35rem]"
+            className="mt-6 font-serif text-[1.25rem] font-light leading-[1.55] md:text-[1.35rem]"
             style={{ color: palette.soft }}
           >
             {story.dek}
@@ -690,7 +690,7 @@ function StoryArticle({
         <div className="grid grid-cols-1 gap-x-16 gap-y-10 md:grid-cols-12">
           <div className="md:col-span-7 md:col-start-1">
             <p
-              className="font-serif text-[1.15rem] leading-[1.7]"
+              className="font-serif text-[1.15rem] font-medium leading-[1.7]"
               style={{ color: palette.ink }}
             >
               {article.lede}
