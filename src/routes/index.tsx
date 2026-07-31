@@ -237,10 +237,10 @@ function Hero() {
         <p className="mb-6 flex items-center justify-center gap-2 text-[0.7rem] uppercase tracking-[0.35em] text-ivory/85">
           <Leaf className="h-3.5 w-3.5" /> Welcome to Egrow
         </p>
-        <h1 className="font-serif text-6xl leading-[1.02] tracking-tight text-ivory md:text-8xl">
+        <h1 className="font-serif text-6xl font-medium leading-[1.02] tracking-tight text-ivory md:text-8xl">
           Bring Nature <em className="not-italic block font-light">Home.</em>
         </h1>
-        <p className="mx-auto mt-7 max-w-xl text-base text-ivory/85 md:text-lg">
+        <p className="mx-auto mt-7 max-w-xl text-base leading-snug text-ivory/85 md:text-lg">
           Healthy Plants. Beautiful Pottery. Expert Guidance.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
@@ -295,10 +295,10 @@ function About() {
         </div>
         <div className="md:col-span-5">
           <Eyebrow>Our Story</Eyebrow>
-          <h2 className="mt-3 font-serif text-5xl leading-[1.1] md:text-6xl">
+          <h2 className="mt-3 font-serif text-5xl font-medium leading-[1.1] md:text-6xl">
             From a Passion,<br />To a Green Legacy.
           </h2>
-          <p className="mt-4 max-w-md text-base leading-relaxed text-charcoal/80">
+          <p className="mt-4 max-w-md text-base leading-snug text-charcoal/80">
             What began as a small dream to bring more plants into people's lives has grown into a space filled with greenery, learning and love. Every plant we tend is chosen for how it makes a home feel.
           </p>
           <a href="#stories" className="btn-link mt-5">Know Our Journey →</a>
@@ -311,8 +311,8 @@ function About() {
                   <span className="h-1.5 w-1.5 rounded-full bg-olive" />
                 </span>
                 <div className="text-sm text-olive">{t.year}</div>
-                <div className="mt-1 font-serif text-lg text-forest">{t.title}</div>
-                <div className="text-sm text-charcoal/70">{t.note}</div>
+                <div className="mt-1 font-serif text-lg font-medium text-forest">{t.title}</div>
+                <div className="text-sm leading-snug text-charcoal/70">{t.note}</div>
               </li>
             ))}
           </ol>
@@ -337,7 +337,7 @@ function WhyEgrow() {
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
         <div className="mb-12 max-w-2xl">
           <Eyebrow>Why Egrow</Eyebrow>
-          <h2 className="mt-3 font-serif text-5xl leading-[1.05] md:text-6xl">More Than Just Plants.</h2>
+          <h2 className="mt-3 font-serif text-5xl font-medium leading-[1.05] md:text-6xl">More Than Just Plants.</h2>
         </div>
         <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-5">
           {items.map((it, i) => {
@@ -347,8 +347,8 @@ function WhyEgrow() {
                 <div className="mx-auto mb-3 grid h-16 w-16 place-items-center rounded-full border border-olive/30 text-olive transition-all group-hover:bg-ivory group-hover:shadow-lg">
                   <Icon className="h-8 w-8" />
                 </div>
-                <div className="font-serif text-lg text-forest">{it.title}</div>
-                <div className="mt-2 text-sm leading-relaxed text-charcoal/75">{it.note}</div>
+                <div className="font-serif text-lg font-medium text-forest">{it.title}</div>
+                <div className="mt-2 text-sm leading-snug text-charcoal/75">{it.note}</div>
               </div>
             );
           })}
