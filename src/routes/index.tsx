@@ -669,7 +669,7 @@ function StoryArticle({
 
         <header className="max-w-3xl">
           <h3
-            className="font-serif text-[2.6rem] leading-[1.05] md:text-[3.6rem]"
+            className="font-serif text-[2.6rem] font-medium leading-[1.05] md:text-[3.6rem]"
             style={{ color: palette.ink }}
           >
             {story.title}
