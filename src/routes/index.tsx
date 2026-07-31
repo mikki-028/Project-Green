@@ -606,7 +606,7 @@ function GrowingStories() {
                     {s.title}
                   </h3>
                   <div className="mt-5 h-px w-full bg-forest/15" />
-                  <p className="mt-5 text-[0.88rem] leading-relaxed text-charcoal/80">
+                  <p className="mt-5 text-[0.88rem] leading-snug text-charcoal/80">
                     {s.dek}
                   </p>
                   <span className="mt-8 inline-flex items-center gap-2 text-[0.72rem] uppercase tracking-[0.26em] text-forest transition-colors group-hover:text-olive">
@@ -975,7 +975,7 @@ function Reviews() {
                   </svg>
                 ))}
               </div>
-              <blockquote className="mb-8 flex-1 text-[1.02rem] leading-relaxed text-charcoal/85">
+              <blockquote className="mb-8 flex-1 text-[1.02rem] leading-snug text-charcoal/85">
                 “{r.quote}”
               </blockquote>
               <div className="flex items-center gap-4">
