@@ -1077,9 +1077,9 @@ function Footer() {
         <div className="md:col-span-2">
           <div className="flex items-center gap-2">
             <Leaf className="h-6 w-6" />
-            <span className="font-serif text-2xl">Egrow</span>
+            <span className="font-serif text-2xl font-medium">Egrow</span>
           </div>
-          <p className="mt-3 max-w-xs text-sm text-ivory/70">
+          <p className="mt-3 max-w-xs text-sm leading-snug text-ivory/70">
             Bringing nature home with healthy plants, beautiful spaces and expert care.
           </p>
           <div className="mt-3 flex gap-3">
