@@ -51,6 +51,7 @@ function Index() {
         <PlantCalendar />
         <Transform />
         <Gallery />
+        <Reviews />
         <PlanVisit />
       </div>
       <Footer />
