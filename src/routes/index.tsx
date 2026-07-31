@@ -98,7 +98,7 @@ function Nav() {
       >
         <a href="#" className="flex items-center gap-2">
           <Leaf className={`h-6 w-6 ${scrolled ? "text-forest" : "text-ivory"}`} />
-          <span className="font-serif text-2xl leading-none">Egrow</span>
+          <span className="font-serif text-2xl font-medium leading-none">Egrow</span>
         </a>
         <nav className="hidden items-center gap-6 text-sm md:flex">
           <a href="#home" className="hover:text-olive transition">Home</a>
@@ -237,10 +237,10 @@ function Hero() {
         <p className="mb-6 flex items-center justify-center gap-2 text-[0.7rem] uppercase tracking-[0.35em] text-ivory/85">
           <Leaf className="h-3.5 w-3.5" /> Welcome to Egrow
         </p>
-        <h1 className="font-serif text-6xl leading-[1.02] tracking-tight text-ivory md:text-8xl">
+        <h1 className="font-serif text-6xl font-medium leading-[1.02] tracking-tight text-ivory md:text-8xl">
           Bring Nature <em className="not-italic block font-light">Home.</em>
         </h1>
-        <p className="mx-auto mt-7 max-w-xl text-base text-ivory/85 md:text-lg">
+        <p className="mx-auto mt-7 max-w-xl text-base leading-snug text-ivory/85 md:text-lg">
           Healthy Plants. Beautiful Pottery. Expert Guidance.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
@@ -295,10 +295,10 @@ function About() {
         </div>
         <div className="md:col-span-5">
           <Eyebrow>Our Story</Eyebrow>
-          <h2 className="mt-3 font-serif text-5xl leading-[1.1] md:text-6xl">
+          <h2 className="mt-3 font-serif text-5xl font-medium leading-[1.1] md:text-6xl">
             From a Passion,<br />To a Green Legacy.
           </h2>
-          <p className="mt-4 max-w-md text-base leading-relaxed text-charcoal/80">
+          <p className="mt-4 max-w-md text-base leading-snug text-charcoal/80">
             What began as a small dream to bring more plants into people's lives has grown into a space filled with greenery, learning and love. Every plant we tend is chosen for how it makes a home feel.
           </p>
           <a href="#stories" className="btn-link mt-5">Know Our Journey →</a>
@@ -311,8 +311,8 @@ function About() {
                   <span className="h-1.5 w-1.5 rounded-full bg-olive" />
                 </span>
                 <div className="text-sm text-olive">{t.year}</div>
-                <div className="mt-1 font-serif text-lg text-forest">{t.title}</div>
-                <div className="text-sm text-charcoal/70">{t.note}</div>
+                <div className="mt-1 font-serif text-lg font-medium text-forest">{t.title}</div>
+                <div className="text-sm leading-snug text-charcoal/70">{t.note}</div>
               </li>
             ))}
           </ol>
@@ -337,7 +337,7 @@ function WhyEgrow() {
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
         <div className="mb-12 max-w-2xl">
           <Eyebrow>Why Egrow</Eyebrow>
-          <h2 className="mt-3 font-serif text-5xl leading-[1.05] md:text-6xl">More Than Just Plants.</h2>
+          <h2 className="mt-3 font-serif text-5xl font-medium leading-[1.05] md:text-6xl">More Than Just Plants.</h2>
         </div>
         <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-5">
           {items.map((it, i) => {
@@ -347,8 +347,8 @@ function WhyEgrow() {
                 <div className="mx-auto mb-3 grid h-16 w-16 place-items-center rounded-full border border-olive/30 text-olive transition-all group-hover:bg-ivory group-hover:shadow-lg">
                   <Icon className="h-8 w-8" />
                 </div>
-                <div className="font-serif text-lg text-forest">{it.title}</div>
-                <div className="mt-2 text-sm leading-relaxed text-charcoal/75">{it.note}</div>
+                <div className="font-serif text-lg font-medium text-forest">{it.title}</div>
+                <div className="mt-2 text-sm leading-snug text-charcoal/75">{it.note}</div>
               </div>
             );
           })}
@@ -548,10 +548,10 @@ function GrowingStories() {
       <div className="relative z-10 mx-auto max-w-7xl px-8 lg:px-12">
         <div className="mb-14 max-w-2xl">
           <Eyebrow>Growing Stories</Eyebrow>
-          <h2 className="mt-4 font-serif text-4xl leading-[1.08] text-forest md:text-5xl">
+          <h2 className="mt-4 font-serif text-4xl font-medium leading-[1.08] text-forest md:text-5xl">
             Field notes from the nursery.
           </h2>
-          <p className="mt-4 max-w-lg text-[0.95rem] leading-relaxed text-charcoal/70">
+          <p className="mt-4 max-w-lg text-[0.95rem] leading-snug text-charcoal/70">
             Short editorial pieces on the plants, pottery and small rituals that shape the way we garden. Open any chapter to read the full story.
           </p>
         </div>
@@ -602,11 +602,11 @@ function GrowingStories() {
                   <div className="text-[0.62rem] uppercase tracking-[0.32em] text-forest/70">
                     {s.tag}
                   </div>
-                  <h3 className="mt-4 font-serif text-[1.75rem] leading-[1.12] text-forest">
+                  <h3 className="mt-4 font-serif text-[1.75rem] font-medium leading-[1.12] text-forest">
                     {s.title}
                   </h3>
                   <div className="mt-5 h-px w-full bg-forest/15" />
-                  <p className="mt-5 text-[0.88rem] leading-relaxed text-charcoal/80">
+                  <p className="mt-5 text-[0.88rem] leading-snug text-charcoal/80">
                     {s.dek}
                   </p>
                   <span className="mt-8 inline-flex items-center gap-2 text-[0.72rem] uppercase tracking-[0.26em] text-forest transition-colors group-hover:text-olive">
@@ -669,13 +669,13 @@ function StoryArticle({
 
         <header className="max-w-3xl">
           <h3
-            className="font-serif text-[2.6rem] leading-[1.05] md:text-[3.6rem]"
+            className="font-serif text-[2.6rem] font-medium leading-[1.05] md:text-[3.6rem]"
             style={{ color: palette.ink }}
           >
             {story.title}
           </h3>
           <p
-            className="mt-6 font-serif text-[1.25rem] leading-[1.55] md:text-[1.35rem]"
+            className="mt-6 font-serif text-[1.25rem] font-light leading-[1.55] md:text-[1.35rem]"
             style={{ color: palette.soft }}
           >
             {story.dek}
@@ -690,7 +690,7 @@ function StoryArticle({
         <div className="grid grid-cols-1 gap-x-16 gap-y-10 md:grid-cols-12">
           <div className="md:col-span-7 md:col-start-1">
             <p
-              className="font-serif text-[1.15rem] leading-[1.7]"
+              className="font-serif text-[1.15rem] font-medium leading-[1.7]"
               style={{ color: palette.ink }}
             >
               {article.lede}
@@ -705,7 +705,7 @@ function StoryArticle({
                   {sec.heading}
                 </h4>
                 <p
-                  className="mt-4 text-[0.98rem] leading-[1.8]"
+                  className="mt-4 text-[0.98rem] leading-snug"
                   style={{ color: palette.soft }}
                 >
                   {sec.body}
@@ -715,7 +715,7 @@ function StoryArticle({
                     {sec.list.map((li, j) => (
                       <li
                         key={j}
-                        className="flex gap-3 text-[0.95rem] leading-[1.7]"
+                        className="flex gap-3 text-[0.95rem] leading-snug"
                         style={{ color: palette.soft }}
                       >
                         <span style={{ color: palette.accent }}>—</span>
@@ -738,7 +738,7 @@ function StoryArticle({
                 {article.tip.label}
               </div>
               <p
-                className="mt-3 font-serif text-[1.1rem] italic leading-[1.65]"
+                className="mt-3 font-serif text-[1.1rem] font-medium italic leading-[1.65]"
                 style={{ color: palette.ink }}
               >
                 {article.tip.body}
@@ -785,7 +785,7 @@ function Transform() {
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
         <div className="mx-auto mb-12 max-w-2xl text-center">
           <Eyebrow>Transform Your Space</Eyebrow>
-          <h2 className="mt-3 font-serif text-5xl leading-[1.05] md:text-6xl">From Ordinary to Extraordinary.</h2>
+          <h2 className="mt-3 font-serif text-5xl font-medium leading-[1.05] md:text-6xl">From Ordinary to Extraordinary.</h2>
           <p className="mt-3 text-charcoal/80">
             We transform balconies, terraces and outdoor spaces into beautiful green retreats you'll love spending time in.
           </p>
@@ -795,9 +795,9 @@ function Transform() {
             <div key={p.title}>
               <BeforeAfter before={p.before} after={p.after} />
               <div className="mt-3">
-                <div className="font-serif text-2xl text-forest">{p.title}</div>
+                <div className="font-serif text-2xl font-medium text-forest">{p.title}</div>
                 <div className="mt-1 text-xs uppercase tracking-widest text-olive">{p.area}</div>
-                <p className="mt-3 text-sm text-charcoal/75">{p.note}</p>
+                <p className="mt-3 text-sm leading-snug text-charcoal/75">{p.note}</p>
               </div>
             </div>
           ))}
@@ -812,7 +812,7 @@ function Transform() {
               ["Happy", "Green Families"],
             ].map(([n, l]) => (
               <div key={l}>
-                <div className="font-serif text-3xl text-forest">{n}</div>
+                <div className="font-serif text-3xl font-medium text-forest">{n}</div>
                 <div className="text-[0.7rem] uppercase tracking-widest text-charcoal/60">{l}</div>
               </div>
             ))}
@@ -878,7 +878,7 @@ function Gallery() {
         <div className="mb-10 grid grid-cols-1 items-end gap-3 md:grid-cols-2">
           <div>
             <Eyebrow>Gallery</Eyebrow>
-            <h2 className="mt-3 font-serif text-5xl leading-[1.05] md:text-6xl">Moments That Bloom.</h2>
+            <h2 className="mt-3 font-serif text-5xl font-medium leading-[1.05] md:text-6xl">Moments That Bloom.</h2>
           </div>
           <p className="max-w-md text-charcoal/80 md:justify-self-end">
             A glimpse of greenery, growth and beautiful spaces. Follow along as we tend, plant, and share the everyday poetry of the nursery.
@@ -955,7 +955,7 @@ function Reviews() {
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
         <div className="mx-auto mb-14 max-w-2xl text-center">
           <Eyebrow>Community Voices</Eyebrow>
-          <h2 className="mt-3 font-serif text-5xl leading-[1.05] md:text-6xl">
+          <h2 className="mt-3 font-serif text-5xl font-medium leading-[1.05] md:text-6xl">
             What Green Families Say.
           </h2>
           <p className="mt-4 text-charcoal/75">
@@ -975,7 +975,7 @@ function Reviews() {
                   </svg>
                 ))}
               </div>
-              <blockquote className="mb-8 flex-1 text-[1.02rem] leading-relaxed text-charcoal/85">
+              <blockquote className="mb-8 flex-1 text-[1.02rem] leading-snug text-charcoal/85">
                 “{r.quote}”
               </blockquote>
               <div className="flex items-center gap-4">
@@ -983,8 +983,8 @@ function Reviews() {
                   {r.name.split(" ").map((n) => n[0]).slice(0, 2).join("")}
                 </div>
                 <div>
-                  <div className="font-serif text-base text-forest">{r.name}</div>
-                  <div className="text-xs text-charcoal/60">{r.location}</div>
+                  <div className="font-serif text-base font-medium text-forest">{r.name}</div>
+                  <div className="text-xs leading-snug text-charcoal/60">{r.location}</div>
                 </div>
               </div>
             </div>
@@ -1004,7 +1004,7 @@ function PlanVisit() {
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
         <div className="mb-12 max-w-2xl">
           <Eyebrow>Let's Plan Your Green Space</Eyebrow>
-          <h2 className="mt-3 font-serif text-5xl leading-[1.05] md:text-6xl">Let's Plan<br/>Your Green Space.</h2>
+          <h2 className="mt-3 font-serif text-5xl font-medium leading-[1.05] md:text-6xl">Let's Plan<br/>Your Green Space.</h2>
           <p className="mt-3 text-charcoal/80">
             We'd love to welcome you. Visit our nursery or reach out to plan your perfect green space — we'll bring the plants, pottery and expertise.
           </p>
@@ -1012,9 +1012,9 @@ function PlanVisit() {
         <div className="grid grid-cols-1 gap-3 md:grid-cols-12">
           {/* visit card */}
           <div className="md:col-span-4 rounded-3xl bg-ivory p-6 shadow-sm">
-            <div className="font-serif text-2xl text-forest">Visit Us</div>
-            <p className="mt-2 text-sm text-charcoal/75">Come explore our nursery and experience the joy of greenery.</p>
-            <ul className="mt-3 space-y-2 text-sm">
+            <div className="font-serif text-2xl font-medium text-forest">Visit Us</div>
+            <p className="mt-2 text-sm leading-snug text-charcoal/75">Come explore our nursery and experience the joy of greenery.</p>
+            <ul className="mt-3 space-y-2 text-sm leading-snug">
               <li className="flex items-start gap-3"><Leaf className="mt-0.5 h-4 w-4 text-olive" /> 123 Greenway, Nature Street, Green City, 1100</li>
               <li className="flex items-start gap-3"><Leaf className="mt-0.5 h-4 w-4 text-olive" /> +91 98765 43210</li>
               <li className="flex items-start gap-3"><Leaf className="mt-0.5 h-4 w-4 text-olive" /> hello@egrow.com</li>
@@ -1043,9 +1043,9 @@ function PlanVisit() {
           </div>
           {/* form */}
           <div className="md:col-span-4 rounded-3xl bg-ivory p-6 shadow-sm">
-            <div className="font-serif text-2xl text-forest">Book a Visit</div>
-            <p className="mt-2 text-sm text-charcoal/75">Choose your preferred date and let's meet.</p>
-            <form className="mt-3 space-y-3 text-sm" onSubmit={(e) => e.preventDefault()}>
+            <div className="font-serif text-2xl font-medium text-forest">Book a Visit</div>
+            <p className="mt-2 text-sm leading-snug text-charcoal/75">Choose your preferred date and let's meet.</p>
+            <form className="mt-3 space-y-3 text-sm leading-snug" onSubmit={(e) => e.preventDefault()}>
               <Field label="Your Name" placeholder="Enter your name" />
               <Field label="Phone Number" placeholder="Enter phone number" />
               <Field label="Preferred Date" placeholder="Select date" type="date" />
@@ -1077,9 +1077,9 @@ function Footer() {
         <div className="md:col-span-2">
           <div className="flex items-center gap-2">
             <Leaf className="h-6 w-6" />
-            <span className="font-serif text-2xl">Egrow</span>
+            <span className="font-serif text-2xl font-medium">Egrow</span>
           </div>
-          <p className="mt-3 max-w-xs text-sm text-ivory/70">
+          <p className="mt-3 max-w-xs text-sm leading-snug text-ivory/70">
             Bringing nature home with healthy plants, beautiful spaces and expert care.
           </p>
           <div className="mt-3 flex gap-3">
@@ -1093,7 +1093,7 @@ function Footer() {
         <FooterCol title="Contact" items={["hello@egrow.com","+91 98765 43210","123 Greenway","Green City, 1100"]} />
       </div>
       <div className="border-t border-ivory/15">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-6 py-4 text-xs text-ivory/60">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-6 py-4 text-xs leading-snug text-ivory/60">
           <div>© 2026 Egrow. All rights reserved.</div>
           <div className="flex gap-6"><a href="#" className="hover:text-ivory">Privacy Policy</a><a href="#" className="hover:text-ivory">Terms & Conditions</a></div>
         </div>
@@ -1105,8 +1105,8 @@ function Footer() {
 function FooterCol({ title, items }: { title: string; items: string[] }) {
   return (
     <div>
-      <div className="font-serif text-lg text-ivory">{title}</div>
-      <ul className="mt-4 space-y-2 text-sm text-ivory/70">
+      <div className="font-serif text-lg font-medium text-ivory">{title}</div>
+      <ul className="mt-4 space-y-2 text-sm leading-snug text-ivory/70">
         {items.map(i => <li key={i}><a href="#" className="hover:text-ivory transition">{i}</a></li>)}
       </ul>
     </div>
@@ -1379,7 +1379,7 @@ function BotanicalJournal() {
       <div className="mx-auto max-w-7xl px-6 md:px-10">
         <div className="mx-auto max-w-2xl text-center">
           <Eyebrow>Seasonal Journal</Eyebrow>
-          <h2 className="mt-3 font-serif text-5xl leading-[1.05] md:text-6xl">A Botanical Journal, Kept by Season.</h2>
+          <h2 className="mt-3 font-serif text-5xl font-medium leading-[1.05] md:text-6xl">A Botanical Journal, Kept by Season.</h2>
           <p className="mt-4 text-charcoal/75">
             Turn the pages of our field notebook to find plants that naturally thrive across an Indian year — one carefully chosen companion at a time.
           </p>
@@ -1391,7 +1391,7 @@ function BotanicalJournal() {
             <button
               key={m.name}
               onClick={() => jumpToMonth(i)}
-              className={`rounded-full px-3 py-1.5 text-xs tracking-wide transition md:text-sm ${
+              className={`rounded-full px-3 py-1.5 text-xs font-medium tracking-wide transition md:text-sm ${
                 i === currentMonth ? "bg-olive text-ivory shadow-sm" : "text-charcoal/70 hover:text-forest"
               }`}
             >
@@ -1456,7 +1456,7 @@ function BotanicalJournal() {
           </div>
 
           {/* Controls */}
-          <div className="mt-8 flex items-center gap-4 text-sm text-charcoal/70">
+          <div className="mt-8 flex items-center gap-4 text-sm leading-snug text-charcoal/70">
             <button
               onClick={prev}
               disabled={index === 0 || !!flipping}
@@ -1768,10 +1768,10 @@ function MonthIntroLeft({ month }: { month: JournalMonth }) {
     <div className="flex h-full flex-col justify-between p-10 md:p-14">
       <div>
         <div className="text-xs uppercase tracking-[0.4em] text-olive/70">Chapter</div>
-        <h3 className="mt-3 font-serif text-6xl leading-none text-forest md:text-7xl">{month.name}</h3>
+        <h3 className="mt-3 font-serif text-6xl font-medium leading-none text-forest md:text-7xl">{month.name}</h3>
         <div className="mt-4 max-w-xs text-sm italic text-charcoal/75">{month.season}</div>
       </div>
-      <div className="max-w-xs font-serif text-lg italic leading-snug text-charcoal/80">
+      <div className="max-w-xs font-serif text-lg font-medium italic leading-snug text-charcoal/80">
         “{month.epigraph}”
       </div>
       <div className="text-[10px] uppercase tracking-[0.35em] text-charcoal/50">Egrow Field Notes</div>
@@ -1786,15 +1786,15 @@ function MonthIntroRight({ month }: { month: JournalMonth }) {
       <div className="mt-6 space-y-4">
         {month.plants.map((p, i) => (
           <div key={p.name} className="flex items-baseline gap-4 border-b border-forest/10 pb-3">
-            <div className="font-serif text-2xl italic text-forest/70">{String(i + 1).padStart(2, "0")}</div>
+            <div className="font-serif text-2xl font-medium italic text-forest/70">{String(i + 1).padStart(2, "0")}</div>
             <div>
-              <div className="font-serif text-xl text-forest">{p.name}</div>
-              <div className="text-xs italic text-charcoal/60">{p.latin}</div>
+              <div className="font-serif text-xl font-medium text-forest">{p.name}</div>
+              <div className="text-xs italic leading-snug text-charcoal/60">{p.latin}</div>
             </div>
           </div>
         ))}
       </div>
-      <div className="mt-auto pt-6 text-xs italic text-charcoal/60">
+      <div className="mt-auto pt-6 text-xs italic leading-snug text-charcoal/60">
         Turn the page for each plant, its ideal moment, and a short note from the nursery.
       </div>
     </div>
@@ -1814,10 +1814,10 @@ function PlantPageImage({ plant, month }: { plant: JournalPlant; month: JournalM
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,transparent_60%,rgba(60,50,30,0.18)_100%)]" />
       </div>
       <div className="mt-5">
-        <div className="font-serif text-3xl italic text-forest md:text-4xl">{plant.name}</div>
-        <div className="mt-1 text-xs italic text-charcoal/60">{plant.latin}</div>
+        <div className="font-serif text-3xl font-medium italic text-forest md:text-4xl">{plant.name}</div>
+        <div className="mt-1 text-xs italic leading-snug text-charcoal/60">{plant.latin}</div>
         <div className="mt-3 h-px w-16 bg-olive/40" />
-        <p className="mt-3 max-w-sm text-sm leading-relaxed text-charcoal/75">{plant.intro}</p>
+        <p className="mt-3 max-w-sm text-sm leading-snug text-charcoal/75">{plant.intro}</p>
       </div>
     </div>
   );
@@ -1832,7 +1832,7 @@ function PlantPageText({
         <span>{month.name} — Plate {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</span>
         <span>Notes</span>
       </div>
-      <div className="space-y-4 text-sm leading-relaxed text-charcoal/80">
+      <div className="space-y-4 text-sm leading-snug text-charcoal/80">
         <div>
           <div className="text-[11px] uppercase tracking-[0.3em] text-olive/80">Why this month</div>
           <p className="mt-1">{plant.why}</p>
@@ -1856,7 +1856,7 @@ function PlantPageText({
             <Leaf className="h-3 w-3" /> Egrow Tip
           </div>
           <p
-            className="mt-2 text-sm leading-relaxed text-charcoal/85"
+            className="mt-2 text-sm leading-snug text-charcoal/85"
             style={{ fontFamily: "'Caveat', 'Segoe Script', cursive" as string }}
           >
             {plant.tip}
