@@ -156,6 +156,7 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
   }
 
   h1, h2, h3, h4, .font-serif {
@@ -163,6 +164,10 @@
     color: var(--color-forest);
     letter-spacing: -0.02em;
     font-weight: 500;
+  }
+
+  p {
+    line-height: 1.55;
   }
 }
 
