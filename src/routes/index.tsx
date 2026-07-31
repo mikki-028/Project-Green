@@ -1814,10 +1814,10 @@ function PlantPageImage({ plant, month }: { plant: JournalPlant; month: JournalM
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,transparent_60%,rgba(60,50,30,0.18)_100%)]" />
       </div>
       <div className="mt-5">
-        <div className="font-serif text-3xl italic text-forest md:text-4xl">{plant.name}</div>
-        <div className="mt-1 text-xs italic text-charcoal/60">{plant.latin}</div>
+        <div className="font-serif text-3xl font-medium italic text-forest md:text-4xl">{plant.name}</div>
+        <div className="mt-1 text-xs italic leading-snug text-charcoal/60">{plant.latin}</div>
         <div className="mt-3 h-px w-16 bg-olive/40" />
-        <p className="mt-3 max-w-sm text-sm leading-relaxed text-charcoal/75">{plant.intro}</p>
+        <p className="mt-3 max-w-sm text-sm leading-snug text-charcoal/75">{plant.intro}</p>
       </div>
     </div>
   );
