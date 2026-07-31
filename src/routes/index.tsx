@@ -1379,7 +1379,7 @@ function BotanicalJournal() {
       <div className="mx-auto max-w-7xl px-6 md:px-10">
         <div className="mx-auto max-w-2xl text-center">
           <Eyebrow>Seasonal Journal</Eyebrow>
-          <h2 className="mt-3 font-serif text-5xl leading-[1.05] md:text-6xl">A Botanical Journal, Kept by Season.</h2>
+          <h2 className="mt-3 font-serif text-5xl font-medium leading-[1.05] md:text-6xl">A Botanical Journal, Kept by Season.</h2>
           <p className="mt-4 text-charcoal/75">
             Turn the pages of our field notebook to find plants that naturally thrive across an Indian year — one carefully chosen companion at a time.
           </p>
@@ -1391,7 +1391,7 @@ function BotanicalJournal() {
             <button
               key={m.name}
               onClick={() => jumpToMonth(i)}
-              className={`rounded-full px-3 py-1.5 text-xs tracking-wide transition md:text-sm ${
+              className={`rounded-full px-3 py-1.5 text-xs font-medium tracking-wide transition md:text-sm ${
                 i === currentMonth ? "bg-olive text-ivory shadow-sm" : "text-charcoal/70 hover:text-forest"
               }`}
             >
@@ -1456,7 +1456,7 @@ function BotanicalJournal() {
           </div>
 
           {/* Controls */}
-          <div className="mt-8 flex items-center gap-4 text-sm text-charcoal/70">
+          <div className="mt-8 flex items-center gap-4 text-sm leading-snug text-charcoal/70">
             <button
               onClick={prev}
               disabled={index === 0 || !!flipping}
@@ -1768,10 +1768,10 @@ function MonthIntroLeft({ month }: { month: JournalMonth }) {
     <div className="flex h-full flex-col justify-between p-10 md:p-14">
       <div>
         <div className="text-xs uppercase tracking-[0.4em] text-olive/70">Chapter</div>
-        <h3 className="mt-3 font-serif text-6xl leading-none text-forest md:text-7xl">{month.name}</h3>
+        <h3 className="mt-3 font-serif text-6xl font-medium leading-none text-forest md:text-7xl">{month.name}</h3>
         <div className="mt-4 max-w-xs text-sm italic text-charcoal/75">{month.season}</div>
       </div>
-      <div className="max-w-xs font-serif text-lg italic leading-snug text-charcoal/80">
+      <div className="max-w-xs font-serif text-lg font-medium italic leading-snug text-charcoal/80">
         “{month.epigraph}”
       </div>
       <div className="text-[10px] uppercase tracking-[0.35em] text-charcoal/50">Egrow Field Notes</div>
