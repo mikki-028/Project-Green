@@ -1786,15 +1786,15 @@ function MonthIntroRight({ month }: { month: JournalMonth }) {
       <div className="mt-6 space-y-4">
         {month.plants.map((p, i) => (
           <div key={p.name} className="flex items-baseline gap-4 border-b border-forest/10 pb-3">
-            <div className="font-serif text-2xl italic text-forest/70">{String(i + 1).padStart(2, "0")}</div>
+            <div className="font-serif text-2xl font-medium italic text-forest/70">{String(i + 1).padStart(2, "0")}</div>
             <div>
-              <div className="font-serif text-xl text-forest">{p.name}</div>
-              <div className="text-xs italic text-charcoal/60">{p.latin}</div>
+              <div className="font-serif text-xl font-medium text-forest">{p.name}</div>
+              <div className="text-xs italic leading-snug text-charcoal/60">{p.latin}</div>
             </div>
           </div>
         ))}
       </div>
-      <div className="mt-auto pt-6 text-xs italic text-charcoal/60">
+      <div className="mt-auto pt-6 text-xs italic leading-snug text-charcoal/60">
         Turn the page for each plant, its ideal moment, and a short note from the nursery.
       </div>
     </div>
@@ -1832,7 +1832,7 @@ function PlantPageText({
         <span>{month.name} — Plate {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</span>
         <span>Notes</span>
       </div>
-      <div className="space-y-4 text-sm leading-relaxed text-charcoal/80">
+      <div className="space-y-4 text-sm leading-snug text-charcoal/80">
         <div>
           <div className="text-[11px] uppercase tracking-[0.3em] text-olive/80">Why this month</div>
           <p className="mt-1">{plant.why}</p>
@@ -1856,7 +1856,7 @@ function PlantPageText({
             <Leaf className="h-3 w-3" /> Egrow Tip
           </div>
           <p
-            className="mt-2 text-sm leading-relaxed text-charcoal/85"
+            className="mt-2 text-sm leading-snug text-charcoal/85"
             style={{ fontFamily: "'Caveat', 'Segoe Script', cursive" as string }}
           >
             {plant.tip}
