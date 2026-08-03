@@ -745,7 +745,7 @@ function GrowingStories() {
   return (
     <section
       id="stories"
-      className="relative z-10 overflow-hidden py-24"
+      className="grain relative z-10 overflow-hidden py-28 md:py-36"
     >
       {/* Botanical artwork background — covers the entire section and hides the global vine */}
       <div
@@ -763,23 +763,33 @@ function GrowingStories() {
         }}
       />
       <div className="relative z-10 mx-auto max-w-7xl px-8 lg:px-12">
-        <div className="mb-14 max-w-2xl">
+        <div className="relative mb-16 max-w-3xl">
           <Eyebrow>Growing Stories</Eyebrow>
-          <h2 className="mt-4 font-serif text-4xl font-medium leading-[1.08] text-forest md:text-5xl">
-            Field notes from the nursery.
-          </h2>
-          <p className="mt-4 max-w-lg text-[0.95rem] leading-snug text-charcoal/70">
+          <RevealHeading
+            text="Field notes / from the nursery."
+            className="mt-4 font-serif text-[3rem] font-semibold leading-[0.95] tracking-[-0.035em] text-forest md:text-[5rem]"
+          />
+          <span className="hand-note absolute -right-2 top-2 hidden rotate-[-6deg] lg:block">
+            written in the potting shed ↴
+          </span>
+          <p className="mt-5 max-w-lg text-[0.95rem] leading-snug text-charcoal/70">
             Short editorial pieces on the plants, pottery and small rituals that shape the way we garden. Open any chapter to read the full story.
           </p>
         </div>
 
         {story === null ? (
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-            {stories.map((s, i) => (
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-12 md:gap-6">
+            {stories.map((s, i) => {
+              const layout = [
+                "md:col-span-7 md:aspect-[16/10] rotate-[-1.5deg]",
+                "md:col-span-5 md:aspect-[4/5] md:mt-14 rotate-[2.5deg]",
+                "md:col-span-8 md:col-start-4 md:aspect-[16/9] md:-mt-6 rotate-[-1deg]",
+              ][i];
+              return (
               <button
                 key={i}
                 onClick={() => setActive(i)}
-                className="group relative flex aspect-[3/4] flex-col justify-between overflow-hidden rounded-[28px] border border-white/50 bg-white/20 p-8 text-left shadow-[0_20px_60px_-24px_rgba(47,79,58,0.4)] backdrop-blur-2xl backdrop-saturate-150 transition-all duration-500 ease-out hover:-translate-y-1.5 hover:border-white/70 hover:bg-white/30 hover:shadow-[0_32px_80px_-24px_rgba(47,79,58,0.5)]"
+                className={`group relative flex aspect-[3/4] flex-col justify-between overflow-hidden rounded-[4px] border border-white/50 bg-white/20 p-8 text-left shadow-clay backdrop-blur-2xl backdrop-saturate-150 transition-all duration-500 ease-out hover:-translate-y-1.5 hover:rotate-0 hover:border-clay/40 hover:bg-white/30 ${layout}`}
               >
                 {/* Background image on right half with fade to glass */}
                 <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden rounded-[28px]">
@@ -806,7 +816,7 @@ function GrowingStories() {
 
                 {/* Top: small icon chip */}
                 <div className="relative">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/60 bg-white/50 backdrop-blur-md">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-sm border border-white/60 bg-white/50 backdrop-blur-md">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2f4f3a" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M12 2c3 4 5 7 5 11a5 5 0 01-10 0c0-4 2-7 5-11z" />
                       <path d="M12 13v8" />
@@ -815,23 +825,27 @@ function GrowingStories() {
                 </div>
 
                 {/* Text block */}
-                <div className="relative max-w-[65%]">
-                  <div className="text-[0.62rem] uppercase tracking-[0.32em] text-forest/70">
+                <div className="relative max-w-[62%]">
+                  <div className="text-[0.62rem] uppercase tracking-[0.32em] text-clay">
                     {s.tag}
                   </div>
-                  <h3 className="mt-4 font-serif text-[1.75rem] font-medium leading-[1.12] text-forest">
+                  <h3 className="mt-4 font-serif text-[1.9rem] font-semibold leading-[1.02] tracking-[-0.03em] text-forest md:text-[2.3rem]">
                     {s.title}
                   </h3>
-                  <div className="mt-5 h-px w-full bg-forest/15" />
+                  <div className="mt-5 h-px w-full bg-clay/25" />
                   <p className="mt-5 text-[0.88rem] leading-snug text-charcoal/80">
                     {s.dek}
                   </p>
-                  <span className="mt-8 inline-flex items-center gap-2 text-[0.72rem] uppercase tracking-[0.26em] text-forest transition-colors group-hover:text-olive">
+                  <span className="mt-8 inline-flex items-center gap-2 text-[0.72rem] uppercase tracking-[0.26em] text-forest transition-colors group-hover:text-clay">
                     Read Story <span aria-hidden>→</span>
                   </span>
                 </div>
+                <span className="hand-note pointer-events-none absolute -bottom-1 right-6 hidden rotate-[-5deg] text-clay-deep/80 md:block">
+                  {["a customer favourite", "kiln-fired, Jaipur", "start here!"][i]}
+                </span>
               </button>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <StoryArticle story={story} onClose={() => setActive(null)} />
