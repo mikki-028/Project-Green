@@ -1069,7 +1069,8 @@ function BeforeAfter({ before, after }: { before: string; after: string }) {
   return (
     <div
       ref={ref}
-      className="shadow-clay relative aspect-[4/3] w-full select-none overflow-hidden rounded-[4px] [cursor:url(\"data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='48'%20height='48'%3E%3Ccircle%20cx='24'%20cy='24'%20r='20'%20fill='%23B4532A'%20fill-opacity='0.85'/%3E%3Cpath%20d='M18%2018l-6%206%206%206M30%2018l6%206-6%206'%20stroke='%23FDF7F0'%20stroke-width='2'%20fill='none'%20stroke-linecap='round'/%3E%3C/svg%3E\")_24_24,ew-resize]"
+      className="shadow-clay relative aspect-[4/3] w-full select-none overflow-hidden rounded-[4px]"
+      style={{ cursor: `url("${SLIDER_CURSOR}") 24 24, ew-resize` }}
       onMouseMove={(e) => e.buttons === 1 && drag(e.clientX)}
       onTouchMove={(e) => drag(e.touches[0].clientX)}
     >
