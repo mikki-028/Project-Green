@@ -436,28 +436,33 @@ function Hero() {
         <span>{isMuted ? "Sound" : "Sound on"}</span>
       </button>
       {soundBlocked ? <span className="sr-only" role="status">Sound will start after another tap.</span> : null}
-      <div className="relative z-10 mx-auto max-w-4xl px-6 pt-24 text-center text-ivory fade-up">
-        <p className="mb-6 flex items-center justify-center gap-2 text-[0.7rem] uppercase tracking-[0.35em] text-ivory/85">
+      <div
+        className="relative z-10 mx-auto w-full max-w-6xl px-7 pt-28 text-left text-ivory fade-up md:pl-[12%]"
+        style={{ transform: `translateY(${scrollY * 0.08}px)` }}
+      >
+        <p className="mb-6 flex items-center gap-2 text-[0.7rem] uppercase tracking-[0.35em] text-ivory/85">
           <Leaf className="h-3.5 w-3.5" /> Welcome to Egrow
         </p>
-        <h1 className="font-serif text-6xl font-medium leading-[1.02] tracking-tight text-ivory md:text-8xl">
-          Bring Nature <em className="not-italic block font-light">Home.</em>
+        <h1 className="font-serif text-[3.4rem] font-semibold leading-[0.92] tracking-[-0.04em] text-ivory sm:text-7xl md:text-[8.5rem]">
+          Bring Nature
+          <em className="ml-1 block pl-[0.08em] font-light italic text-moss md:-mt-4">Home.</em>
         </h1>
-        <p className="mx-auto mt-7 max-w-xl text-base leading-snug text-ivory/85 md:text-lg">
+        <p className="mt-7 max-w-md text-base leading-snug text-ivory/85 md:text-lg">
           Healthy Plants. Beautiful Pottery. Expert Guidance.
         </p>
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <a href="#visit" className="btn-primary">Visit Nursery</a>
-          <a href="#stories" className="btn-ghost">Buy Plants</a>
+        <div className="mt-9 flex flex-wrap items-center gap-4">
+          <Magnetic href="#visit" className="btn-clay">Visit Nursery</Magnetic>
+          <Magnetic href="#stories" className="btn-ghost">Buy Plants</Magnetic>
           <a href="#transform" className="text-ivory border-b border-ivory pb-1 text-sm hover:text-moss hover:border-moss transition">
             Transform Your Space →
           </a>
+          <Stamp className="relative -mt-2 ml-1 hidden rotate-[-9deg] sm:grid" />
         </div>
       </div>
-      {/* soft ivory wave */}
-      <svg viewBox="0 0 1440 120" className="absolute -bottom-1 left-0 right-0 z-[65] w-full text-ivory" preserveAspectRatio="none">
-        <path fill="currentColor" d="M0,64 C240,120 480,20 720,48 C960,76 1200,120 1440,72 L1440,120 L0,120 Z" />
-      </svg>
+      {/* torn paper edge */}
+      <div className="absolute -bottom-px left-0 right-0 z-[65]">
+        <TornDivider color="text-ivory" className="h-[44px] drop-shadow-[0_-6px_10px_rgba(20,17,13,0.25)]" />
+      </div>
     </section>
   );
 }
