@@ -40,7 +40,9 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <div id="home" className="relative min-h-screen overflow-x-hidden bg-ivory text-charcoal">
+    <div id="home" className="relative min-h-screen overflow-x-hidden bg-ivory text-ink">
+      <ScrollProgress />
+      <SideRail />
       <Nav />
       <Hero />
       <div className="relative">
@@ -59,6 +61,180 @@ function Index() {
 }
 
 /* ---------------- Small primitives ---------------- */
+
+const RAIL_SECTIONS = [
+  { id: "home", label: "Nursery" },
+  { id: "about", label: "Story" },
+  { id: "stories", label: "Field Notes" },
+  { id: "calendar", label: "Journal" },
+  { id: "transform", label: "Transformations" },
+  { id: "gallery", label: "Gallery" },
+  { id: "reviews", label: "Voices" },
+  { id: "visit", label: "Visit" },
+];
+
+function ScrollProgress() {
+  const [p, setP] = useState(0);
+  useEffect(() => {
+    const onScroll = () => {
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      setP(h > 0 ? (window.scrollY / h) * 100 : 0);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  return (
+    <div aria-hidden className="pointer-events-none fixed inset-x-0 top-0 z-[90] h-[3px] bg-transparent">
+      <div className="h-full bg-clay shadow-[0_0_12px_rgba(180,83,42,0.7)] transition-[width] duration-150" style={{ width: `${p}%` }} />
+    </div>
+  );
+}
+
+function SideRail() {
+  const [active, setActive] = useState("home");
+  useEffect(() => {
+    const onScroll = () => {
+      const mid = window.innerHeight * 0.4;
+      let current = RAIL_SECTIONS[0].id;
+      for (const s of RAIL_SECTIONS) {
+        const el = document.getElementById(s.id);
+        if (el && el.getBoundingClientRect().top <= mid) current = s.id;
+      }
+      setActive(current);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  return (
+    <nav aria-label="Section progress" className="fixed left-4 top-1/2 z-[75] hidden -translate-y-1/2 flex-col gap-2.5 xl:flex">
+      {RAIL_SECTIONS.map((s, i) => {
+        const on = active === s.id;
+        return (
+          <a
+            key={s.id}
+            href={`#${s.id}`}
+            className={`group flex items-center gap-2 text-[0.6rem] uppercase tracking-[0.22em] transition-all duration-500 ${
+              on ? "text-clay" : "text-charcoal/35 hover:text-charcoal/70"
+            }`}
+          >
+            <span className={`h-px transition-all duration-500 ${on ? "w-7 bg-clay" : "w-3 bg-current"}`} />
+            <span className="tabular-nums">{String(i + 1).padStart(2, "0")}</span>
+            <span className={`transition-all duration-500 ${on ? "opacity-100" : "opacity-0 group-hover:opacity-70"}`}>
+              {s.label}
+            </span>
+          </a>
+        );
+      })}
+    </nav>
+  );
+}
+
+function useInView<T extends HTMLElement>() {
+  const ref = useRef<T>(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setInView(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.25 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return { ref, inView };
+}
+
+function RevealHeading({
+  text,
+  className = "",
+  as: Tag = "h2",
+}: {
+  text: string;
+  className?: string;
+  as?: "h1" | "h2" | "h3";
+}) {
+  const { ref, inView } = useInView<HTMLHeadingElement>();
+  const words = text.split(" ");
+  return (
+    <Tag ref={ref} className={`word-reveal ${inView ? "is-in" : ""} ${className}`}>
+      {words.map((w, i) => (
+        <span key={i} style={{ animationDelay: `${i * 65}ms` }}>
+          {w === "/" ? <br /> : w}
+          {w === "/" ? "" : "\u00A0"}
+        </span>
+      ))}
+    </Tag>
+  );
+}
+
+function Magnetic({
+  children,
+  className = "",
+  href,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  href: string;
+}) {
+  const ref = useRef<HTMLAnchorElement>(null);
+  return (
+    <a
+      ref={ref}
+      href={href}
+      className={className}
+      style={{ transition: "transform 0.25s cubic-bezier(0.2,0.8,0.2,1), background 0.35s ease, box-shadow 0.35s ease" }}
+      onMouseMove={(e) => {
+        const el = ref.current;
+        if (!el) return;
+        const r = el.getBoundingClientRect();
+        const x = (e.clientX - (r.left + r.width / 2)) * 0.35;
+        const y = (e.clientY - (r.top + r.height / 2)) * 0.45;
+        el.style.transform = `translate(${x}px, ${y}px)`;
+      }}
+      onMouseLeave={() => {
+        const el = ref.current;
+        if (el) el.style.transform = "translate(0,0)";
+      }}
+    >
+      {children}
+    </a>
+  );
+}
+
+function Stamp({ className = "" }: { className?: string }) {
+  return (
+    <div aria-hidden className={`pointer-events-none grid h-28 w-28 place-items-center ${className}`}>
+      <svg viewBox="0 0 200 200" className="spin-slow absolute h-full w-full text-clay">
+        <defs>
+          <path id="stampcircle" d="M100,100 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0" />
+        </defs>
+        <text className="fill-current" style={{ fontSize: 19, letterSpacing: "5.5px", fontFamily: "var(--font-sans)" }}>
+          <textPath href="#stampcircle">EST. EGROW · HAND-POTTED · GROWN SLOWLY ·</textPath>
+        </text>
+      </svg>
+      <span className="relative font-serif text-[0.7rem] uppercase tracking-[0.2em] text-clay-deep">Egrow</span>
+    </div>
+  );
+}
+
+function TornDivider({ color = "text-ivory", className = "" }: { color?: string; className?: string }) {
+  return (
+    <svg aria-hidden viewBox="0 0 1200 44" preserveAspectRatio="none" className={`w-full ${color} ${className}`}>
+      <path
+        fill="currentColor"
+        d="M0 18 C38 8 68 26 108 16 C150 5 176 27 220 18 C262 9 300 30 342 18 C382 7 420 28 462 17 C502 7 542 30 584 19 C624 9 662 28 704 17 C744 7 782 27 824 18 C864 9 902 29 944 19 C984 9 1022 26 1064 16 C1104 7 1152 24 1200 14 L1200 44 L0 44 Z"
+      />
+    </svg>
+  );
+}
 
 function Leaf({ className = "" }: { className?: string }) {
   return (
@@ -122,6 +298,13 @@ function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
   const [soundBlocked, setSoundBlocked] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const onScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     const v = videoRef.current;
@@ -218,10 +401,30 @@ function Hero() {
         controls={false}
         preload="auto"
         poster={heroVideoPoster}
-        className="absolute inset-0 h-full w-full object-cover object-center [transform:translateZ(0)]"
+        className="ken-burns absolute inset-0 h-full w-full object-cover object-center"
         aria-label="Ambient botanical nursery footage with natural bird chirping"
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/25 to-black/60" />
+      {/* parallax depth layer 1 — tinted haze */}
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-gradient-to-b from-ink/55 via-ink/25 to-ink/70"
+        style={{ transform: `translateY(${scrollY * 0.15}px)` }}
+      />
+      {/* parallax depth layer 2 — oversized outlined leaf breaking the frame */}
+      <svg
+        aria-hidden
+        viewBox="0 0 400 600"
+        className="pointer-events-none absolute -left-24 top-[8%] z-[5] h-[85%] w-auto text-ivory/25 md:-left-16"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.1"
+        style={{ transform: `translateY(${scrollY * -0.22}px) rotate(-8deg)` }}
+      >
+        <path d="M200 10C60 120 20 320 120 480c40 64 96 100 96 100s10-120-20-220" />
+        <path d="M200 10c140 110 180 310 80 470-40 64-96 100-96 100" />
+        <path d="M196 580C196 380 198 190 200 10" />
+        <path d="M198 140 96 210M198 220 78 300M198 300 92 380M202 140 304 210M202 220 322 300M202 300 308 380" />
+      </svg>
       <button
         type="button"
         onClick={toggleSound}
@@ -233,28 +436,33 @@ function Hero() {
         <span>{isMuted ? "Sound" : "Sound on"}</span>
       </button>
       {soundBlocked ? <span className="sr-only" role="status">Sound will start after another tap.</span> : null}
-      <div className="relative z-10 mx-auto max-w-4xl px-6 pt-24 text-center text-ivory fade-up">
-        <p className="mb-6 flex items-center justify-center gap-2 text-[0.7rem] uppercase tracking-[0.35em] text-ivory/85">
+      <div
+        className="relative z-10 mx-auto w-full max-w-6xl px-7 pt-28 text-left text-ivory fade-up md:pl-[12%]"
+        style={{ transform: `translateY(${scrollY * 0.08}px)` }}
+      >
+        <p className="mb-6 flex items-center gap-2 text-[0.7rem] uppercase tracking-[0.35em] text-ivory/85">
           <Leaf className="h-3.5 w-3.5" /> Welcome to Egrow
         </p>
-        <h1 className="font-serif text-6xl font-medium leading-[1.02] tracking-tight text-ivory md:text-8xl">
-          Bring Nature <em className="not-italic block font-light">Home.</em>
+        <h1 className="font-serif text-[3.4rem] font-semibold leading-[0.92] tracking-[-0.04em] text-ivory sm:text-7xl md:text-[8.5rem]">
+          Bring Nature
+          <em className="ml-1 block pl-[0.08em] font-light italic text-moss md:-mt-4">Home.</em>
         </h1>
-        <p className="mx-auto mt-7 max-w-xl text-base leading-snug text-ivory/85 md:text-lg">
+        <p className="mt-7 max-w-md text-base leading-snug text-ivory/85 md:text-lg">
           Healthy Plants. Beautiful Pottery. Expert Guidance.
         </p>
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <a href="#visit" className="btn-primary">Visit Nursery</a>
-          <a href="#stories" className="btn-ghost">Buy Plants</a>
+        <div className="mt-9 flex flex-wrap items-center gap-4">
+          <Magnetic href="#visit" className="btn-clay">Visit Nursery</Magnetic>
+          <Magnetic href="#stories" className="btn-ghost">Buy Plants</Magnetic>
           <a href="#transform" className="text-ivory border-b border-ivory pb-1 text-sm hover:text-moss hover:border-moss transition">
             Transform Your Space →
           </a>
+          <Stamp className="relative -mt-2 ml-1 hidden rotate-[-9deg] sm:grid" />
         </div>
       </div>
-      {/* soft ivory wave */}
-      <svg viewBox="0 0 1440 120" className="absolute -bottom-1 left-0 right-0 z-[65] w-full text-ivory" preserveAspectRatio="none">
-        <path fill="currentColor" d="M0,64 C240,120 480,20 720,48 C960,76 1200,120 1440,72 L1440,120 L0,120 Z" />
-      </svg>
+      {/* torn paper edge */}
+      <div className="absolute -bottom-px left-0 right-0 z-[65]">
+        <TornDivider color="text-ivory" className="h-[44px] drop-shadow-[0_-6px_10px_rgba(20,17,13,0.25)]" />
+      </div>
     </section>
   );
 }
@@ -269,7 +477,7 @@ function About() {
     { year: "2026", title: "And Beyond", note: "Continuing to grow, together." },
   ];
   return (
-    <section id="about" className="relative z-10 overflow-hidden py-24">
+    <section id="about" className="grain relative z-10 overflow-hidden py-28 md:py-36">
       {/* Botanical artwork background — covers the entire section and hides the global vine */}
       <div
         aria-hidden
@@ -285,32 +493,34 @@ function About() {
             "radial-gradient(ellipse at 50% 45%, rgba(248,246,241,0.86) 0%, rgba(248,246,241,0.62) 32%, rgba(248,246,241,0.24) 62%, transparent 100%)",
         }}
       />
-      <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 gap-10 px-8 md:grid-cols-12 md:gap-8 lg:px-12">
-        <div className="md:col-span-4">
-          <div className="relative mx-auto max-w-[360px]">
-            <div className="overflow-hidden rounded-t-[220px] rounded-b-[220px] shadow-xl">
-              <img src={aboutImg} alt="Egrow founder tending plants" className="h-[520px] w-full object-cover" loading="lazy" />
+      <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 items-start gap-12 px-8 md:grid-cols-12 md:gap-8 lg:px-12">
+        <div className="md:col-span-5 md:-ml-4 lg:-ml-10">
+          <div className="relative max-w-[420px] rotate-[-3deg]">
+            <div className="shadow-clay overflow-hidden rounded-[6px]">
+              <img src={aboutImg} alt="Egrow founder tending plants" className="h-[560px] w-full object-cover" loading="lazy" />
             </div>
+            <span className="hand-note absolute -bottom-9 right-2 rotate-[4deg]">the first bench, 2020</span>
           </div>
         </div>
-        <div className="md:col-span-5">
+        <div className="md:col-span-4 md:pt-24">
           <Eyebrow>Our Story</Eyebrow>
-          <h2 className="mt-3 font-serif text-5xl font-medium leading-[1.1] md:text-6xl">
-            From a Passion,<br />To a Green Legacy.
-          </h2>
-          <p className="mt-4 max-w-md text-base leading-snug text-charcoal/80">
+          <RevealHeading
+            text="From a Passion, / To a Green Legacy."
+            className="mt-4 font-serif text-[2.9rem] font-semibold leading-[0.98] tracking-[-0.035em] md:text-[4.2rem]"
+          />
+          <p className="mt-6 max-w-md text-base leading-snug text-charcoal/80">
             What began as a small dream to bring more plants into people's lives has grown into a space filled with greenery, learning and love. Every plant we tend is chosen for how it makes a home feel.
           </p>
-          <a href="#stories" className="btn-link mt-5">Know Our Journey →</a>
+          <a href="#stories" className="btn-link mt-6 border-clay text-clay-deep hover:text-clay">Know Our Journey →</a>
         </div>
-        <div className="md:col-span-3">
-          <ol className="relative border-l border-olive/30 pl-6">
+        <div className="md:col-span-3 md:pt-6">
+          <ol className="relative rotate-[1.5deg] border-l border-clay/30 pl-6">
             {timeline.map((t, i) => (
               <li key={i} className="relative mb-4 last:mb-0">
-                <span className="absolute -left-[31px] top-1 grid h-4 w-4 place-items-center rounded-full border border-olive bg-ivory">
-                  <span className="h-1.5 w-1.5 rounded-full bg-olive" />
+                <span className="absolute -left-[31px] top-1 grid h-4 w-4 place-items-center rounded-full border border-clay bg-ivory">
+                  <span className="h-1.5 w-1.5 rounded-full bg-clay" />
                 </span>
-                <div className="text-sm text-olive">{t.year}</div>
+                <div className="text-sm tracking-widest text-clay">{t.year}</div>
                 <div className="mt-1 font-serif text-lg font-medium text-forest">{t.title}</div>
                 <div className="text-sm leading-snug text-charcoal/70">{t.note}</div>
               </li>
@@ -333,18 +543,25 @@ function WhyEgrow() {
     { title: "Local & Trusted", note: "A neighbourhood nursery, proudly rooted.", icon: IconHeart },
   ];
   return (
-    <section className="relative bg-sage py-20">
+    <section className="grain relative bg-sage py-24">
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
-        <div className="mb-12 max-w-2xl">
+        <div className="mb-14 max-w-3xl md:ml-[38%]">
           <Eyebrow>Why Egrow</Eyebrow>
-          <h2 className="mt-3 font-serif text-5xl font-medium leading-[1.05] md:text-6xl">More Than Just Plants.</h2>
+          <RevealHeading
+            text="More Than Just Plants."
+            className="mt-3 font-serif text-[2.6rem] font-semibold leading-[0.98] tracking-[-0.03em] md:text-[3.4rem]"
+          />
         </div>
-        <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-5">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-5">
           {items.map((it, i) => {
             const Icon = it.icon;
             return (
-              <div key={i} className="group text-center transition-transform duration-500 hover:-translate-y-1">
-                <div className="mx-auto mb-3 grid h-16 w-16 place-items-center rounded-full border border-olive/30 text-olive transition-all group-hover:bg-ivory group-hover:shadow-lg">
+              <div
+                key={i}
+                className="group text-center transition-transform duration-500 hover:-translate-y-1"
+                style={{ transform: `rotate(${(i % 2 ? 1 : -1) * (1.5 + (i % 3))}deg)`, marginTop: `${(i % 3) * 18}px` }}
+              >
+                <div className="mx-auto mb-3 grid h-16 w-16 place-items-center rounded-full border border-olive/30 text-olive transition-all group-hover:border-clay group-hover:bg-ivory group-hover:text-clay group-hover:shadow-clay">
                   <Icon className="h-8 w-8" />
                 </div>
                 <div className="font-serif text-lg font-medium text-forest">{it.title}</div>
@@ -528,7 +745,7 @@ function GrowingStories() {
   return (
     <section
       id="stories"
-      className="relative z-10 overflow-hidden py-24"
+      className="grain relative z-10 overflow-hidden py-28 md:py-36"
     >
       {/* Botanical artwork background — covers the entire section and hides the global vine */}
       <div
@@ -546,23 +763,33 @@ function GrowingStories() {
         }}
       />
       <div className="relative z-10 mx-auto max-w-7xl px-8 lg:px-12">
-        <div className="mb-14 max-w-2xl">
+        <div className="relative mb-16 max-w-3xl">
           <Eyebrow>Growing Stories</Eyebrow>
-          <h2 className="mt-4 font-serif text-4xl font-medium leading-[1.08] text-forest md:text-5xl">
-            Field notes from the nursery.
-          </h2>
-          <p className="mt-4 max-w-lg text-[0.95rem] leading-snug text-charcoal/70">
+          <RevealHeading
+            text="Field notes / from the nursery."
+            className="mt-4 font-serif text-[3rem] font-semibold leading-[0.95] tracking-[-0.035em] text-forest md:text-[5rem]"
+          />
+          <span className="hand-note absolute -right-2 top-2 hidden rotate-[-6deg] lg:block">
+            written in the potting shed ↴
+          </span>
+          <p className="mt-5 max-w-lg text-[0.95rem] leading-snug text-charcoal/70">
             Short editorial pieces on the plants, pottery and small rituals that shape the way we garden. Open any chapter to read the full story.
           </p>
         </div>
 
         {story === null ? (
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-            {stories.map((s, i) => (
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-12 md:gap-6">
+            {stories.map((s, i) => {
+              const layout = [
+                "md:col-span-7 md:aspect-[16/10] rotate-[-1.5deg]",
+                "md:col-span-5 md:aspect-[4/5] md:mt-14 rotate-[2.5deg]",
+                "md:col-span-8 md:col-start-4 md:aspect-[16/9] md:-mt-6 rotate-[-1deg]",
+              ][i];
+              return (
               <button
                 key={i}
                 onClick={() => setActive(i)}
-                className="group relative flex aspect-[3/4] flex-col justify-between overflow-hidden rounded-[28px] border border-white/50 bg-white/20 p-8 text-left shadow-[0_20px_60px_-24px_rgba(47,79,58,0.4)] backdrop-blur-2xl backdrop-saturate-150 transition-all duration-500 ease-out hover:-translate-y-1.5 hover:border-white/70 hover:bg-white/30 hover:shadow-[0_32px_80px_-24px_rgba(47,79,58,0.5)]"
+                className={`group relative flex aspect-[3/4] flex-col justify-between overflow-hidden rounded-[4px] border border-white/50 bg-white/20 p-8 text-left shadow-clay backdrop-blur-2xl backdrop-saturate-150 transition-all duration-500 ease-out hover:-translate-y-1.5 hover:rotate-0 hover:border-clay/40 hover:bg-white/30 ${layout}`}
               >
                 {/* Background image on right half with fade to glass */}
                 <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden rounded-[28px]">
@@ -570,13 +797,13 @@ function GrowingStories() {
                     src={s.img}
                     alt=""
                     loading="lazy"
-                    className="absolute right-0 top-0 h-full w-[72%] object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.06]"
+                    className="absolute right-0 top-0 h-full w-[60%] object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.06]"
                   />
                   <div
                     className="absolute inset-0"
                     style={{
                       background:
-                        "linear-gradient(to right, rgba(255,255,255,0.78) 0%, rgba(255,255,255,0.55) 32%, rgba(255,255,255,0.15) 55%, rgba(255,255,255,0) 78%)",
+                        "linear-gradient(to right, rgba(248,246,241,0.97) 0%, rgba(248,246,241,0.95) 45%, rgba(248,246,241,0.55) 68%, rgba(248,246,241,0) 92%)",
                       backdropFilter: "blur(2px)",
                     }}
                   />
@@ -589,7 +816,7 @@ function GrowingStories() {
 
                 {/* Top: small icon chip */}
                 <div className="relative">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/60 bg-white/50 backdrop-blur-md">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-sm border border-white/60 bg-white/50 backdrop-blur-md">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2f4f3a" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M12 2c3 4 5 7 5 11a5 5 0 01-10 0c0-4 2-7 5-11z" />
                       <path d="M12 13v8" />
@@ -598,23 +825,27 @@ function GrowingStories() {
                 </div>
 
                 {/* Text block */}
-                <div className="relative max-w-[65%]">
-                  <div className="text-[0.62rem] uppercase tracking-[0.32em] text-forest/70">
+                <div className="relative max-w-[58%]">
+                  <div className="text-[0.62rem] uppercase tracking-[0.32em] text-clay">
                     {s.tag}
                   </div>
-                  <h3 className="mt-4 font-serif text-[1.75rem] font-medium leading-[1.12] text-forest">
+                  <h3 className="mt-4 font-serif text-[1.9rem] font-semibold leading-[1.02] tracking-[-0.03em] text-forest md:text-[2.3rem]">
                     {s.title}
                   </h3>
-                  <div className="mt-5 h-px w-full bg-forest/15" />
+                  <div className="mt-5 h-px w-full bg-clay/25" />
                   <p className="mt-5 text-[0.88rem] leading-snug text-charcoal/80">
                     {s.dek}
                   </p>
-                  <span className="mt-8 inline-flex items-center gap-2 text-[0.72rem] uppercase tracking-[0.26em] text-forest transition-colors group-hover:text-olive">
+                  <span className="mt-8 inline-flex items-center gap-2 text-[0.72rem] uppercase tracking-[0.26em] text-forest transition-colors group-hover:text-clay">
                     Read Story <span aria-hidden>→</span>
                   </span>
                 </div>
+                <span className="hand-note pointer-events-none absolute bottom-4 right-7 hidden rotate-[-5deg] md:block">
+                  {["a customer favourite", "kiln-fired, Jaipur", "start here!"][i]}
+                </span>
               </button>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <StoryArticle story={story} onClose={() => setActive(null)} />
@@ -781,29 +1012,32 @@ function Transform() {
     { title: "Sunlit Balcony", area: "120 sq ft • Andheri", note: "A bare apartment balcony turned into a lush retreat.", before: t2before, after: t2after },
   ];
   return (
-    <section id="transform" className="relative py-24">
+    <section id="transform" className="grain relative py-28">
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
-        <div className="mx-auto mb-12 max-w-2xl text-center">
+        <div className="mb-14 max-w-3xl">
           <Eyebrow>Transform Your Space</Eyebrow>
-          <h2 className="mt-3 font-serif text-5xl font-medium leading-[1.05] md:text-6xl">From Ordinary to Extraordinary.</h2>
-          <p className="mt-3 text-charcoal/80">
+          <RevealHeading
+            text="From Ordinary / to Extraordinary."
+            className="mt-3 font-serif text-[2.8rem] font-semibold leading-[0.95] tracking-[-0.035em] md:text-[4.6rem]"
+          />
+          <p className="mt-4 max-w-lg text-charcoal/80">
             We transform balconies, terraces and outdoor spaces into beautiful green retreats you'll love spending time in.
           </p>
         </div>
-        <div className="grid grid-cols-1 gap-7 md:grid-cols-2">
-          {projects.map((p) => (
-            <div key={p.title}>
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
+          {projects.map((p, i) => (
+            <div key={p.title} className={i === 1 ? "md:mt-20" : ""}>
               <BeforeAfter before={p.before} after={p.after} />
               <div className="mt-3">
-                <div className="font-serif text-2xl font-medium text-forest">{p.title}</div>
-                <div className="mt-1 text-xs uppercase tracking-widest text-olive">{p.area}</div>
+                <div className="font-serif text-3xl font-semibold tracking-[-0.02em] text-forest">{p.title}</div>
+                <div className="mt-1 text-xs uppercase tracking-widest text-clay">{p.area}</div>
                 <p className="mt-3 text-sm leading-snug text-charcoal/75">{p.note}</p>
               </div>
             </div>
           ))}
         </div>
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-          <a href="#visit" className="btn-primary">See All Transformations →</a>
+        <div className="mt-14 flex flex-wrap items-center gap-6">
+          <Magnetic href="#visit" className="btn-clay">See All Transformations →</Magnetic>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-4 text-center">
             {[
               ["50+", "Spaces Transformed"],
@@ -812,7 +1046,7 @@ function Transform() {
               ["Happy", "Green Families"],
             ].map(([n, l]) => (
               <div key={l}>
-                <div className="font-serif text-3xl font-medium text-forest">{n}</div>
+                <div className="font-serif text-4xl font-semibold text-clay">{n}</div>
                 <div className="text-[0.7rem] uppercase tracking-widest text-charcoal/60">{l}</div>
               </div>
             ))}
@@ -822,6 +1056,9 @@ function Transform() {
     </section>
   );
 }
+
+const SLIDER_CURSOR =
+  "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='48'%20height='48'%3E%3Ccircle%20cx='24'%20cy='24'%20r='20'%20fill='%23B4532A'%20fill-opacity='0.9'/%3E%3Cpath%20d='M18%2018l-6%206%206%206M30%2018l6%206-6%206'%20stroke='%23FDF7F0'%20stroke-width='2'%20fill='none'%20stroke-linecap='round'/%3E%3C/svg%3E";
 
 function BeforeAfter({ before, after }: { before: string; after: string }) {
   const [pos, setPos] = useState(50);
@@ -835,7 +1072,8 @@ function BeforeAfter({ before, after }: { before: string; after: string }) {
   return (
     <div
       ref={ref}
-      className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl shadow-xl select-none"
+      className="shadow-clay relative aspect-[4/3] w-full select-none overflow-hidden rounded-[4px]"
+      style={{ cursor: `url("${SLIDER_CURSOR}") 24 24, ew-resize` }}
       onMouseMove={(e) => e.buttons === 1 && drag(e.clientX)}
       onTouchMove={(e) => drag(e.touches[0].clientX)}
     >
@@ -843,8 +1081,8 @@ function BeforeAfter({ before, after }: { before: string; after: string }) {
       <div className="absolute inset-0 overflow-hidden" style={{ width: `${pos}%` }}>
         <img src={before} alt="Before" loading="lazy" className="h-full w-full object-cover" style={{ width: `${(100 / pos) * 100}%`, maxWidth: "none" }} />
       </div>
-      <span className="absolute left-4 top-4 rounded-full bg-forest/80 px-3 py-1 text-[0.65rem] uppercase tracking-widest text-ivory">Before</span>
-      <span className="absolute right-4 top-4 rounded-full bg-olive px-3 py-1 text-[0.65rem] uppercase tracking-widest text-ivory">After</span>
+      <span className="absolute left-4 top-4 rounded-full bg-ink/80 px-3 py-1 text-[0.65rem] uppercase tracking-widest text-ivory">Before</span>
+      <span className="absolute right-4 top-4 rounded-full bg-clay px-3 py-1 text-[0.65rem] uppercase tracking-widest text-ivory">After</span>
       <div className="pointer-events-none absolute inset-y-0" style={{ left: `${pos}%` }}>
         <div className="h-full w-px -translate-x-1/2 bg-ivory shadow-[0_0_15px_rgba(0,0,0,0.3)]" />
       </div>
@@ -864,39 +1102,44 @@ function BeforeAfter({ before, after }: { before: string; after: string }) {
 
 function Gallery() {
   const imgs = [
-    { src: g2, span: "row-span-2" },
-    { src: g3, span: "" },
-    { src: g1, span: "" },
-    { src: g5, span: "row-span-2" },
-    { src: g4, span: "" },
-    { src: g6, span: "row-span-2" },
+    { src: g2, span: "col-span-2 row-span-3 md:col-span-5", tilt: "-2deg" },
+    { src: g3, span: "col-span-1 row-span-2 md:col-span-3", tilt: "1.8deg" },
+    { src: g1, span: "col-span-1 row-span-2 md:col-span-4", tilt: "-1deg" },
+    { src: g5, span: "col-span-2 row-span-2 md:col-span-4 md:mt-6", tilt: "2.5deg" },
+    { src: g4, span: "col-span-1 row-span-3 md:col-span-3", tilt: "-2.5deg" },
+    { src: g6, span: "col-span-1 row-span-2 md:col-span-5 md:-mt-8", tilt: "1.2deg" },
   ];
   const [open, setOpen] = useState<string | null>(null);
   return (
-    <section id="gallery" className="relative bg-sage py-24">
+    <section id="gallery" className="grain relative overflow-hidden bg-sage py-28">
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
         <div className="mb-10 grid grid-cols-1 items-end gap-3 md:grid-cols-2">
           <div>
             <Eyebrow>Gallery</Eyebrow>
-            <h2 className="mt-3 font-serif text-5xl font-medium leading-[1.05] md:text-6xl">Moments That Bloom.</h2>
+            <RevealHeading
+              text="Moments / That Bloom."
+              className="mt-3 font-serif text-[3.2rem] font-semibold leading-[0.92] tracking-[-0.04em] md:text-[5.6rem]"
+            />
           </div>
           <p className="max-w-md text-charcoal/80 md:justify-self-end">
             A glimpse of greenery, growth and beautiful spaces. Follow along as we tend, plant, and share the everyday poetry of the nursery.
           </p>
         </div>
-        <div className="grid auto-rows-[200px] grid-cols-2 gap-2 md:grid-cols-4 md:gap-3">
+        <div className="grid auto-rows-[110px] grid-cols-2 gap-3 md:grid-cols-12 md:gap-5">
           {imgs.map((im, i) => (
             <button
               key={i}
               onClick={() => setOpen(im.src)}
-              className={`group relative overflow-hidden rounded-3xl bg-ivory shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl ${im.span}`}
+              style={{ transform: `rotate(${im.tilt})` }}
+              className={`group shadow-moss-drop relative overflow-hidden rounded-[3px] bg-ivory transition-all duration-500 hover:-translate-y-1 hover:shadow-clay ${im.span}`}
             >
               <img src={im.src} alt="Gallery" loading="lazy" className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-105" />
             </button>
           ))}
         </div>
-        <div className="mt-6 text-center">
-          <a href="#" className="btn-ghost">Follow Our Journey →</a>
+        <div className="mt-12 flex flex-wrap items-center gap-6">
+          <Magnetic href="#" className="btn-clay">Follow Our Journey →</Magnetic>
+          <span className="hand-note rotate-[-4deg]">shot on ordinary mornings</span>
         </div>
       </div>
       {open && (
@@ -951,14 +1194,19 @@ function Reviews() {
   ];
 
   return (
-    <section id="reviews" className="relative bg-ivory py-24">
-      <div className="mx-auto max-w-7xl px-8 lg:px-12">
-        <div className="mx-auto mb-14 max-w-2xl text-center">
-          <Eyebrow>Community Voices</Eyebrow>
-          <h2 className="mt-3 font-serif text-5xl font-medium leading-[1.05] md:text-6xl">
-            What Green Families Say.
-          </h2>
-          <p className="mt-4 text-charcoal/75">
+    <section id="reviews" className="grain relative overflow-hidden bg-ink py-28 text-ivory">
+      <div className="relative z-10 mx-auto max-w-7xl px-8 lg:px-12">
+        <div className="mb-16 grid grid-cols-1 items-end gap-6 md:grid-cols-12">
+          <div className="md:col-span-7">
+            <div className="flex items-center gap-2 text-[0.72rem] uppercase tracking-[0.18em] text-clay">
+              <Leaf className="h-3.5 w-3.5" /> Community Voices
+            </div>
+            <RevealHeading
+              text="What Green / Families Say."
+              className="mt-4 font-serif text-[3rem] font-semibold leading-[0.92] tracking-[-0.04em] !text-ivory md:text-[5.4rem]"
+            />
+          </div>
+          <p className="text-ivory/65 md:col-span-4 md:col-start-9 md:pb-4">
             Words from plant lovers, balcony dreamers, and the green spaces we have helped grow.
           </p>
         </div>
@@ -966,31 +1214,33 @@ function Reviews() {
           {reviews.map((r, i) => (
             <div
               key={i}
-              className="relative flex flex-col rounded-3xl border border-forest/10 bg-sage p-8 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl"
+              style={{ transform: `rotate(${(i % 2 ? 1 : -1) * 1.2}deg)`, marginTop: `${(i % 3) * 22}px` }}
+              className="relative flex flex-col rounded-[3px] border border-ivory/12 bg-ivory/[0.04] p-8 backdrop-blur-sm transition-all duration-500 hover:-translate-y-1 hover:border-clay/40 hover:bg-ivory/[0.07]"
             >
-              <div className="mb-5 flex items-center gap-0.5 text-olive">
+              <div className="mb-5 flex items-center gap-0.5 text-clay">
                 {Array.from({ length: r.rating }).map((_, s) => (
                   <svg key={s} className="h-4 w-4 fill-current" viewBox="0 0 20 20">
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                   </svg>
                 ))}
               </div>
-              <blockquote className="mb-8 flex-1 text-[1.02rem] leading-snug text-charcoal/85">
+              <blockquote className="mb-8 flex-1 text-[1.02rem] leading-snug text-ivory/85">
                 “{r.quote}”
               </blockquote>
               <div className="flex items-center gap-4">
-                <div className="grid h-11 w-11 place-items-center rounded-full bg-olive/15 font-serif text-base text-forest">
+                <div className="grid h-11 w-11 place-items-center rounded-full bg-clay/20 font-serif text-base !text-clay">
                   {r.name.split(" ").map((n) => n[0]).slice(0, 2).join("")}
                 </div>
                 <div>
-                  <div className="font-serif text-base font-medium text-forest">{r.name}</div>
-                  <div className="text-xs leading-snug text-charcoal/60">{r.location}</div>
+                  <div className="font-serif text-base font-semibold !text-ivory">{r.name}</div>
+                  <div className="text-xs leading-snug text-ivory/55">{r.location}</div>
                 </div>
               </div>
             </div>
           ))}
         </div>
       </div>
+      <div className="absolute inset-x-0 bottom-0 z-20"><TornDivider color="text-ivory" className="h-[40px]" /></div>
     </section>
   );
 }
@@ -999,19 +1249,23 @@ function Reviews() {
 
 function PlanVisit() {
   return (
-    <section id="visit" className="relative py-24 scroll-mt-16" style={{}}>
+    <section id="visit" className="grain relative py-28 scroll-mt-16">
       <a id="contact" className="absolute -top-8" />
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
-        <div className="mb-12 max-w-2xl">
+        <div className="relative mb-14 max-w-3xl">
           <Eyebrow>Let's Plan Your Green Space</Eyebrow>
-          <h2 className="mt-3 font-serif text-5xl font-medium leading-[1.05] md:text-6xl">Let's Plan<br/>Your Green Space.</h2>
+          <RevealHeading
+            text="Let's Plan / Your Green Space."
+            className="mt-3 font-serif text-[2.9rem] font-semibold leading-[0.93] tracking-[-0.04em] md:text-[5rem]"
+          />
+          <Stamp className="absolute -top-6 right-0 hidden rotate-[7deg] lg:grid" />
           <p className="mt-3 text-charcoal/80">
             We'd love to welcome you. Visit our nursery or reach out to plan your perfect green space — we'll bring the plants, pottery and expertise.
           </p>
         </div>
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-12">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-12">
           {/* visit card */}
-          <div className="md:col-span-4 rounded-3xl bg-ivory p-6 shadow-sm">
+          <div className="shadow-moss-drop md:col-span-4 rotate-[-1.2deg] rounded-[4px] bg-ivory p-7">
             <div className="font-serif text-2xl font-medium text-forest">Visit Us</div>
             <p className="mt-2 text-sm leading-snug text-charcoal/75">Come explore our nursery and experience the joy of greenery.</p>
             <ul className="mt-3 space-y-2 text-sm leading-snug">
@@ -1020,13 +1274,13 @@ function PlanVisit() {
               <li className="flex items-start gap-3"><Leaf className="mt-0.5 h-4 w-4 text-olive" /> hello@egrow.com</li>
               <li className="flex items-start gap-3"><Leaf className="mt-0.5 h-4 w-4 text-olive" /> 9:00 AM – 7:00 PM (Everyday)</li>
             </ul>
-            <div className="mt-4 flex gap-3">
-              <a href="#" className="btn-primary">Get Directions</a>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <Magnetic href="#" className="btn-clay">Get Directions</Magnetic>
               <a href="https://wa.me/919876543210" className="btn-ghost">WhatsApp</a>
             </div>
           </div>
           {/* map */}
-          <div className="md:col-span-4 relative overflow-hidden rounded-3xl min-h-[420px] shadow-sm">
+          <div className="shadow-moss-drop md:col-span-4 relative min-h-[420px] overflow-hidden rounded-[4px] md:mt-10">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,#c7d9bd,transparent_60%),radial-gradient(circle_at_70%_70%,#a8c69f,transparent_60%),linear-gradient(135deg,#eef1e8,#dfe7d5)]" />
             <svg className="absolute inset-0 h-full w-full opacity-40" viewBox="0 0 400 400" fill="none">
               <path d="M0 250 Q100 200 200 260 T400 220" stroke="#6B8E5A" strokeWidth="1.5" />
@@ -1042,14 +1296,14 @@ function PlanVisit() {
             </div>
           </div>
           {/* form */}
-          <div className="md:col-span-4 rounded-3xl bg-ivory p-6 shadow-sm">
+          <div className="shadow-moss-drop md:col-span-4 rotate-[1deg] rounded-[4px] bg-ivory p-7">
             <div className="font-serif text-2xl font-medium text-forest">Book a Visit</div>
             <p className="mt-2 text-sm leading-snug text-charcoal/75">Choose your preferred date and let's meet.</p>
             <form className="mt-3 space-y-3 text-sm leading-snug" onSubmit={(e) => e.preventDefault()}>
               <Field label="Your Name" placeholder="Enter your name" />
               <Field label="Phone Number" placeholder="Enter phone number" />
               <Field label="Preferred Date" placeholder="Select date" type="date" />
-              <button className="btn-primary w-full justify-center">Book My Visit</button>
+              <button className="btn-clay w-full justify-center">Book My Visit</button>
             </form>
           </div>
         </div>
@@ -1616,7 +1870,7 @@ function HalfFace({ page, side }: { page: PageKind; side: "left" | "right" }) {
 function PaperPage({ side, children, fill = false }: { side: "left" | "right"; children: React.ReactNode; fill?: boolean }) {
   return (
     <div
-      className={`relative h-full ${fill ? "w-full" : ""} overflow-hidden`}
+      className={`paper-fiber relative h-full ${fill ? "w-full" : ""} overflow-hidden`}
       style={{
         background:
           "radial-gradient(120% 90% at 50% 0%, #fbf6e6 0%, #f4ecd5 60%, #eee2c2 100%)",
@@ -1655,6 +1909,17 @@ function PaperPage({ side, children, fill = false }: { side: "left" | "right"; c
       />
       {/* Corner sketches */}
       <CornerSketch side={side} />
+      {/* page-curl shadow */}
+      <div
+        aria-hidden
+        className={`pointer-events-none absolute bottom-0 ${side === "left" ? "left-0" : "right-0"} h-24 w-24`}
+        style={{
+          background:
+            side === "left"
+              ? "radial-gradient(circle at 0% 100%, rgba(60,44,20,0.28), transparent 62%)"
+              : "radial-gradient(circle at 100% 100%, rgba(60,44,20,0.28), transparent 62%)",
+        }}
+      />
       <div className="relative z-10 h-full">{children}</div>
     </div>
   );
