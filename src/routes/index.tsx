@@ -477,7 +477,7 @@ function About() {
     { year: "2026", title: "And Beyond", note: "Continuing to grow, together." },
   ];
   return (
-    <section id="about" className="relative z-10 overflow-hidden py-24">
+    <section id="about" className="grain relative z-10 overflow-hidden py-28 md:py-36">
       {/* Botanical artwork background — covers the entire section and hides the global vine */}
       <div
         aria-hidden
@@ -493,32 +493,34 @@ function About() {
             "radial-gradient(ellipse at 50% 45%, rgba(248,246,241,0.86) 0%, rgba(248,246,241,0.62) 32%, rgba(248,246,241,0.24) 62%, transparent 100%)",
         }}
       />
-      <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 gap-10 px-8 md:grid-cols-12 md:gap-8 lg:px-12">
-        <div className="md:col-span-4">
-          <div className="relative mx-auto max-w-[360px]">
-            <div className="overflow-hidden rounded-t-[220px] rounded-b-[220px] shadow-xl">
-              <img src={aboutImg} alt="Egrow founder tending plants" className="h-[520px] w-full object-cover" loading="lazy" />
+      <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 items-start gap-12 px-8 md:grid-cols-12 md:gap-8 lg:px-12">
+        <div className="md:col-span-5 md:-ml-16 lg:-ml-28">
+          <div className="relative max-w-[420px] rotate-[-3deg]">
+            <div className="shadow-clay overflow-hidden rounded-[6px]">
+              <img src={aboutImg} alt="Egrow founder tending plants" className="h-[560px] w-full object-cover" loading="lazy" />
             </div>
+            <span className="hand-note absolute -bottom-9 right-2 rotate-[4deg]">the first bench, 2020</span>
           </div>
         </div>
-        <div className="md:col-span-5">
+        <div className="md:col-span-4 md:pt-24">
           <Eyebrow>Our Story</Eyebrow>
-          <h2 className="mt-3 font-serif text-5xl font-medium leading-[1.1] md:text-6xl">
-            From a Passion,<br />To a Green Legacy.
-          </h2>
-          <p className="mt-4 max-w-md text-base leading-snug text-charcoal/80">
+          <RevealHeading
+            text="From a Passion, / To a Green Legacy."
+            className="mt-4 font-serif text-[2.9rem] font-semibold leading-[0.98] tracking-[-0.035em] md:text-[4.2rem]"
+          />
+          <p className="mt-6 max-w-md text-base leading-snug text-charcoal/80">
             What began as a small dream to bring more plants into people's lives has grown into a space filled with greenery, learning and love. Every plant we tend is chosen for how it makes a home feel.
           </p>
-          <a href="#stories" className="btn-link mt-5">Know Our Journey →</a>
+          <a href="#stories" className="btn-link mt-6 border-clay text-clay-deep hover:text-clay">Know Our Journey →</a>
         </div>
-        <div className="md:col-span-3">
-          <ol className="relative border-l border-olive/30 pl-6">
+        <div className="md:col-span-3 md:pt-6">
+          <ol className="relative rotate-[1.5deg] border-l border-clay/30 pl-6">
             {timeline.map((t, i) => (
               <li key={i} className="relative mb-4 last:mb-0">
-                <span className="absolute -left-[31px] top-1 grid h-4 w-4 place-items-center rounded-full border border-olive bg-ivory">
-                  <span className="h-1.5 w-1.5 rounded-full bg-olive" />
+                <span className="absolute -left-[31px] top-1 grid h-4 w-4 place-items-center rounded-full border border-clay bg-ivory">
+                  <span className="h-1.5 w-1.5 rounded-full bg-clay" />
                 </span>
-                <div className="text-sm text-olive">{t.year}</div>
+                <div className="text-sm tracking-widest text-clay">{t.year}</div>
                 <div className="mt-1 font-serif text-lg font-medium text-forest">{t.title}</div>
                 <div className="text-sm leading-snug text-charcoal/70">{t.note}</div>
               </li>
