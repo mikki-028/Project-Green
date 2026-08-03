@@ -401,7 +401,7 @@ function Hero() {
         controls={false}
         preload="auto"
         poster={heroVideoPoster}
-        className="absolute inset-0 h-full w-full object-cover object-center [transform:translateZ(0)]"
+        className="ken-burns absolute inset-0 h-full w-full object-cover object-center"
         aria-label="Ambient botanical nursery footage with natural bird chirping"
       />
       {/* parallax depth layer 1 — tinted haze */}
