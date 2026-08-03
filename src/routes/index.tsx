@@ -543,18 +543,25 @@ function WhyEgrow() {
     { title: "Local & Trusted", note: "A neighbourhood nursery, proudly rooted.", icon: IconHeart },
   ];
   return (
-    <section className="relative bg-sage py-20">
+    <section className="grain relative bg-sage py-24">
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
-        <div className="mb-12 max-w-2xl">
+        <div className="mb-14 max-w-3xl md:ml-[38%]">
           <Eyebrow>Why Egrow</Eyebrow>
-          <h2 className="mt-3 font-serif text-5xl font-medium leading-[1.05] md:text-6xl">More Than Just Plants.</h2>
+          <RevealHeading
+            text="More Than Just Plants."
+            className="mt-3 font-serif text-[2.6rem] font-semibold leading-[0.98] tracking-[-0.03em] md:text-[3.4rem]"
+          />
         </div>
-        <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-5">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-5">
           {items.map((it, i) => {
             const Icon = it.icon;
             return (
-              <div key={i} className="group text-center transition-transform duration-500 hover:-translate-y-1">
-                <div className="mx-auto mb-3 grid h-16 w-16 place-items-center rounded-full border border-olive/30 text-olive transition-all group-hover:bg-ivory group-hover:shadow-lg">
+              <div
+                key={i}
+                className="group text-center transition-transform duration-500 hover:-translate-y-1"
+                style={{ transform: `rotate(${(i % 2 ? 1 : -1) * (1.5 + (i % 3))}deg)`, marginTop: `${(i % 3) * 18}px` }}
+              >
+                <div className="mx-auto mb-3 grid h-16 w-16 place-items-center rounded-full border border-olive/30 text-olive transition-all group-hover:border-clay group-hover:bg-ivory group-hover:text-clay group-hover:shadow-clay">
                   <Icon className="h-8 w-8" />
                 </div>
                 <div className="font-serif text-lg font-medium text-forest">{it.title}</div>
