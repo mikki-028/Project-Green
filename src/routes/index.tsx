@@ -1046,7 +1046,7 @@ function Transform() {
               ["Happy", "Green Families"],
             ].map(([n, l]) => (
               <div key={l}>
-                <div className="font-serif text-3xl font-medium text-forest">{n}</div>
+                <div className="font-serif text-4xl font-semibold text-clay">{n}</div>
                 <div className="text-[0.7rem] uppercase tracking-widest text-charcoal/60">{l}</div>
               </div>
             ))}
@@ -1069,7 +1069,7 @@ function BeforeAfter({ before, after }: { before: string; after: string }) {
   return (
     <div
       ref={ref}
-      className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl shadow-xl select-none"
+      className="shadow-clay relative aspect-[4/3] w-full select-none overflow-hidden rounded-[4px] [cursor:url(\"data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='48'%20height='48'%3E%3Ccircle%20cx='24'%20cy='24'%20r='20'%20fill='%23B4532A'%20fill-opacity='0.85'/%3E%3Cpath%20d='M18%2018l-6%206%206%206M30%2018l6%206-6%206'%20stroke='%23FDF7F0'%20stroke-width='2'%20fill='none'%20stroke-linecap='round'/%3E%3C/svg%3E\")_24_24,ew-resize]"
       onMouseMove={(e) => e.buttons === 1 && drag(e.clientX)}
       onTouchMove={(e) => drag(e.touches[0].clientX)}
     >
@@ -1077,8 +1077,8 @@ function BeforeAfter({ before, after }: { before: string; after: string }) {
       <div className="absolute inset-0 overflow-hidden" style={{ width: `${pos}%` }}>
         <img src={before} alt="Before" loading="lazy" className="h-full w-full object-cover" style={{ width: `${(100 / pos) * 100}%`, maxWidth: "none" }} />
       </div>
-      <span className="absolute left-4 top-4 rounded-full bg-forest/80 px-3 py-1 text-[0.65rem] uppercase tracking-widest text-ivory">Before</span>
-      <span className="absolute right-4 top-4 rounded-full bg-olive px-3 py-1 text-[0.65rem] uppercase tracking-widest text-ivory">After</span>
+      <span className="absolute left-4 top-4 rounded-full bg-ink/80 px-3 py-1 text-[0.65rem] uppercase tracking-widest text-ivory">Before</span>
+      <span className="absolute right-4 top-4 rounded-full bg-clay px-3 py-1 text-[0.65rem] uppercase tracking-widest text-ivory">After</span>
       <div className="pointer-events-none absolute inset-y-0" style={{ left: `${pos}%` }}>
         <div className="h-full w-px -translate-x-1/2 bg-ivory shadow-[0_0_15px_rgba(0,0,0,0.3)]" />
       </div>
