@@ -1111,30 +1111,35 @@ function Gallery() {
   ];
   const [open, setOpen] = useState<string | null>(null);
   return (
-    <section id="gallery" className="relative bg-sage py-24">
+    <section id="gallery" className="grain relative overflow-hidden bg-sage py-28">
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
         <div className="mb-10 grid grid-cols-1 items-end gap-3 md:grid-cols-2">
           <div>
             <Eyebrow>Gallery</Eyebrow>
-            <h2 className="mt-3 font-serif text-5xl font-medium leading-[1.05] md:text-6xl">Moments That Bloom.</h2>
+            <RevealHeading
+              text="Moments / That Bloom."
+              className="mt-3 font-serif text-[3.2rem] font-semibold leading-[0.92] tracking-[-0.04em] md:text-[5.6rem]"
+            />
           </div>
           <p className="max-w-md text-charcoal/80 md:justify-self-end">
             A glimpse of greenery, growth and beautiful spaces. Follow along as we tend, plant, and share the everyday poetry of the nursery.
           </p>
         </div>
-        <div className="grid auto-rows-[200px] grid-cols-2 gap-2 md:grid-cols-4 md:gap-3">
+        <div className="grid auto-rows-[110px] grid-cols-2 gap-3 md:grid-cols-12 md:gap-5">
           {imgs.map((im, i) => (
             <button
               key={i}
               onClick={() => setOpen(im.src)}
-              className={`group relative overflow-hidden rounded-3xl bg-ivory shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl ${im.span}`}
+              style={{ transform: `rotate(${im.tilt})` }}
+              className={`group shadow-moss-drop relative overflow-hidden rounded-[3px] bg-ivory transition-all duration-500 hover:-translate-y-1 hover:shadow-clay ${im.span}`}
             >
               <img src={im.src} alt="Gallery" loading="lazy" className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-105" />
             </button>
           ))}
         </div>
-        <div className="mt-6 text-center">
-          <a href="#" className="btn-ghost">Follow Our Journey →</a>
+        <div className="mt-12 flex flex-wrap items-center gap-6">
+          <Magnetic href="#" className="btn-clay">Follow Our Journey →</Magnetic>
+          <span className="hand-note rotate-[-4deg]">shot on ordinary mornings</span>
         </div>
       </div>
       {open && (
