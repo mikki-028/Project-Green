@@ -797,13 +797,13 @@ function GrowingStories() {
                     src={s.img}
                     alt=""
                     loading="lazy"
-                    className="absolute right-0 top-0 h-full w-[72%] object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.06]"
+                    className="absolute right-0 top-0 h-full w-[60%] object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.06]"
                   />
                   <div
                     className="absolute inset-0"
                     style={{
                       background:
-                        "linear-gradient(to right, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.82) 38%, rgba(255,255,255,0.42) 62%, rgba(255,255,255,0) 88%)",
+                        "linear-gradient(to right, rgba(248,246,241,0.97) 0%, rgba(248,246,241,0.95) 45%, rgba(248,246,241,0.55) 68%, rgba(248,246,241,0) 92%)",
                       backdropFilter: "blur(2px)",
                     }}
                   />
@@ -825,7 +825,7 @@ function GrowingStories() {
                 </div>
 
                 {/* Text block */}
-                <div className="relative max-w-[62%]">
+                <div className="relative max-w-[58%]">
                   <div className="text-[0.62rem] uppercase tracking-[0.32em] text-clay">
                     {s.tag}
                   </div>
