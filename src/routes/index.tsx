@@ -404,7 +404,27 @@ function Hero() {
         className="absolute inset-0 h-full w-full object-cover object-center [transform:translateZ(0)]"
         aria-label="Ambient botanical nursery footage with natural bird chirping"
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/25 to-black/60" />
+      {/* parallax depth layer 1 — tinted haze */}
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-gradient-to-b from-ink/55 via-ink/25 to-ink/70"
+        style={{ transform: `translateY(${scrollY * 0.15}px)` }}
+      />
+      {/* parallax depth layer 2 — oversized outlined leaf breaking the frame */}
+      <svg
+        aria-hidden
+        viewBox="0 0 400 600"
+        className="pointer-events-none absolute -left-24 top-[8%] z-[5] h-[85%] w-auto text-ivory/25 md:-left-16"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.1"
+        style={{ transform: `translateY(${scrollY * -0.22}px) rotate(-8deg)` }}
+      >
+        <path d="M200 10C60 120 20 320 120 480c40 64 96 100 96 100s10-120-20-220" />
+        <path d="M200 10c140 110 180 310 80 470-40 64-96 100-96 100" />
+        <path d="M196 580C196 380 198 190 200 10" />
+        <path d="M198 140 96 210M198 220 78 300M198 300 92 380M202 140 304 210M202 220 322 300M202 300 308 380" />
+      </svg>
       <button
         type="button"
         onClick={toggleSound}
