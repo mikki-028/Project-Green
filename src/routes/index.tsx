@@ -1866,7 +1866,7 @@ function HalfFace({ page, side }: { page: PageKind; side: "left" | "right" }) {
 function PaperPage({ side, children, fill = false }: { side: "left" | "right"; children: React.ReactNode; fill?: boolean }) {
   return (
     <div
-      className={`relative h-full ${fill ? "w-full" : ""} overflow-hidden`}
+      className={`paper-fiber relative h-full ${fill ? "w-full" : ""} overflow-hidden`}
       style={{
         background:
           "radial-gradient(120% 90% at 50% 0%, #fbf6e6 0%, #f4ecd5 60%, #eee2c2 100%)",
@@ -1905,6 +1905,17 @@ function PaperPage({ side, children, fill = false }: { side: "left" | "right"; c
       />
       {/* Corner sketches */}
       <CornerSketch side={side} />
+      {/* page-curl shadow */}
+      <div
+        aria-hidden
+        className={`pointer-events-none absolute bottom-0 ${side === "left" ? "left-0" : "right-0"} h-24 w-24`}
+        style={{
+          background:
+            side === "left"
+              ? "radial-gradient(circle at 0% 100%, rgba(60,44,20,0.28), transparent 62%)"
+              : "radial-gradient(circle at 100% 100%, rgba(60,44,20,0.28), transparent 62%)",
+        }}
+      />
       <div className="relative z-10 h-full">{children}</div>
     </div>
   );
