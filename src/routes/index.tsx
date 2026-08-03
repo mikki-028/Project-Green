@@ -1194,14 +1194,19 @@ function Reviews() {
   ];
 
   return (
-    <section id="reviews" className="relative bg-ivory py-24">
-      <div className="mx-auto max-w-7xl px-8 lg:px-12">
-        <div className="mx-auto mb-14 max-w-2xl text-center">
-          <Eyebrow>Community Voices</Eyebrow>
-          <h2 className="mt-3 font-serif text-5xl font-medium leading-[1.05] md:text-6xl">
-            What Green Families Say.
-          </h2>
-          <p className="mt-4 text-charcoal/75">
+    <section id="reviews" className="grain relative overflow-hidden bg-ink py-28 text-ivory">
+      <div className="relative z-10 mx-auto max-w-7xl px-8 lg:px-12">
+        <div className="mb-16 grid grid-cols-1 items-end gap-6 md:grid-cols-12">
+          <div className="md:col-span-7">
+            <div className="flex items-center gap-2 text-[0.72rem] uppercase tracking-[0.18em] text-clay">
+              <Leaf className="h-3.5 w-3.5" /> Community Voices
+            </div>
+            <RevealHeading
+              text="What Green / Families Say."
+              className="mt-4 font-serif text-[3rem] font-semibold leading-[0.92] tracking-[-0.04em] !text-ivory md:text-[5.4rem]"
+            />
+          </div>
+          <p className="text-ivory/65 md:col-span-4 md:col-start-9 md:pb-4">
             Words from plant lovers, balcony dreamers, and the green spaces we have helped grow.
           </p>
         </div>
@@ -1209,31 +1214,33 @@ function Reviews() {
           {reviews.map((r, i) => (
             <div
               key={i}
-              className="relative flex flex-col rounded-3xl border border-forest/10 bg-sage p-8 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl"
+              style={{ transform: `rotate(${(i % 2 ? 1 : -1) * 1.2}deg)`, marginTop: `${(i % 3) * 22}px` }}
+              className="relative flex flex-col rounded-[3px] border border-ivory/12 bg-ivory/[0.04] p-8 backdrop-blur-sm transition-all duration-500 hover:-translate-y-1 hover:border-clay/40 hover:bg-ivory/[0.07]"
             >
-              <div className="mb-5 flex items-center gap-0.5 text-olive">
+              <div className="mb-5 flex items-center gap-0.5 text-clay">
                 {Array.from({ length: r.rating }).map((_, s) => (
                   <svg key={s} className="h-4 w-4 fill-current" viewBox="0 0 20 20">
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                   </svg>
                 ))}
               </div>
-              <blockquote className="mb-8 flex-1 text-[1.02rem] leading-snug text-charcoal/85">
+              <blockquote className="mb-8 flex-1 text-[1.02rem] leading-snug text-ivory/85">
                 “{r.quote}”
               </blockquote>
               <div className="flex items-center gap-4">
-                <div className="grid h-11 w-11 place-items-center rounded-full bg-olive/15 font-serif text-base text-forest">
+                <div className="grid h-11 w-11 place-items-center rounded-full bg-clay/20 font-serif text-base !text-clay">
                   {r.name.split(" ").map((n) => n[0]).slice(0, 2).join("")}
                 </div>
                 <div>
-                  <div className="font-serif text-base font-medium text-forest">{r.name}</div>
-                  <div className="text-xs leading-snug text-charcoal/60">{r.location}</div>
+                  <div className="font-serif text-base font-semibold !text-ivory">{r.name}</div>
+                  <div className="text-xs leading-snug text-ivory/55">{r.location}</div>
                 </div>
               </div>
             </div>
           ))}
         </div>
       </div>
+      <div className="absolute inset-x-0 bottom-0 z-20"><TornDivider color="text-ivory" className="h-[40px]" /></div>
     </section>
   );
 }
