@@ -1012,29 +1012,32 @@ function Transform() {
     { title: "Sunlit Balcony", area: "120 sq ft • Andheri", note: "A bare apartment balcony turned into a lush retreat.", before: t2before, after: t2after },
   ];
   return (
-    <section id="transform" className="relative py-24">
+    <section id="transform" className="grain relative py-28">
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
-        <div className="mx-auto mb-12 max-w-2xl text-center">
+        <div className="mb-14 max-w-3xl">
           <Eyebrow>Transform Your Space</Eyebrow>
-          <h2 className="mt-3 font-serif text-5xl font-medium leading-[1.05] md:text-6xl">From Ordinary to Extraordinary.</h2>
-          <p className="mt-3 text-charcoal/80">
+          <RevealHeading
+            text="From Ordinary / to Extraordinary."
+            className="mt-3 font-serif text-[2.8rem] font-semibold leading-[0.95] tracking-[-0.035em] md:text-[4.6rem]"
+          />
+          <p className="mt-4 max-w-lg text-charcoal/80">
             We transform balconies, terraces and outdoor spaces into beautiful green retreats you'll love spending time in.
           </p>
         </div>
-        <div className="grid grid-cols-1 gap-7 md:grid-cols-2">
-          {projects.map((p) => (
-            <div key={p.title}>
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
+          {projects.map((p, i) => (
+            <div key={p.title} className={i === 1 ? "md:mt-20" : ""}>
               <BeforeAfter before={p.before} after={p.after} />
               <div className="mt-3">
-                <div className="font-serif text-2xl font-medium text-forest">{p.title}</div>
-                <div className="mt-1 text-xs uppercase tracking-widest text-olive">{p.area}</div>
+                <div className="font-serif text-3xl font-semibold tracking-[-0.02em] text-forest">{p.title}</div>
+                <div className="mt-1 text-xs uppercase tracking-widest text-clay">{p.area}</div>
                 <p className="mt-3 text-sm leading-snug text-charcoal/75">{p.note}</p>
               </div>
             </div>
           ))}
         </div>
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-          <a href="#visit" className="btn-primary">See All Transformations →</a>
+        <div className="mt-14 flex flex-wrap items-center gap-6">
+          <Magnetic href="#visit" className="btn-clay">See All Transformations →</Magnetic>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-4 text-center">
             {[
               ["50+", "Spaces Transformed"],
