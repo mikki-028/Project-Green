@@ -494,7 +494,7 @@ function About() {
         }}
       />
       <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 items-start gap-12 px-8 md:grid-cols-12 md:gap-8 lg:px-12">
-        <div className="md:col-span-5 md:-ml-16 lg:-ml-28">
+        <div className="md:col-span-5 md:-ml-4 lg:-ml-10">
           <div className="relative max-w-[420px] rotate-[-3deg]">
             <div className="shadow-clay overflow-hidden rounded-[6px]">
               <img src={aboutImg} alt="Egrow founder tending plants" className="h-[560px] w-full object-cover" loading="lazy" />
