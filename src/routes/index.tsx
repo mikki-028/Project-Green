@@ -803,7 +803,7 @@ function GrowingStories() {
                     className="absolute inset-0"
                     style={{
                       background:
-                        "linear-gradient(to right, rgba(255,255,255,0.78) 0%, rgba(255,255,255,0.55) 32%, rgba(255,255,255,0.15) 55%, rgba(255,255,255,0) 78%)",
+                        "linear-gradient(to right, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.82) 38%, rgba(255,255,255,0.42) 62%, rgba(255,255,255,0) 88%)",
                       backdropFilter: "blur(2px)",
                     }}
                   />
@@ -840,7 +840,7 @@ function GrowingStories() {
                     Read Story <span aria-hidden>→</span>
                   </span>
                 </div>
-                <span className="hand-note pointer-events-none absolute -bottom-1 right-6 hidden rotate-[-5deg] text-clay-deep/80 md:block">
+                <span className="hand-note pointer-events-none absolute bottom-4 right-7 hidden rotate-[-5deg] md:block">
                   {["a customer favourite", "kiln-fired, Jaipur", "start here!"][i]}
                 </span>
               </button>
