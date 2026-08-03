@@ -169,13 +169,25 @@
   h1, h2, h3, h4, .font-serif {
     font-family: var(--font-serif);
     color: var(--color-forest);
-    letter-spacing: -0.02em;
-    font-weight: 500;
+    letter-spacing: -0.025em;
+    font-weight: 600;
+    font-variation-settings: "SOFT" 20, "WONK" 1;
   }
 
   p {
     line-height: 1.55;
   }
+}
+
+html {
+  scrollbar-color: var(--clay) var(--sage);
+}
+::-webkit-scrollbar { width: 11px; }
+::-webkit-scrollbar-track { background: var(--sage); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--clay), var(--clay-deep));
+  border-radius: 999px;
+  border: 3px solid var(--sage);
 }
 
 @utility eyebrow {
