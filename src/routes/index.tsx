@@ -40,7 +40,9 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <div id="home" className="relative min-h-screen overflow-x-hidden bg-ivory text-charcoal">
+    <div id="home" className="relative min-h-screen overflow-x-hidden bg-ivory text-ink">
+      <ScrollProgress />
+      <SideRail />
       <Nav />
       <Hero />
       <div className="relative">
@@ -59,6 +61,180 @@ function Index() {
 }
 
 /* ---------------- Small primitives ---------------- */
+
+const RAIL_SECTIONS = [
+  { id: "home", label: "Nursery" },
+  { id: "about", label: "Story" },
+  { id: "stories", label: "Field Notes" },
+  { id: "calendar", label: "Journal" },
+  { id: "transform", label: "Transformations" },
+  { id: "gallery", label: "Gallery" },
+  { id: "reviews", label: "Voices" },
+  { id: "visit", label: "Visit" },
+];
+
+function ScrollProgress() {
+  const [p, setP] = useState(0);
+  useEffect(() => {
+    const onScroll = () => {
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      setP(h > 0 ? (window.scrollY / h) * 100 : 0);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  return (
+    <div aria-hidden className="pointer-events-none fixed inset-x-0 top-0 z-[90] h-[3px] bg-transparent">
+      <div className="h-full bg-clay shadow-[0_0_12px_rgba(180,83,42,0.7)] transition-[width] duration-150" style={{ width: `${p}%` }} />
+    </div>
+  );
+}
+
+function SideRail() {
+  const [active, setActive] = useState("home");
+  useEffect(() => {
+    const onScroll = () => {
+      const mid = window.innerHeight * 0.4;
+      let current = RAIL_SECTIONS[0].id;
+      for (const s of RAIL_SECTIONS) {
+        const el = document.getElementById(s.id);
+        if (el && el.getBoundingClientRect().top <= mid) current = s.id;
+      }
+      setActive(current);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  return (
+    <nav aria-label="Section progress" className="fixed left-4 top-1/2 z-[75] hidden -translate-y-1/2 flex-col gap-2.5 xl:flex">
+      {RAIL_SECTIONS.map((s, i) => {
+        const on = active === s.id;
+        return (
+          <a
+            key={s.id}
+            href={`#${s.id}`}
+            className={`group flex items-center gap-2 text-[0.6rem] uppercase tracking-[0.22em] transition-all duration-500 ${
+              on ? "text-clay" : "text-charcoal/35 hover:text-charcoal/70"
+            }`}
+          >
+            <span className={`h-px transition-all duration-500 ${on ? "w-7 bg-clay" : "w-3 bg-current"}`} />
+            <span className="tabular-nums">{String(i + 1).padStart(2, "0")}</span>
+            <span className={`transition-all duration-500 ${on ? "opacity-100" : "opacity-0 group-hover:opacity-70"}`}>
+              {s.label}
+            </span>
+          </a>
+        );
+      })}
+    </nav>
+  );
+}
+
+function useInView<T extends HTMLElement>() {
+  const ref = useRef<T>(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setInView(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.25 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return { ref, inView };
+}
+
+function RevealHeading({
+  text,
+  className = "",
+  as: Tag = "h2",
+}: {
+  text: string;
+  className?: string;
+  as?: "h1" | "h2" | "h3";
+}) {
+  const { ref, inView } = useInView<HTMLHeadingElement>();
+  const words = text.split(" ");
+  return (
+    <Tag ref={ref} className={`word-reveal ${inView ? "is-in" : ""} ${className}`}>
+      {words.map((w, i) => (
+        <span key={i} style={{ animationDelay: `${i * 65}ms` }}>
+          {w === "/" ? <br /> : w}
+          {w === "/" ? "" : "\u00A0"}
+        </span>
+      ))}
+    </Tag>
+  );
+}
+
+function Magnetic({
+  children,
+  className = "",
+  href,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  href: string;
+}) {
+  const ref = useRef<HTMLAnchorElement>(null);
+  return (
+    <a
+      ref={ref}
+      href={href}
+      className={className}
+      style={{ transition: "transform 0.25s cubic-bezier(0.2,0.8,0.2,1), background 0.35s ease, box-shadow 0.35s ease" }}
+      onMouseMove={(e) => {
+        const el = ref.current;
+        if (!el) return;
+        const r = el.getBoundingClientRect();
+        const x = (e.clientX - (r.left + r.width / 2)) * 0.35;
+        const y = (e.clientY - (r.top + r.height / 2)) * 0.45;
+        el.style.transform = `translate(${x}px, ${y}px)`;
+      }}
+      onMouseLeave={() => {
+        const el = ref.current;
+        if (el) el.style.transform = "translate(0,0)";
+      }}
+    >
+      {children}
+    </a>
+  );
+}
+
+function Stamp({ className = "" }: { className?: string }) {
+  return (
+    <div aria-hidden className={`pointer-events-none grid h-28 w-28 place-items-center ${className}`}>
+      <svg viewBox="0 0 200 200" className="spin-slow absolute h-full w-full text-clay">
+        <defs>
+          <path id="stampcircle" d="M100,100 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0" />
+        </defs>
+        <text className="fill-current" style={{ fontSize: 19, letterSpacing: "5.5px", fontFamily: "var(--font-sans)" }}>
+          <textPath href="#stampcircle">EST. EGROW · HAND-POTTED · GROWN SLOWLY ·</textPath>
+        </text>
+      </svg>
+      <span className="relative font-serif text-[0.7rem] uppercase tracking-[0.2em] text-clay-deep">Egrow</span>
+    </div>
+  );
+}
+
+function TornDivider({ color = "text-ivory", className = "" }: { color?: string; className?: string }) {
+  return (
+    <svg aria-hidden viewBox="0 0 1200 44" preserveAspectRatio="none" className={`w-full ${color} ${className}`}>
+      <path
+        fill="currentColor"
+        d="M0 18 C38 8 68 26 108 16 C150 5 176 27 220 18 C262 9 300 30 342 18 C382 7 420 28 462 17 C502 7 542 30 584 19 C624 9 662 28 704 17 C744 7 782 27 824 18 C864 9 902 29 944 19 C984 9 1022 26 1064 16 C1104 7 1152 24 1200 14 L1200 44 L0 44 Z"
+      />
+    </svg>
+  );
+}
 
 function Leaf({ className = "" }: { className?: string }) {
   return (
