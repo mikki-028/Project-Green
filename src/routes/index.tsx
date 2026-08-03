@@ -1102,12 +1102,12 @@ function BeforeAfter({ before, after }: { before: string; after: string }) {
 
 function Gallery() {
   const imgs = [
-    { src: g2, span: "row-span-2" },
-    { src: g3, span: "" },
-    { src: g1, span: "" },
-    { src: g5, span: "row-span-2" },
-    { src: g4, span: "" },
-    { src: g6, span: "row-span-2" },
+    { src: g2, span: "col-span-2 row-span-3 md:col-span-5", tilt: "-2deg" },
+    { src: g3, span: "col-span-1 row-span-2 md:col-span-3", tilt: "1.8deg" },
+    { src: g1, span: "col-span-1 row-span-2 md:col-span-4", tilt: "-1deg" },
+    { src: g5, span: "col-span-2 row-span-2 md:col-span-4 md:mt-6", tilt: "2.5deg" },
+    { src: g4, span: "col-span-1 row-span-3 md:col-span-3", tilt: "-2.5deg" },
+    { src: g6, span: "col-span-1 row-span-2 md:col-span-5 md:-mt-8", tilt: "1.2deg" },
   ];
   const [open, setOpen] = useState<string | null>(null);
   return (
