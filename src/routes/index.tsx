@@ -567,21 +567,6 @@ function Hero() {
         className="absolute inset-0 bg-gradient-to-b from-ink/55 via-ink/25 to-ink/70"
         style={{ transform: `translateY(${scrollY * 0.15}px)` }}
       />
-      {/* parallax depth layer 2 — oversized outlined leaf breaking the frame */}
-      <svg
-        aria-hidden
-        viewBox="0 0 400 600"
-        className="pointer-events-none absolute -left-24 top-[8%] z-[5] h-[85%] w-auto text-ivory/25 md:-left-16"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.1"
-        style={{ transform: `translateY(${scrollY * -0.22}px) rotate(-8deg)` }}
-      >
-        <path d="M200 10C60 120 20 320 120 480c40 64 96 100 96 100s10-120-20-220" />
-        <path d="M200 10c140 110 180 310 80 470-40 64-96 100-96 100" />
-        <path d="M196 580C196 380 198 190 200 10" />
-        <path d="M198 140 96 210M198 220 78 300M198 300 92 380M202 140 304 210M202 220 322 300M202 300 308 380" />
-      </svg>
       <button
         type="button"
         onClick={toggleSound}
@@ -613,7 +598,6 @@ function Hero() {
           <a href="#transform" className="text-ivory border-b border-ivory pb-1 text-sm hover:text-moss hover:border-moss transition">
             Transform Your Space →
           </a>
-          <Stamp className="relative -mt-2 ml-1 hidden rotate-[-9deg] sm:grid" />
         </div>
       </div>
       {/* torn paper edge */}
