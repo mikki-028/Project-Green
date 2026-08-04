@@ -676,47 +676,143 @@ function About() {
   );
 }
 
-/* ---------------- Why Egrow ---------------- */
+/* ---------------- The Egrow Difference ---------------- */
 
-function WhyEgrow() {
-  const items = [
-    { title: "Handpicked Plants", note: "Every plant chosen with care and intention.", icon: IconLeaflet },
-    { title: "Wide Variety", note: "From rare foliage to everyday favourites.", icon: IconBranch },
-    { title: "Premium Quality", note: "Nurtured with expertise for a strong start.", icon: IconPot },
-    { title: "Expert Guidance", note: "We help you grow with confidence.", icon: IconHands },
-    { title: "Local & Trusted", note: "A neighbourhood nursery, proudly rooted.", icon: IconHeart },
-  ];
+const DIFFERENCE_FEATURES = [
+  { title: "Premium Nursery Quality", desc: "Every plant is raised, hardened and inspected on our own benches before it ever reaches your home.", icon: IconLeaflet },
+  { title: "Organic Growing Practices", desc: "Compost-rich soil, natural pest care and slow growing — no shortcuts, no harsh chemicals.", icon: IconBranch },
+  { title: "IFFCO Approved Products", desc: "Certified fertilisers and soil supplements you can trust for long-term, healthy growth.", icon: IconPot },
+  { title: "Safe Packaging & Delivery", desc: "Cushioned, breathable packing so roots and foliage arrive exactly as they left the nursery.", icon: IconTruck },
+  { title: "Expert Plant Guidance", desc: "Real advice from real growers — light, water and season notes for every plant you take home.", icon: IconHands },
+  { title: "Transforming Green Spaces", desc: "From a single windowsill to a full terrace garden, we design green spaces that keep growing.", icon: IconHeart },
+];
+
+function EgrowDifference() {
+  const [active, setActive] = useState(0);
+  const count = DIFFERENCE_FEATURES.length;
+  const step = 360 / count;
+  const rotation = -active * step;
+  const Feature = DIFFERENCE_FEATURES[active];
+  const Icon = Feature.icon;
+
   return (
-    <section className="grain relative bg-sage py-24">
-      <div className="mx-auto max-w-7xl px-8 lg:px-12">
-        <div className="mb-14 max-w-3xl md:ml-[38%]">
-          <Eyebrow>Why Egrow</Eyebrow>
-          <RevealHeading
-            text="More Than Just Plants."
-            className="mt-3 font-serif text-[2.6rem] font-semibold leading-[0.98] tracking-[-0.03em] md:text-[3.4rem]"
+    <section
+      id="difference"
+      className="grain relative overflow-hidden py-24 md:py-32"
+      style={{ background: "radial-gradient(ellipse at 50% 40%, #2C4436 0%, #22342A 45%, #1B241E 100%)" }}
+    >
+      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.18]">
+        {[...Array(14)].map((_, i) => (
+          <span
+            key={i}
+            className="absolute rounded-full bg-moss"
+            style={{
+              left: `${(i * 37) % 100}%`,
+              top: `${(i * 53) % 100}%`,
+              width: `${3 + (i % 3)}px`,
+              height: `${3 + (i % 3)}px`,
+              animation: `driftUp ${16 + (i % 7) * 3}s ease-in-out ${i * 0.7}s infinite alternate`,
+            }}
           />
+        ))}
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-6xl px-7 lg:px-12">
+        <div className="max-w-2xl">
+          <div className="flex items-center gap-2 eyebrow text-moss">
+            <Leaf className="h-3.5 w-3.5" /> <span>Why Egrow</span>
+          </div>
+          <RevealHeading
+            text="The Egrow Difference."
+            className="mt-3 font-serif text-[2.6rem] font-semibold leading-[1] tracking-[-0.03em] !text-[#F3EFE5] md:text-[4rem]"
+          />
+          <p className="mt-5 max-w-lg text-base leading-relaxed text-[#E9E3D5]/70">
+            Not just plants. A promise rooted in quality, care, and trust.
+          </p>
         </div>
-        <div className="grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-5">
-          {items.map((it, i) => {
-            const Icon = it.icon;
-            return (
-              <div
-                key={i}
-                className="group text-center transition-transform duration-500 hover:-translate-y-1"
-                style={{ transform: `rotate(${(i % 2 ? 1 : -1) * (1.5 + (i % 3))}deg)`, marginTop: `${(i % 3) * 18}px` }}
-              >
-                <div className="mx-auto mb-3 grid h-16 w-16 place-items-center rounded-full border border-olive/30 text-olive transition-all group-hover:border-clay group-hover:bg-ivory group-hover:text-clay group-hover:shadow-clay">
-                  <Icon className="h-8 w-8" />
-                </div>
-                <div className="font-serif text-lg font-medium text-forest">{it.title}</div>
-                <div className="mt-2 text-sm leading-snug text-charcoal/75">{it.note}</div>
+
+        <div className="mt-16 grid items-center gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+          {/* circular vine navigation */}
+          <div className="relative mx-auto aspect-square w-full max-w-[420px]">
+            <div
+              className="absolute inset-0 transition-transform duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+              style={{ transform: `rotate(${rotation}deg)` }}
+            >
+              <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full" aria-hidden>
+                <circle cx="200" cy="200" r="160" fill="none" stroke="#A8C69F" strokeOpacity="0.28" strokeWidth="1" />
+                <circle cx="200" cy="200" r="160" fill="none" stroke="#A8C69F" strokeOpacity="0.18" strokeWidth="6" strokeDasharray="2 22" strokeLinecap="round" />
+              </svg>
+              {DIFFERENCE_FEATURES.map((f, i) => {
+                const angle = (i * step - 90) * (Math.PI / 180);
+                const x = 50 + 40 * Math.cos(angle);
+                const y = 50 + 40 * Math.sin(angle);
+                const on = i === active;
+                return (
+                  <button
+                    key={f.title}
+                    type="button"
+                    onClick={() => setActive(i)}
+                    aria-pressed={on}
+                    className="absolute -translate-x-1/2 -translate-y-1/2"
+                    style={{ left: `${x}%`, top: `${y}%` }}
+                  >
+                    <span
+                      className="block transition-transform duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+                      style={{ transform: `rotate(${-rotation}deg)` }}
+                    >
+                      <span
+                        className={`grid h-14 w-14 place-items-center rounded-full border transition-all duration-500 ${
+                          on
+                            ? "border-moss bg-moss/20 text-[#DDEBD3] shadow-[0_0_28px_rgba(168,198,159,0.55)]"
+                            : "border-moss/25 bg-white/5 text-moss/70 hover:border-moss/60 hover:bg-white/10"
+                        }`}
+                      >
+                        <f.icon className="h-7 w-7" />
+                      </span>
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+            {/* center content */}
+            <div className="absolute inset-[22%] grid place-items-center rounded-full border border-moss/15 bg-white/[0.04] p-4 text-center backdrop-blur-sm">
+              <div key={active} className="fade-up">
+                <Icon className="mx-auto h-9 w-9 text-moss" />
+                <div className="mt-3 font-serif text-lg font-medium leading-tight !text-[#F3EFE5]">{Feature.title}</div>
               </div>
-            );
-          })}
+            </div>
+          </div>
+
+          {/* text panel */}
+          <div key={active} className="fade-up">
+            <div className="text-[0.68rem] uppercase tracking-[0.24em] text-moss">
+              {String(active + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
+            </div>
+            <h3 className="mt-4 font-serif text-[2rem] font-medium leading-tight !text-[#F3EFE5] md:text-[2.6rem]">{Feature.title}</h3>
+            <p className="mt-4 max-w-md text-base leading-relaxed text-[#E9E3D5]/70">{Feature.desc}</p>
+            <div className="mt-8 flex flex-wrap gap-2">
+              {DIFFERENCE_FEATURES.map((f, i) => (
+                <button
+                  key={f.title}
+                  type="button"
+                  onClick={() => setActive(i)}
+                  className={`rounded-full border px-3.5 py-1.5 text-[0.62rem] uppercase tracking-[0.16em] transition-all duration-500 ${
+                    i === active ? "border-clay bg-clay/20 text-[#F3EFE5]" : "border-moss/20 text-[#E9E3D5]/55 hover:border-moss/50"
+                  }`}
+                >
+                  {f.title.split(" ")[0]}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>
   );
+}
+
+function IconTruck({ className = "" }: { className?: string }) {
+  return <svg viewBox="0 0 40 40" className={className} fill="none" stroke="currentColor" strokeWidth="1.2"><path d="M4 12h18v14H4z"/><path d="M22 17h7l5 5v4h-12z"/><circle cx="11" cy="30" r="3"/><circle cx="27" cy="30" r="3"/></svg>;
 }
 
 function IconLeaflet({ className = "" }: { className?: string }) {
