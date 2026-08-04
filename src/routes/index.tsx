@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import heroVideo from "@/assets/nature_1.mp4.asset.json";
 import heroVideoMobile from "@/assets/hero-video-mobile.mp4";
 import heroVideoPoster from "@/assets/hero-video-poster.jpg";
-import aboutImg from "@/assets/about-owner.jpg";
 import story1 from "@/assets/story-1.jpg";
 import story2 from "@/assets/story-2.jpg";
 import story3 from "@/assets/story-3.jpg";
@@ -11,18 +10,22 @@ import t1before from "@/assets/transform-1-before.jpg";
 import t1after from "@/assets/transform-1-after.jpg";
 import t2before from "@/assets/transform-2-before.jpg";
 import t2after from "@/assets/transform-2-after.jpg";
-import g1 from "@/assets/gallery-1.jpg";
-import g2 from "@/assets/gallery-2.jpg";
-import g3 from "@/assets/gallery-3.jpg";
-import g4 from "@/assets/gallery-4.jpg";
-import g5 from "@/assets/gallery-5.jpg";
-import g6 from "@/assets/gallery-6.jpg";
 import pMonstera from "@/assets/plant-monstera.jpg";
 import pAreca from "@/assets/plant-areca.jpg";
 import pPeace from "@/assets/plant-peace-lily.jpg";
 import pSnake from "@/assets/plant-snake.jpg";
 import botanicalBg from "@/assets/botanical-stories-bg.png.asset.json";
 import pPothos from "@/assets/plant-pothos.jpg";
+import logoImg from "@/assets/egrow-2.png.asset.json";
+import ph3 from "@/assets/egrow-3.png.asset.json";
+import ph4 from "@/assets/egrow-4.png.asset.json";
+import ph5 from "@/assets/egrow-5.png.asset.json";
+import ph6 from "@/assets/egrow-6.png.asset.json";
+import ph7 from "@/assets/egrow-7.png.asset.json";
+import ph8 from "@/assets/egrow-8.png.asset.json";
+import ph9 from "@/assets/egrow-9.png.asset.json";
+import ph10 from "@/assets/egrow-10.png.asset.json";
+import ph11 from "@/assets/egrow-11.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -44,10 +47,11 @@ function Index() {
       <ScrollProgress />
       <SideRail />
       <Nav />
+      <ActionDock />
       <Hero />
       <div className="relative">
         <About />
-        <WhyEgrow />
+        <EgrowDifference />
         <GrowingStories />
         <PlantCalendar />
         <Transform />
@@ -65,6 +69,7 @@ function Index() {
 const RAIL_SECTIONS = [
   { id: "home", label: "Nursery" },
   { id: "about", label: "Story" },
+  { id: "difference", label: "Difference" },
   { id: "stories", label: "Field Notes" },
   { id: "calendar", label: "Journal" },
   { id: "transform", label: "Transformations" },
@@ -256,39 +261,184 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 
 /* ---------------- Nav ---------------- */
 
+const NAV_ITEMS = [
+  { id: "home", label: "Home" },
+  { id: "about", label: "Our Story" },
+  { id: "difference", label: "The Egrow Difference" },
+  { id: "transform", label: "Transformations" },
+  { id: "gallery", label: "Gallery" },
+  { id: "reviews", label: "Reviews" },
+  { id: "visit", label: "Contact" },
+];
+
 function Nav() {
   const [scrolled, setScrolled] = useState(false);
+  const [active, setActive] = useState("home");
+  const [open, setOpen] = useState(false);
+  const itemRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
+  const [pill, setPill] = useState({ left: 0, width: 0, ready: false });
+
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 24);
+      const mid = window.innerHeight * 0.35;
+      let current = NAV_ITEMS[0].id;
+      for (const s of NAV_ITEMS) {
+        const el = document.getElementById(s.id);
+        if (el && el.getBoundingClientRect().top <= mid) current = s.id;
+      }
+      setActive(current);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    const measure = () => {
+      const el = itemRefs.current[active];
+      if (el) setPill({ left: el.offsetLeft, width: el.offsetWidth, ready: true });
+    };
+    measure();
+    const t = setTimeout(measure, 350);
+    window.addEventListener("resize", measure);
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener("resize", measure);
+    };
+  }, [active, scrolled]);
+
   return (
-    <header className="fixed inset-x-0 top-5 z-[70] flex justify-center px-4">
+    <header className="fixed inset-x-0 top-4 z-[70] flex justify-center px-4">
       <div
-        className={`mx-auto flex w-full max-w-5xl items-center justify-between rounded-full border px-5 py-3 shadow-lg backdrop-blur-xl transition-all duration-500 md:px-8 md:py-3.5 ${
+        className={`mx-auto flex w-full max-w-6xl items-center justify-between rounded-full border transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
           scrolled
-            ? "bg-ivory/85 border-white/40 shadow-black/10 text-forest"
-            : "bg-white/10 border-white/20 shadow-black/5 text-ivory"
+            ? "border-white/50 bg-ivory/70 px-4 py-1.5 shadow-[0_14px_40px_-18px_rgba(20,17,13,0.45)] backdrop-blur-2xl md:px-6 md:py-2 text-forest"
+            : "border-white/25 bg-white/10 px-4 py-2 shadow-[0_16px_44px_-22px_rgba(20,17,13,0.5)] backdrop-blur-xl md:px-7 md:py-2.5 text-ivory"
         }`}
       >
-        <a href="#" className="flex items-center gap-2">
-          <Leaf className={`h-6 w-6 ${scrolled ? "text-forest" : "text-ivory"}`} />
-          <span className="font-serif text-2xl font-medium leading-none">Egrow</span>
+        <a href="#home" className="flex shrink-0 items-center gap-2.5">
+          <img
+            src={logoImg.url}
+            alt="Egrow Plants logo"
+            className={`rounded-full object-cover transition-all duration-700 ${scrolled ? "h-9 w-9" : "h-11 w-11"}`}
+          />
+          <span className={`font-serif font-semibold leading-none tracking-[-0.02em] transition-all duration-700 ${scrolled ? "text-xl" : "text-2xl"}`}>
+            Egrow
+          </span>
         </a>
-        <nav className="hidden items-center gap-6 text-sm md:flex">
-          <a href="#home" className="hover:text-olive transition">Home</a>
-          <a href="#about" className="hover:text-olive transition">About</a>
-          <a href="#stories" className="hover:text-olive transition">Stories</a>
-          <a href="#calendar" className="hover:text-olive transition">Calendar</a>
-          <a href="#gallery" className="hover:text-olive transition">Gallery</a>
-          <a href="#contact" className="hover:text-olive transition">Contact</a>
+
+        <nav className="relative hidden items-center lg:flex">
+          <span
+            aria-hidden
+            className={`absolute top-1/2 -z-0 h-8 -translate-y-1/2 rounded-full transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+              pill.ready ? "opacity-100" : "opacity-0"
+            } ${scrolled ? "bg-forest/10" : "bg-white/20"}`}
+            style={{ left: pill.left, width: pill.width }}
+          />
+          {NAV_ITEMS.map((n) => (
+            <a
+              key={n.id}
+              href={`#${n.id}`}
+              ref={(el) => {
+                itemRefs.current[n.id] = el;
+              }}
+              className={`relative z-10 whitespace-nowrap rounded-full px-4 py-2 text-[0.72rem] uppercase tracking-[0.14em] transition-colors duration-500 ${
+                active === n.id ? (scrolled ? "text-forest" : "text-ivory") : "opacity-65 hover:opacity-100"
+              }`}
+            >
+              {n.label}
+            </a>
+          ))}
         </nav>
-        <a href="#contact" className={`hidden md:inline-flex ${scrolled ? "btn-ghost" : "btn-ghost bg-white/10 text-ivory border-white/20 hover:bg-white/20 hover:text-ivory"}`}>
-          Plan Your Green Space
-        </a>
+
+        <button
+          type="button"
+          onClick={() => setOpen((o) => !o)}
+          aria-label="Toggle navigation"
+          aria-expanded={open}
+          className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-current/20 lg:hidden"
+        >
+          <span className="space-y-1">
+            <span className="block h-px w-4 bg-current" />
+            <span className="block h-px w-4 bg-current" />
+          </span>
+        </button>
       </div>
+
+      {open && (
+        <div className="absolute left-4 right-4 top-[72px] rounded-3xl border border-white/40 bg-ivory/90 p-3 shadow-xl backdrop-blur-2xl lg:hidden">
+          {NAV_ITEMS.map((n) => (
+            <a
+              key={n.id}
+              href={`#${n.id}`}
+              onClick={() => setOpen(false)}
+              className={`block rounded-full px-4 py-2.5 text-[0.72rem] uppercase tracking-[0.16em] transition ${
+                active === n.id ? "bg-forest/10 text-forest" : "text-charcoal/70"
+              }`}
+            >
+              {n.label}
+            </a>
+          ))}
+        </div>
+      )}
     </header>
+  );
+}
+
+/* ---------------- Floating action dock ---------------- */
+
+function ActionDock() {
+  const actions = [
+    {
+      label: "Shop Now",
+      href: "#stories",
+      hover: "group-hover:scale-110",
+      icon: <Leaf className="h-4 w-4" />,
+    },
+    {
+      label: "WhatsApp",
+      href: "https://wa.me/919999999999",
+      hover: "group-hover:-translate-y-1",
+      icon: (
+        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor">
+          <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2Zm5.3 14c-.2.6-1.2 1.2-1.7 1.2-.5.1-1 .1-1.7-.1a12 12 0 0 1-5.9-5.1c-.5-.8-.8-1.6-.8-2.3 0-.7.4-1.3.8-1.7.2-.2.4-.3.6-.3h.5c.2 0 .4 0 .5.4l.7 1.7c0 .2 0 .3-.1.5l-.4.5c-.1.2-.3.3-.1.6.3.5.8 1.2 1.4 1.7.7.6 1.3.9 1.7 1 .2.1.4.1.6-.1l.7-.8c.2-.2.3-.2.6-.1l1.6.8c.3.1.4.2.4.4.1.2.1.7-.1 1.3Z" />
+        </svg>
+      ),
+    },
+    {
+      label: "Instagram",
+      href: "https://instagram.com",
+      hover: "group-hover:drop-shadow-[0_0_10px_rgba(180,83,42,0.9)]",
+      icon: (
+        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.6">
+          <rect x="3" y="3" width="18" height="18" rx="5" />
+          <circle cx="12" cy="12" r="4" />
+          <circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none" />
+        </svg>
+      ),
+    },
+  ];
+  return (
+    <div className="fixed right-3 top-1/2 z-[80] hidden -translate-y-1/2 sm:block">
+      <div className="flex flex-col gap-2 rounded-full border border-white/40 bg-white/25 p-2 shadow-[0_18px_44px_-20px_rgba(20,17,13,0.5)] backdrop-blur-2xl">
+        {actions.map((a) => (
+          <a
+            key={a.label}
+            href={a.href}
+            target={a.href.startsWith("http") ? "_blank" : undefined}
+            rel="noreferrer"
+            aria-label={a.label}
+            className="group flex items-center justify-end gap-0 overflow-hidden rounded-full bg-ivory/70 px-3 py-3 text-forest transition-all duration-500 hover:bg-clay hover:text-ivory"
+          >
+            <span className={`transition-all duration-500 ${a.hover}`}>{a.icon}</span>
+            <span className="max-w-0 whitespace-nowrap text-[0.62rem] uppercase tracking-[0.18em] opacity-0 transition-all duration-500 group-hover:ml-2 group-hover:max-w-[7rem] group-hover:opacity-100">
+              {a.label}
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -410,21 +560,6 @@ function Hero() {
         className="absolute inset-0 bg-gradient-to-b from-ink/55 via-ink/25 to-ink/70"
         style={{ transform: `translateY(${scrollY * 0.15}px)` }}
       />
-      {/* parallax depth layer 2 — oversized outlined leaf breaking the frame */}
-      <svg
-        aria-hidden
-        viewBox="0 0 400 600"
-        className="pointer-events-none absolute -left-24 top-[8%] z-[5] h-[85%] w-auto text-ivory/25 md:-left-16"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.1"
-        style={{ transform: `translateY(${scrollY * -0.22}px) rotate(-8deg)` }}
-      >
-        <path d="M200 10C60 120 20 320 120 480c40 64 96 100 96 100s10-120-20-220" />
-        <path d="M200 10c140 110 180 310 80 470-40 64-96 100-96 100" />
-        <path d="M196 580C196 380 198 190 200 10" />
-        <path d="M198 140 96 210M198 220 78 300M198 300 92 380M202 140 304 210M202 220 322 300M202 300 308 380" />
-      </svg>
       <button
         type="button"
         onClick={toggleSound}
@@ -456,7 +591,6 @@ function Hero() {
           <a href="#transform" className="text-ivory border-b border-ivory pb-1 text-sm hover:text-moss hover:border-moss transition">
             Transform Your Space →
           </a>
-          <Stamp className="relative -mt-2 ml-1 hidden rotate-[-9deg] sm:grid" />
         </div>
       </div>
       {/* torn paper edge */}
@@ -494,29 +628,32 @@ function About() {
         }}
       />
       <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 items-start gap-12 px-8 md:grid-cols-12 md:gap-8 lg:px-12">
-        <div className="md:col-span-5 md:-ml-4 lg:-ml-10">
-          <div className="relative max-w-[420px] rotate-[-3deg]">
+        <div className="md:col-span-5 md:-ml-2 lg:-ml-6">
+          <div className="relative max-w-[440px] rotate-[-2deg]">
             <div className="shadow-clay overflow-hidden rounded-[6px]">
-              <img src={aboutImg} alt="Egrow founder tending plants" className="h-[560px] w-full object-cover" loading="lazy" />
+              <img src={ph5.url} alt="Rows of plants on benches at the Egrow nursery" className="h-[520px] w-full object-cover" loading="lazy" />
             </div>
-            <span className="hand-note absolute -bottom-9 right-2 rotate-[4deg]">the first bench, 2020</span>
+            <div className="absolute -bottom-12 -right-6 hidden w-[180px] rotate-[4deg] overflow-hidden rounded-[4px] border-4 border-ivory shadow-clay sm:block">
+              <img src={ph8.url} alt="Croton foliage at the nursery" className="h-[130px] w-full object-cover" loading="lazy" />
+            </div>
+            <span className="hand-note absolute -bottom-9 left-2 rotate-[-3deg]">the first bench, 2020</span>
           </div>
         </div>
-        <div className="md:col-span-4 md:pt-24">
+        <div className="md:col-span-4 md:pt-20">
           <Eyebrow>Our Story</Eyebrow>
           <RevealHeading
             text="From a Passion, / To a Green Legacy."
-            className="mt-4 font-serif text-[2.9rem] font-semibold leading-[0.98] tracking-[-0.035em] md:text-[4.2rem]"
+            className="mt-4 font-serif text-[2.3rem] font-semibold leading-[1.02] tracking-[-0.03em] md:text-[3.2rem]"
           />
-          <p className="mt-6 max-w-md text-base leading-snug text-charcoal/80">
+          <p className="mt-6 max-w-md text-base leading-relaxed text-charcoal/80">
             What began as a small dream to bring more plants into people's lives has grown into a space filled with greenery, learning and love. Every plant we tend is chosen for how it makes a home feel.
           </p>
-          <a href="#stories" className="btn-link mt-6 border-clay text-clay-deep hover:text-clay">Know Our Journey →</a>
+          <a href="#stories" className="btn-link mt-8 border-clay text-clay-deep hover:text-clay">Know Our Journey →</a>
         </div>
-        <div className="md:col-span-3 md:pt-6">
-          <ol className="relative rotate-[1.5deg] border-l border-clay/30 pl-6">
+        <div className="md:col-span-3 md:pt-24">
+          <ol className="relative rotate-[1deg] border-l border-clay/30 pl-6">
             {timeline.map((t, i) => (
-              <li key={i} className="relative mb-4 last:mb-0">
+              <li key={i} className="relative mb-7 last:mb-0">
                 <span className="absolute -left-[31px] top-1 grid h-4 w-4 place-items-center rounded-full border border-clay bg-ivory">
                   <span className="h-1.5 w-1.5 rounded-full bg-clay" />
                 </span>
@@ -532,47 +669,143 @@ function About() {
   );
 }
 
-/* ---------------- Why Egrow ---------------- */
+/* ---------------- The Egrow Difference ---------------- */
 
-function WhyEgrow() {
-  const items = [
-    { title: "Handpicked Plants", note: "Every plant chosen with care and intention.", icon: IconLeaflet },
-    { title: "Wide Variety", note: "From rare foliage to everyday favourites.", icon: IconBranch },
-    { title: "Premium Quality", note: "Nurtured with expertise for a strong start.", icon: IconPot },
-    { title: "Expert Guidance", note: "We help you grow with confidence.", icon: IconHands },
-    { title: "Local & Trusted", note: "A neighbourhood nursery, proudly rooted.", icon: IconHeart },
-  ];
+const DIFFERENCE_FEATURES = [
+  { title: "Premium Nursery Quality", desc: "Every plant is raised, hardened and inspected on our own benches before it ever reaches your home.", icon: IconLeaflet },
+  { title: "Organic Growing Practices", desc: "Compost-rich soil, natural pest care and slow growing — no shortcuts, no harsh chemicals.", icon: IconBranch },
+  { title: "IFFCO Approved Products", desc: "Certified fertilisers and soil supplements you can trust for long-term, healthy growth.", icon: IconPot },
+  { title: "Safe Packaging & Delivery", desc: "Cushioned, breathable packing so roots and foliage arrive exactly as they left the nursery.", icon: IconTruck },
+  { title: "Expert Plant Guidance", desc: "Real advice from real growers — light, water and season notes for every plant you take home.", icon: IconHands },
+  { title: "Transforming Green Spaces", desc: "From a single windowsill to a full terrace garden, we design green spaces that keep growing.", icon: IconHeart },
+];
+
+function EgrowDifference() {
+  const [active, setActive] = useState(0);
+  const count = DIFFERENCE_FEATURES.length;
+  const step = 360 / count;
+  const rotation = -active * step;
+  const Feature = DIFFERENCE_FEATURES[active];
+  const Icon = Feature.icon;
+
   return (
-    <section className="grain relative bg-sage py-24">
-      <div className="mx-auto max-w-7xl px-8 lg:px-12">
-        <div className="mb-14 max-w-3xl md:ml-[38%]">
-          <Eyebrow>Why Egrow</Eyebrow>
-          <RevealHeading
-            text="More Than Just Plants."
-            className="mt-3 font-serif text-[2.6rem] font-semibold leading-[0.98] tracking-[-0.03em] md:text-[3.4rem]"
+    <section
+      id="difference"
+      className="grain relative overflow-hidden py-24 md:py-32"
+      style={{ background: "radial-gradient(ellipse at 50% 40%, #2C4436 0%, #22342A 45%, #1B241E 100%)" }}
+    >
+      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.18]">
+        {[...Array(14)].map((_, i) => (
+          <span
+            key={i}
+            className="absolute rounded-full bg-moss"
+            style={{
+              left: `${(i * 37) % 100}%`,
+              top: `${(i * 53) % 100}%`,
+              width: `${3 + (i % 3)}px`,
+              height: `${3 + (i % 3)}px`,
+              animation: `driftUp ${16 + (i % 7) * 3}s ease-in-out ${i * 0.7}s infinite alternate`,
+            }}
           />
+        ))}
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-6xl px-7 lg:px-12">
+        <div className="max-w-2xl">
+          <div className="flex items-center gap-2 eyebrow text-moss">
+            <Leaf className="h-3.5 w-3.5" /> <span>Why Egrow</span>
+          </div>
+          <RevealHeading
+            text="The Egrow Difference."
+            className="mt-3 font-serif text-[2.6rem] font-semibold leading-[1] tracking-[-0.03em] !text-[#F3EFE5] md:text-[4rem]"
+          />
+          <p className="mt-5 max-w-lg text-base leading-relaxed text-[#E9E3D5]/70">
+            Not just plants. A promise rooted in quality, care, and trust.
+          </p>
         </div>
-        <div className="grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-5">
-          {items.map((it, i) => {
-            const Icon = it.icon;
-            return (
-              <div
-                key={i}
-                className="group text-center transition-transform duration-500 hover:-translate-y-1"
-                style={{ transform: `rotate(${(i % 2 ? 1 : -1) * (1.5 + (i % 3))}deg)`, marginTop: `${(i % 3) * 18}px` }}
-              >
-                <div className="mx-auto mb-3 grid h-16 w-16 place-items-center rounded-full border border-olive/30 text-olive transition-all group-hover:border-clay group-hover:bg-ivory group-hover:text-clay group-hover:shadow-clay">
-                  <Icon className="h-8 w-8" />
-                </div>
-                <div className="font-serif text-lg font-medium text-forest">{it.title}</div>
-                <div className="mt-2 text-sm leading-snug text-charcoal/75">{it.note}</div>
+
+        <div className="mt-16 grid items-center gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+          {/* circular vine navigation */}
+          <div className="relative mx-auto aspect-square w-full max-w-[420px]">
+            <div
+              className="absolute inset-0 transition-transform duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+              style={{ transform: `rotate(${rotation}deg)` }}
+            >
+              <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full" aria-hidden>
+                <circle cx="200" cy="200" r="160" fill="none" stroke="#A8C69F" strokeOpacity="0.28" strokeWidth="1" />
+                <circle cx="200" cy="200" r="160" fill="none" stroke="#A8C69F" strokeOpacity="0.18" strokeWidth="6" strokeDasharray="2 22" strokeLinecap="round" />
+              </svg>
+              {DIFFERENCE_FEATURES.map((f, i) => {
+                const angle = (i * step - 90) * (Math.PI / 180);
+                const x = 50 + 40 * Math.cos(angle);
+                const y = 50 + 40 * Math.sin(angle);
+                const on = i === active;
+                return (
+                  <button
+                    key={f.title}
+                    type="button"
+                    onClick={() => setActive(i)}
+                    aria-pressed={on}
+                    className="absolute -translate-x-1/2 -translate-y-1/2"
+                    style={{ left: `${x}%`, top: `${y}%` }}
+                  >
+                    <span
+                      className="block transition-transform duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+                      style={{ transform: `rotate(${-rotation}deg)` }}
+                    >
+                      <span
+                        className={`grid h-14 w-14 place-items-center rounded-full border transition-all duration-500 ${
+                          on
+                            ? "border-moss bg-moss/20 text-[#DDEBD3] shadow-[0_0_28px_rgba(168,198,159,0.55)]"
+                            : "border-moss/25 bg-white/5 text-moss/70 hover:border-moss/60 hover:bg-white/10"
+                        }`}
+                      >
+                        <f.icon className="h-7 w-7" />
+                      </span>
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+            {/* center content */}
+            <div className="absolute inset-[22%] grid place-items-center rounded-full border border-moss/15 bg-white/[0.04] p-4 text-center backdrop-blur-sm">
+              <div key={active} className="fade-up">
+                <Icon className="mx-auto h-9 w-9 text-moss" />
+                <div className="mt-3 font-serif text-lg font-medium leading-tight !text-[#F3EFE5]">{Feature.title}</div>
               </div>
-            );
-          })}
+            </div>
+          </div>
+
+          {/* text panel */}
+          <div key={active} className="fade-up">
+            <div className="text-[0.68rem] uppercase tracking-[0.24em] text-moss">
+              {String(active + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
+            </div>
+            <h3 className="mt-4 font-serif text-[2rem] font-medium leading-tight !text-[#F3EFE5] md:text-[2.6rem]">{Feature.title}</h3>
+            <p className="mt-4 max-w-md text-base leading-relaxed text-[#E9E3D5]/70">{Feature.desc}</p>
+            <div className="mt-8 flex flex-wrap gap-2">
+              {DIFFERENCE_FEATURES.map((f, i) => (
+                <button
+                  key={f.title}
+                  type="button"
+                  onClick={() => setActive(i)}
+                  className={`rounded-full border px-3.5 py-1.5 text-[0.62rem] uppercase tracking-[0.16em] transition-all duration-500 ${
+                    i === active ? "border-clay bg-clay/20 text-[#F3EFE5]" : "border-moss/20 text-[#E9E3D5]/55 hover:border-moss/50"
+                  }`}
+                >
+                  {f.title.split(" ")[0]}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>
   );
+}
+
+function IconTruck({ className = "" }: { className?: string }) {
+  return <svg viewBox="0 0 40 40" className={className} fill="none" stroke="currentColor" strokeWidth="1.2"><path d="M4 12h18v14H4z"/><path d="M22 17h7l5 5v4h-12z"/><circle cx="11" cy="30" r="3"/><circle cx="27" cy="30" r="3"/></svg>;
 }
 
 function IconLeaflet({ className = "" }: { className?: string }) {
@@ -1100,51 +1333,120 @@ function BeforeAfter({ before, after }: { before: string; after: string }) {
 
 /* ---------------- Gallery ---------------- */
 
+const DOME_PHOTOS = [
+  { src: ph5.url, caption: "The growing benches" },
+  { src: ph4.url, caption: "Ridged ceramic planters" },
+  { src: ph6.url, caption: "Adenium in bloom" },
+  { src: ph10.url, caption: "Petunia, deep violet" },
+  { src: ph8.url, caption: "Variegated croton" },
+  { src: ph7.url, caption: "Lucky bamboo pairs" },
+  { src: ph3.url, caption: "Wave planter, studio grey" },
+  { src: ph11.url, caption: "Daisies, morning light" },
+  { src: ph9.url, caption: "Yellow bloom, dark eye" },
+];
+
 function Gallery() {
-  const imgs = [
-    { src: g2, span: "col-span-2 row-span-3 md:col-span-5", tilt: "-2deg" },
-    { src: g3, span: "col-span-1 row-span-2 md:col-span-3", tilt: "1.8deg" },
-    { src: g1, span: "col-span-1 row-span-2 md:col-span-4", tilt: "-1deg" },
-    { src: g5, span: "col-span-2 row-span-2 md:col-span-4 md:mt-6", tilt: "2.5deg" },
-    { src: g4, span: "col-span-1 row-span-3 md:col-span-3", tilt: "-2.5deg" },
-    { src: g6, span: "col-span-1 row-span-2 md:col-span-5 md:-mt-8", tilt: "1.2deg" },
-  ];
-  const [open, setOpen] = useState<string | null>(null);
+  const [open, setOpen] = useState<number | null>(null);
+  const [hover, setHover] = useState<number | null>(null);
+  const ring = DOME_PHOTOS.slice(1);
+
   return (
-    <section id="gallery" className="grain relative overflow-hidden bg-sage py-28">
-      <div className="mx-auto max-w-7xl px-8 lg:px-12">
-        <div className="mb-10 grid grid-cols-1 items-end gap-3 md:grid-cols-2">
+    <section id="gallery" className="grain relative overflow-hidden bg-sage py-24 md:py-28">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.14]"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(90deg, rgba(47,79,58,0.5) 0 1px, transparent 1px 130px), repeating-linear-gradient(0deg, rgba(47,79,58,0.35) 0 1px, transparent 1px 130px)",
+        }}
+      />
+      <div className="relative z-10 mx-auto max-w-7xl px-7 lg:px-12">
+        <div className="mb-12 grid grid-cols-1 items-end gap-3 md:grid-cols-2">
           <div>
-            <Eyebrow>Gallery</Eyebrow>
+            <Eyebrow>Greenhouse Gallery</Eyebrow>
             <RevealHeading
-              text="Moments / That Bloom."
-              className="mt-3 font-serif text-[3.2rem] font-semibold leading-[0.92] tracking-[-0.04em] md:text-[5.6rem]"
+              text="Step Inside / The Dome."
+              className="mt-3 font-serif text-[2.8rem] font-semibold leading-[0.95] tracking-[-0.04em] md:text-[4.6rem]"
             />
           </div>
           <p className="max-w-md text-charcoal/80 md:justify-self-end">
-            A glimpse of greenery, growth and beautiful spaces. Follow along as we tend, plant, and share the everyday poetry of the nursery.
+            Real photographs from our nursery — benches, blooms and handmade pots, arranged the way you'd walk through them.
           </p>
         </div>
-        <div className="grid auto-rows-[110px] grid-cols-2 gap-3 md:grid-cols-12 md:gap-5">
-          {imgs.map((im, i) => (
+
+        {/* dome — desktop */}
+        <div className="relative mx-auto hidden aspect-square w-full max-w-[680px] md:block">
+          <div
+            aria-hidden
+            className="absolute inset-0 rounded-full border border-forest/15"
+            style={{ background: "radial-gradient(circle at 50% 35%, rgba(255,255,255,0.6), rgba(238,241,232,0.15))" }}
+          />
+          {ring.map((p, i) => {
+            const angle = (i * (360 / ring.length) - 90) * (Math.PI / 180);
+            const x = 50 + 39 * Math.cos(angle);
+            const y = 50 + 39 * Math.sin(angle);
+            const on = hover === i;
+            return (
+              <button
+                key={p.src}
+                type="button"
+                onClick={() => setOpen(i + 1)}
+                onMouseEnter={() => setHover(i)}
+                onMouseLeave={() => setHover(null)}
+                className="group absolute -translate-x-1/2 -translate-y-1/2"
+                style={{ left: `${x}%`, top: `${y}%`, zIndex: on ? 30 : 10 }}
+              >
+                <span
+                  className={`block overflow-hidden rounded-[4px] border-4 border-ivory shadow-moss-drop transition-all duration-500 ${
+                    on ? "scale-[1.18] shadow-clay" : ""
+                  }`}
+                  style={{ transform: `rotate(${(i % 2 ? 1 : -1) * 3}deg)` }}
+                >
+                  <img src={p.src} alt={p.caption} loading="lazy" className="h-[128px] w-[128px] object-cover" />
+                </span>
+                <span className="mt-2 block text-center text-[0.6rem] uppercase tracking-[0.16em] text-forest/60 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+                  {p.caption}
+                </span>
+              </button>
+            );
+          })}
+          <button
+            type="button"
+            onClick={() => setOpen(0)}
+            className="group absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2"
+          >
+            <span className="block overflow-hidden rounded-full border-8 border-ivory shadow-clay transition-transform duration-700 group-hover:scale-105">
+              <img src={DOME_PHOTOS[0].src} alt={DOME_PHOTOS[0].caption} loading="lazy" className="h-[220px] w-[220px] object-cover" />
+            </span>
+          </button>
+        </div>
+
+        {/* mobile grid */}
+        <div className="grid grid-cols-2 gap-3 md:hidden">
+          {DOME_PHOTOS.map((p, i) => (
             <button
-              key={i}
-              onClick={() => setOpen(im.src)}
-              style={{ transform: `rotate(${im.tilt})` }}
-              className={`group shadow-moss-drop relative overflow-hidden rounded-[3px] bg-ivory transition-all duration-500 hover:-translate-y-1 hover:shadow-clay ${im.span}`}
+              key={p.src}
+              type="button"
+              onClick={() => setOpen(i)}
+              className="overflow-hidden rounded-[4px] border-4 border-ivory shadow-moss-drop"
             >
-              <img src={im.src} alt="Gallery" loading="lazy" className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-105" />
+              <img src={p.src} alt={p.caption} loading="lazy" className="h-40 w-full object-cover" />
             </button>
           ))}
         </div>
-        <div className="mt-12 flex flex-wrap items-center gap-6">
-          <Magnetic href="#" className="btn-clay">Follow Our Journey →</Magnetic>
+
+        <div className="mt-14 flex flex-wrap items-center gap-6">
+          <Magnetic href="https://instagram.com" className="btn-clay">Follow Our Journey →</Magnetic>
           <span className="hand-note rotate-[-4deg]">shot on ordinary mornings</span>
         </div>
       </div>
-      {open && (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-forest/90 p-6 backdrop-blur-sm" onClick={() => setOpen(null)}>
-          <img src={open} alt="Enlarged" className="max-h-[85vh] max-w-[90vw] rounded-2xl object-contain shadow-2xl" />
+
+      {open !== null && (
+        <div className="fixed inset-0 z-[90] grid place-items-center bg-ink/90 p-6 backdrop-blur-sm" onClick={() => setOpen(null)}>
+          <figure className="text-center">
+            <img src={DOME_PHOTOS[open].src} alt={DOME_PHOTOS[open].caption} className="max-h-[80vh] max-w-[90vw] rounded-[4px] object-contain shadow-2xl" />
+            <figcaption className="mt-4 text-[0.65rem] uppercase tracking-[0.2em] text-ivory/70">{DOME_PHOTOS[open].caption}</figcaption>
+          </figure>
         </div>
       )}
     </section>
