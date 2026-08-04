@@ -635,29 +635,32 @@ function About() {
         }}
       />
       <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 items-start gap-12 px-8 md:grid-cols-12 md:gap-8 lg:px-12">
-        <div className="md:col-span-5 md:-ml-4 lg:-ml-10">
-          <div className="relative max-w-[420px] rotate-[-3deg]">
+        <div className="md:col-span-5 md:-ml-2 lg:-ml-6">
+          <div className="relative max-w-[440px] rotate-[-2deg]">
             <div className="shadow-clay overflow-hidden rounded-[6px]">
-              <img src={aboutImg} alt="Egrow founder tending plants" className="h-[560px] w-full object-cover" loading="lazy" />
+              <img src={ph5.url} alt="Rows of plants on benches at the Egrow nursery" className="h-[520px] w-full object-cover" loading="lazy" />
             </div>
-            <span className="hand-note absolute -bottom-9 right-2 rotate-[4deg]">the first bench, 2020</span>
+            <div className="absolute -bottom-12 -right-6 hidden w-[180px] rotate-[4deg] overflow-hidden rounded-[4px] border-4 border-ivory shadow-clay sm:block">
+              <img src={ph8.url} alt="Croton foliage at the nursery" className="h-[130px] w-full object-cover" loading="lazy" />
+            </div>
+            <span className="hand-note absolute -bottom-9 left-2 rotate-[-3deg]">the first bench, 2020</span>
           </div>
         </div>
-        <div className="md:col-span-4 md:pt-24">
+        <div className="md:col-span-4 md:pt-20">
           <Eyebrow>Our Story</Eyebrow>
           <RevealHeading
             text="From a Passion, / To a Green Legacy."
-            className="mt-4 font-serif text-[2.9rem] font-semibold leading-[0.98] tracking-[-0.035em] md:text-[4.2rem]"
+            className="mt-4 font-serif text-[2.3rem] font-semibold leading-[1.02] tracking-[-0.03em] md:text-[3.2rem]"
           />
-          <p className="mt-6 max-w-md text-base leading-snug text-charcoal/80">
+          <p className="mt-6 max-w-md text-base leading-relaxed text-charcoal/80">
             What began as a small dream to bring more plants into people's lives has grown into a space filled with greenery, learning and love. Every plant we tend is chosen for how it makes a home feel.
           </p>
-          <a href="#stories" className="btn-link mt-6 border-clay text-clay-deep hover:text-clay">Know Our Journey →</a>
+          <a href="#stories" className="btn-link mt-8 border-clay text-clay-deep hover:text-clay">Know Our Journey →</a>
         </div>
-        <div className="md:col-span-3 md:pt-6">
-          <ol className="relative rotate-[1.5deg] border-l border-clay/30 pl-6">
+        <div className="md:col-span-3 md:pt-24">
+          <ol className="relative rotate-[1deg] border-l border-clay/30 pl-6">
             {timeline.map((t, i) => (
-              <li key={i} className="relative mb-4 last:mb-0">
+              <li key={i} className="relative mb-7 last:mb-0">
                 <span className="absolute -left-[31px] top-1 grid h-4 w-4 place-items-center rounded-full border border-clay bg-ivory">
                   <span className="h-1.5 w-1.5 rounded-full bg-clay" />
                 </span>
