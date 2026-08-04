@@ -1340,51 +1340,120 @@ function BeforeAfter({ before, after }: { before: string; after: string }) {
 
 /* ---------------- Gallery ---------------- */
 
+const DOME_PHOTOS = [
+  { src: ph5.url, caption: "The growing benches" },
+  { src: ph4.url, caption: "Ridged ceramic planters" },
+  { src: ph6.url, caption: "Adenium in bloom" },
+  { src: ph10.url, caption: "Petunia, deep violet" },
+  { src: ph8.url, caption: "Variegated croton" },
+  { src: ph7.url, caption: "Lucky bamboo pairs" },
+  { src: ph3.url, caption: "Wave planter, studio grey" },
+  { src: ph11.url, caption: "Daisies, morning light" },
+  { src: ph9.url, caption: "Yellow bloom, dark eye" },
+];
+
 function Gallery() {
-  const imgs = [
-    { src: g2, span: "col-span-2 row-span-3 md:col-span-5", tilt: "-2deg" },
-    { src: g3, span: "col-span-1 row-span-2 md:col-span-3", tilt: "1.8deg" },
-    { src: g1, span: "col-span-1 row-span-2 md:col-span-4", tilt: "-1deg" },
-    { src: g5, span: "col-span-2 row-span-2 md:col-span-4 md:mt-6", tilt: "2.5deg" },
-    { src: g4, span: "col-span-1 row-span-3 md:col-span-3", tilt: "-2.5deg" },
-    { src: g6, span: "col-span-1 row-span-2 md:col-span-5 md:-mt-8", tilt: "1.2deg" },
-  ];
-  const [open, setOpen] = useState<string | null>(null);
+  const [open, setOpen] = useState<number | null>(null);
+  const [hover, setHover] = useState<number | null>(null);
+  const ring = DOME_PHOTOS.slice(1);
+
   return (
-    <section id="gallery" className="grain relative overflow-hidden bg-sage py-28">
-      <div className="mx-auto max-w-7xl px-8 lg:px-12">
-        <div className="mb-10 grid grid-cols-1 items-end gap-3 md:grid-cols-2">
+    <section id="gallery" className="grain relative overflow-hidden bg-sage py-24 md:py-28">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.14]"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(90deg, rgba(47,79,58,0.5) 0 1px, transparent 1px 130px), repeating-linear-gradient(0deg, rgba(47,79,58,0.35) 0 1px, transparent 1px 130px)",
+        }}
+      />
+      <div className="relative z-10 mx-auto max-w-7xl px-7 lg:px-12">
+        <div className="mb-12 grid grid-cols-1 items-end gap-3 md:grid-cols-2">
           <div>
-            <Eyebrow>Gallery</Eyebrow>
+            <Eyebrow>Greenhouse Gallery</Eyebrow>
             <RevealHeading
-              text="Moments / That Bloom."
-              className="mt-3 font-serif text-[3.2rem] font-semibold leading-[0.92] tracking-[-0.04em] md:text-[5.6rem]"
+              text="Step Inside / The Dome."
+              className="mt-3 font-serif text-[2.8rem] font-semibold leading-[0.95] tracking-[-0.04em] md:text-[4.6rem]"
             />
           </div>
           <p className="max-w-md text-charcoal/80 md:justify-self-end">
-            A glimpse of greenery, growth and beautiful spaces. Follow along as we tend, plant, and share the everyday poetry of the nursery.
+            Real photographs from our nursery — benches, blooms and handmade pots, arranged the way you'd walk through them.
           </p>
         </div>
-        <div className="grid auto-rows-[110px] grid-cols-2 gap-3 md:grid-cols-12 md:gap-5">
-          {imgs.map((im, i) => (
+
+        {/* dome — desktop */}
+        <div className="relative mx-auto hidden aspect-square w-full max-w-[680px] md:block">
+          <div
+            aria-hidden
+            className="absolute inset-0 rounded-full border border-forest/15"
+            style={{ background: "radial-gradient(circle at 50% 35%, rgba(255,255,255,0.6), rgba(238,241,232,0.15))" }}
+          />
+          {ring.map((p, i) => {
+            const angle = (i * (360 / ring.length) - 90) * (Math.PI / 180);
+            const x = 50 + 39 * Math.cos(angle);
+            const y = 50 + 39 * Math.sin(angle);
+            const on = hover === i;
+            return (
+              <button
+                key={p.src}
+                type="button"
+                onClick={() => setOpen(i + 1)}
+                onMouseEnter={() => setHover(i)}
+                onMouseLeave={() => setHover(null)}
+                className="group absolute -translate-x-1/2 -translate-y-1/2"
+                style={{ left: `${x}%`, top: `${y}%`, zIndex: on ? 30 : 10 }}
+              >
+                <span
+                  className={`block overflow-hidden rounded-[4px] border-4 border-ivory shadow-moss-drop transition-all duration-500 ${
+                    on ? "scale-[1.18] shadow-clay" : ""
+                  }`}
+                  style={{ transform: `rotate(${(i % 2 ? 1 : -1) * 3}deg)` }}
+                >
+                  <img src={p.src} alt={p.caption} loading="lazy" className="h-[128px] w-[128px] object-cover" />
+                </span>
+                <span className="mt-2 block text-center text-[0.6rem] uppercase tracking-[0.16em] text-forest/60 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+                  {p.caption}
+                </span>
+              </button>
+            );
+          })}
+          <button
+            type="button"
+            onClick={() => setOpen(0)}
+            className="group absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2"
+          >
+            <span className="block overflow-hidden rounded-full border-8 border-ivory shadow-clay transition-transform duration-700 group-hover:scale-105">
+              <img src={DOME_PHOTOS[0].src} alt={DOME_PHOTOS[0].caption} loading="lazy" className="h-[220px] w-[220px] object-cover" />
+            </span>
+          </button>
+        </div>
+
+        {/* mobile grid */}
+        <div className="grid grid-cols-2 gap-3 md:hidden">
+          {DOME_PHOTOS.map((p, i) => (
             <button
-              key={i}
-              onClick={() => setOpen(im.src)}
-              style={{ transform: `rotate(${im.tilt})` }}
-              className={`group shadow-moss-drop relative overflow-hidden rounded-[3px] bg-ivory transition-all duration-500 hover:-translate-y-1 hover:shadow-clay ${im.span}`}
+              key={p.src}
+              type="button"
+              onClick={() => setOpen(i)}
+              className="overflow-hidden rounded-[4px] border-4 border-ivory shadow-moss-drop"
             >
-              <img src={im.src} alt="Gallery" loading="lazy" className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-105" />
+              <img src={p.src} alt={p.caption} loading="lazy" className="h-40 w-full object-cover" />
             </button>
           ))}
         </div>
-        <div className="mt-12 flex flex-wrap items-center gap-6">
-          <Magnetic href="#" className="btn-clay">Follow Our Journey →</Magnetic>
+
+        <div className="mt-14 flex flex-wrap items-center gap-6">
+          <Magnetic href="https://instagram.com" className="btn-clay">Follow Our Journey →</Magnetic>
           <span className="hand-note rotate-[-4deg]">shot on ordinary mornings</span>
         </div>
       </div>
-      {open && (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-forest/90 p-6 backdrop-blur-sm" onClick={() => setOpen(null)}>
-          <img src={open} alt="Enlarged" className="max-h-[85vh] max-w-[90vw] rounded-2xl object-contain shadow-2xl" />
+
+      {open !== null && (
+        <div className="fixed inset-0 z-[90] grid place-items-center bg-ink/90 p-6 backdrop-blur-sm" onClick={() => setOpen(null)}>
+          <figure className="text-center">
+            <img src={DOME_PHOTOS[open].src} alt={DOME_PHOTOS[open].caption} className="max-h-[80vh] max-w-[90vw] rounded-[4px] object-contain shadow-2xl" />
+            <figcaption className="mt-4 text-[0.65rem] uppercase tracking-[0.2em] text-ivory/70">{DOME_PHOTOS[open].caption}</figcaption>
+          </figure>
         </div>
       )}
     </section>
