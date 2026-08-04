@@ -268,39 +268,184 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 
 /* ---------------- Nav ---------------- */
 
+const NAV_ITEMS = [
+  { id: "home", label: "Home" },
+  { id: "about", label: "Our Story" },
+  { id: "difference", label: "The Egrow Difference" },
+  { id: "transform", label: "Transformations" },
+  { id: "gallery", label: "Gallery" },
+  { id: "reviews", label: "Reviews" },
+  { id: "visit", label: "Contact" },
+];
+
 function Nav() {
   const [scrolled, setScrolled] = useState(false);
+  const [active, setActive] = useState("home");
+  const [open, setOpen] = useState(false);
+  const itemRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
+  const [pill, setPill] = useState({ left: 0, width: 0, ready: false });
+
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 24);
+      const mid = window.innerHeight * 0.35;
+      let current = NAV_ITEMS[0].id;
+      for (const s of NAV_ITEMS) {
+        const el = document.getElementById(s.id);
+        if (el && el.getBoundingClientRect().top <= mid) current = s.id;
+      }
+      setActive(current);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    const measure = () => {
+      const el = itemRefs.current[active];
+      if (el) setPill({ left: el.offsetLeft, width: el.offsetWidth, ready: true });
+    };
+    measure();
+    const t = setTimeout(measure, 350);
+    window.addEventListener("resize", measure);
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener("resize", measure);
+    };
+  }, [active, scrolled]);
+
   return (
-    <header className="fixed inset-x-0 top-5 z-[70] flex justify-center px-4">
+    <header className="fixed inset-x-0 top-4 z-[70] flex justify-center px-4">
       <div
-        className={`mx-auto flex w-full max-w-5xl items-center justify-between rounded-full border px-5 py-3 shadow-lg backdrop-blur-xl transition-all duration-500 md:px-8 md:py-3.5 ${
+        className={`mx-auto flex w-full max-w-6xl items-center justify-between rounded-full border transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
           scrolled
-            ? "bg-ivory/85 border-white/40 shadow-black/10 text-forest"
-            : "bg-white/10 border-white/20 shadow-black/5 text-ivory"
+            ? "border-white/50 bg-ivory/70 px-4 py-1.5 shadow-[0_14px_40px_-18px_rgba(20,17,13,0.45)] backdrop-blur-2xl md:px-6 md:py-2 text-forest"
+            : "border-white/25 bg-white/10 px-4 py-2 shadow-[0_16px_44px_-22px_rgba(20,17,13,0.5)] backdrop-blur-xl md:px-7 md:py-2.5 text-ivory"
         }`}
       >
-        <a href="#" className="flex items-center gap-2">
-          <Leaf className={`h-6 w-6 ${scrolled ? "text-forest" : "text-ivory"}`} />
-          <span className="font-serif text-2xl font-medium leading-none">Egrow</span>
+        <a href="#home" className="flex shrink-0 items-center gap-2.5">
+          <img
+            src={logoImg.url}
+            alt="Egrow Plants logo"
+            className={`rounded-full object-cover transition-all duration-700 ${scrolled ? "h-9 w-9" : "h-11 w-11"}`}
+          />
+          <span className={`font-serif font-semibold leading-none tracking-[-0.02em] transition-all duration-700 ${scrolled ? "text-xl" : "text-2xl"}`}>
+            Egrow
+          </span>
         </a>
-        <nav className="hidden items-center gap-6 text-sm md:flex">
-          <a href="#home" className="hover:text-olive transition">Home</a>
-          <a href="#about" className="hover:text-olive transition">About</a>
-          <a href="#stories" className="hover:text-olive transition">Stories</a>
-          <a href="#calendar" className="hover:text-olive transition">Calendar</a>
-          <a href="#gallery" className="hover:text-olive transition">Gallery</a>
-          <a href="#contact" className="hover:text-olive transition">Contact</a>
+
+        <nav className="relative hidden items-center lg:flex">
+          <span
+            aria-hidden
+            className={`absolute top-1/2 -z-0 h-8 -translate-y-1/2 rounded-full transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+              pill.ready ? "opacity-100" : "opacity-0"
+            } ${scrolled ? "bg-forest/10" : "bg-white/20"}`}
+            style={{ left: pill.left, width: pill.width }}
+          />
+          {NAV_ITEMS.map((n) => (
+            <a
+              key={n.id}
+              href={`#${n.id}`}
+              ref={(el) => {
+                itemRefs.current[n.id] = el;
+              }}
+              className={`relative z-10 whitespace-nowrap rounded-full px-4 py-2 text-[0.72rem] uppercase tracking-[0.14em] transition-colors duration-500 ${
+                active === n.id ? (scrolled ? "text-forest" : "text-ivory") : "opacity-65 hover:opacity-100"
+              }`}
+            >
+              {n.label}
+            </a>
+          ))}
         </nav>
-        <a href="#contact" className={`hidden md:inline-flex ${scrolled ? "btn-ghost" : "btn-ghost bg-white/10 text-ivory border-white/20 hover:bg-white/20 hover:text-ivory"}`}>
-          Plan Your Green Space
-        </a>
+
+        <button
+          type="button"
+          onClick={() => setOpen((o) => !o)}
+          aria-label="Toggle navigation"
+          aria-expanded={open}
+          className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-current/20 lg:hidden"
+        >
+          <span className="space-y-1">
+            <span className="block h-px w-4 bg-current" />
+            <span className="block h-px w-4 bg-current" />
+          </span>
+        </button>
       </div>
+
+      {open && (
+        <div className="absolute left-4 right-4 top-[72px] rounded-3xl border border-white/40 bg-ivory/90 p-3 shadow-xl backdrop-blur-2xl lg:hidden">
+          {NAV_ITEMS.map((n) => (
+            <a
+              key={n.id}
+              href={`#${n.id}`}
+              onClick={() => setOpen(false)}
+              className={`block rounded-full px-4 py-2.5 text-[0.72rem] uppercase tracking-[0.16em] transition ${
+                active === n.id ? "bg-forest/10 text-forest" : "text-charcoal/70"
+              }`}
+            >
+              {n.label}
+            </a>
+          ))}
+        </div>
+      )}
     </header>
+  );
+}
+
+/* ---------------- Floating action dock ---------------- */
+
+function ActionDock() {
+  const actions = [
+    {
+      label: "Shop Now",
+      href: "#stories",
+      hover: "group-hover:scale-110",
+      icon: <Leaf className="h-4 w-4" />,
+    },
+    {
+      label: "WhatsApp",
+      href: "https://wa.me/919999999999",
+      hover: "group-hover:-translate-y-1",
+      icon: (
+        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor">
+          <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2Zm5.3 14c-.2.6-1.2 1.2-1.7 1.2-.5.1-1 .1-1.7-.1a12 12 0 0 1-5.9-5.1c-.5-.8-.8-1.6-.8-2.3 0-.7.4-1.3.8-1.7.2-.2.4-.3.6-.3h.5c.2 0 .4 0 .5.4l.7 1.7c0 .2 0 .3-.1.5l-.4.5c-.1.2-.3.3-.1.6.3.5.8 1.2 1.4 1.7.7.6 1.3.9 1.7 1 .2.1.4.1.6-.1l.7-.8c.2-.2.3-.2.6-.1l1.6.8c.3.1.4.2.4.4.1.2.1.7-.1 1.3Z" />
+        </svg>
+      ),
+    },
+    {
+      label: "Instagram",
+      href: "https://instagram.com",
+      hover: "group-hover:drop-shadow-[0_0_10px_rgba(180,83,42,0.9)]",
+      icon: (
+        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.6">
+          <rect x="3" y="3" width="18" height="18" rx="5" />
+          <circle cx="12" cy="12" r="4" />
+          <circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none" />
+        </svg>
+      ),
+    },
+  ];
+  return (
+    <div className="fixed right-3 top-1/2 z-[80] hidden -translate-y-1/2 sm:block">
+      <div className="flex flex-col gap-2 rounded-full border border-white/40 bg-white/25 p-2 shadow-[0_18px_44px_-20px_rgba(20,17,13,0.5)] backdrop-blur-2xl">
+        {actions.map((a) => (
+          <a
+            key={a.label}
+            href={a.href}
+            target={a.href.startsWith("http") ? "_blank" : undefined}
+            rel="noreferrer"
+            aria-label={a.label}
+            className="group flex items-center justify-end gap-0 overflow-hidden rounded-full bg-ivory/70 px-3 py-3 text-forest transition-all duration-500 hover:bg-clay hover:text-ivory"
+          >
+            <span className={`transition-all duration-500 ${a.hover}`}>{a.icon}</span>
+            <span className="max-w-0 whitespace-nowrap text-[0.62rem] uppercase tracking-[0.18em] opacity-0 transition-all duration-500 group-hover:ml-2 group-hover:max-w-[7rem] group-hover:opacity-100">
+              {a.label}
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
   );
 }
 
