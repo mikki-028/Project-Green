@@ -76,6 +76,7 @@ function Index() {
 const RAIL_SECTIONS = [
   { id: "home", label: "Nursery" },
   { id: "about", label: "Story" },
+  { id: "difference", label: "Difference" },
   { id: "stories", label: "Field Notes" },
   { id: "calendar", label: "Journal" },
   { id: "transform", label: "Transformations" },
