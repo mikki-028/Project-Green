@@ -1345,21 +1345,257 @@ const DOME_PHOTOS = [
   { src: ph9.url, caption: "Yellow bloom, dark eye" },
 ];
 
+/* Dome architecture: rows arranged as arcs, narrow at the crown, wide at the base. */
+const DOME_ROWS: { idx: number; x: number; size: number; depth: number }[][] = [
+  [
+    { idx: 0, x: -0.5, size: 0.62, depth: 0.35 },
+    { idx: 1, x: 0.5, size: 0.62, depth: 0.35 },
+  ],
+  [
+    { idx: 2, x: -1.06, size: 0.8, depth: 0.6 },
+    { idx: 3, x: 0, size: 1, depth: 1 },
+    { idx: 4, x: 1.06, size: 0.8, depth: 0.6 },
+  ],
+  [
+    { idx: 5, x: -1.62, size: 0.66, depth: 0.4 },
+    { idx: 6, x: -0.54, size: 0.86, depth: 0.75 },
+    { idx: 7, x: 0.54, size: 0.86, depth: 0.75 },
+    { idx: 8, x: 1.62, size: 0.66, depth: 0.4 },
+  ],
+];
+
+const POLLEN = Array.from({ length: 18 }, (_, i) => ({
+  l: (i * 37) % 100,
+  b: 20 + ((i * 53) % 120),
+  s: 2 + ((i * 7) % 3),
+  d: 22 + ((i * 11) % 18),
+  delay: (i * 3.3) % 20,
+  o: 0.25 + ((i * 13) % 30) / 100,
+}));
+
+function useReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const on = () => setReduced(mq.matches);
+    on();
+    mq.addEventListener("change", on);
+    return () => mq.removeEventListener("change", on);
+  }, []);
+  return reduced;
+}
+
+function DomePanel({
+  photo,
+  cell,
+  row,
+  order,
+  unit,
+  pointer,
+  visible,
+  dimmed,
+  onHover,
+  onOpen,
+  reduced,
+}: {
+  photo: { src: string; caption: string };
+  cell: { x: number; size: number; depth: number };
+  row: number;
+  order: number;
+  unit: number;
+  pointer: { x: number; y: number; active: boolean };
+  visible: boolean;
+  dimmed: boolean;
+  onHover: (v: boolean) => void;
+  onOpen: () => void;
+  reduced: boolean;
+}) {
+  const ref = useRef<HTMLButtonElement>(null);
+  const [local, setLocal] = useState({ tx: 0, ty: 0, rx: 0, ry: 0, lx: 50, ly: 30, on: false });
+
+  useEffect(() => {
+    if (reduced || !pointer.active || !ref.current) {
+      setLocal((s) => (s.tx === 0 && s.rx === 0 ? s : { ...s, tx: 0, ty: 0, rx: 0, ry: 0 }));
+      return;
+    }
+    const r = ref.current.getBoundingClientRect();
+    const cx = r.left + r.width / 2;
+    const cy = r.top + r.height / 2;
+    const dx = pointer.x - cx;
+    const dy = pointer.y - cy;
+    const dist = Math.hypot(dx, dy);
+    const reach = 300;
+    const pull = Math.max(0, 1 - dist / reach);
+    setLocal({
+      tx: dx * 0.05 * pull,
+      ty: dy * 0.05 * pull,
+      rx: (-dy / r.height) * 9 * pull,
+      ry: (dx / r.width) * 9 * pull,
+      lx: 50 + (dx / reach) * 40,
+      ly: 40 + (dy / reach) * 40,
+      on: pull > 0.02,
+    });
+  }, [pointer, reduced]);
+
+  const d = unit * cell.size;
+
+  return (
+    <button
+      ref={ref}
+      type="button"
+      onClick={onOpen}
+      onMouseEnter={() => onHover(true)}
+      onMouseLeave={() => onHover(false)}
+      onFocus={() => onHover(true)}
+      onBlur={() => onHover(false)}
+      aria-label={photo.caption}
+      className="group relative block shrink-0 rounded-full outline-none [transform-style:preserve-3d]"
+      style={{
+        width: d,
+        height: d,
+        opacity: visible ? (dimmed ? 0.45 : 1) : 0,
+        transform: `translate3d(${local.tx}px, ${visible ? local.ty : local.ty + 26}px, 0)`,
+        transition: `opacity 900ms cubic-bezier(0.22,0.61,0.36,1) ${row * 140 + order * 70}ms, transform 900ms cubic-bezier(0.22,0.61,0.36,1) ${row * 140 + order * 70}ms`,
+      }}
+    >
+      <span
+        className="block h-full w-full overflow-hidden rounded-full will-change-transform"
+        style={{
+          transform: `perspective(900px) rotateX(${local.rx}deg) rotateY(${local.ry}deg) scale(${local.on ? 1.02 : 1})`,
+          transition: "transform 700ms cubic-bezier(0.22,0.61,0.36,1), box-shadow 700ms cubic-bezier(0.22,0.61,0.36,1)",
+          boxShadow: `0 ${18 + cell.depth * 26}px ${34 + cell.depth * 44}px -${18 - cell.depth * 6}px rgba(32,28,23,${0.22 + cell.depth * 0.2})`,
+        }}
+      >
+        <img
+          src={photo.src}
+          alt={photo.caption}
+          loading="lazy"
+          className="h-full w-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,0.61,0.36,1)] group-hover:scale-[1.08]"
+        />
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-0 rounded-full opacity-0 transition-opacity duration-700 group-hover:opacity-100"
+          style={{ background: `radial-gradient(circle at ${local.lx}% ${local.ly}%, rgba(255,255,255,0.32), transparent 62%)` }}
+        />
+        <span aria-hidden className="pointer-events-none absolute inset-0 rounded-full ring-1 ring-inset ring-ivory/25" />
+      </span>
+      {/* soft reflection */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-full h-1/2 w-full -translate-x-1/2 rounded-full opacity-25 blur-[6px]"
+        style={{
+          backgroundImage: `url(${photo.src})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          transform: "scaleY(-0.5)",
+          transformOrigin: "top",
+          maskImage: "linear-gradient(to bottom, rgba(0,0,0,0.5), transparent 70%)",
+          WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,0.5), transparent 70%)",
+        }}
+      />
+      <span className="pointer-events-none absolute -bottom-6 left-1/2 w-max max-w-[160px] -translate-x-1/2 translate-y-1 text-[0.58rem] uppercase tracking-[0.18em] text-forest/70 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+        {photo.caption}
+      </span>
+    </button>
+  );
+}
+
 function Gallery() {
   const [open, setOpen] = useState<number | null>(null);
   const [hover, setHover] = useState<number | null>(null);
-  const ring = DOME_PHOTOS.slice(1);
+  const [pointer, setPointer] = useState({ x: 0, y: 0, active: false });
+  const [scrollProg, setScrollProg] = useState(0);
+  const [inView, setInView] = useState(false);
+  const [unit, setUnit] = useState(150);
+  const sectionRef = useRef<HTMLElement>(null);
+  const domeRef = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion();
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) setInView(true);
+      },
+      { threshold: 0.15 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    let raf = 0;
+    const measure = () => {
+      const w = domeRef.current?.clientWidth ?? 900;
+      const divisor = w < 700 ? 4.15 : 4.6;
+      setUnit(Math.max(78, Math.min(168, w / divisor)));
+      const el = sectionRef.current;
+      if (el) {
+        const r = el.getBoundingClientRect();
+        const p = 1 - (r.top + r.height / 2) / (window.innerHeight + r.height / 2);
+        setScrollProg(Math.max(-1, Math.min(1, (p - 0.5) * 2)));
+      }
+      raf = 0;
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(measure);
+    };
+    measure();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  const onMove = (e: React.MouseEvent) => setPointer({ x: e.clientX, y: e.clientY, active: true });
 
   return (
-    <section id="gallery" className="grain relative overflow-hidden bg-sage py-24 md:py-28">
+    <section
+      ref={sectionRef}
+      id="gallery"
+      className="grain relative overflow-hidden bg-sage py-24 md:py-28"
+    >
+      {/* greenhouse blueprint grid */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.14]"
+        className="pointer-events-none absolute inset-0 opacity-[0.10]"
         style={{
           backgroundImage:
             "repeating-linear-gradient(90deg, rgba(47,79,58,0.5) 0 1px, transparent 1px 130px), repeating-linear-gradient(0deg, rgba(47,79,58,0.35) 0 1px, transparent 1px 130px)",
         }}
       />
+      {/* morning light behind the dome */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(70% 55% at 50% 42%, rgba(255,253,244,0.85), rgba(238,241,232,0.25) 55%, transparent 78%)",
+        }}
+      />
+      <div aria-hidden className="egrow-sunray pointer-events-none absolute inset-0 overflow-hidden" />
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+        {POLLEN.map((p, i) => (
+          <span
+            key={i}
+            className="egrow-pollen absolute rounded-full bg-ivory"
+            style={{
+              left: `${p.l}%`,
+              bottom: `-${p.b}px`,
+              width: p.s,
+              height: p.s,
+              animationDuration: `${p.d}s`,
+              animationDelay: `${p.delay}s`,
+              opacity: p.o,
+            }}
+          />
+        ))}
+      </div>
+
       <div className="relative z-10 mx-auto max-w-7xl px-7 lg:px-12">
         <div className="mb-12 grid grid-cols-1 items-end gap-3 md:grid-cols-2">
           <div>
@@ -1374,68 +1610,74 @@ function Gallery() {
           </p>
         </div>
 
-        {/* dome — desktop */}
-        <div className="relative mx-auto hidden aspect-square w-full max-w-[680px] md:block">
+        {/* the dome */}
+        <div
+          ref={domeRef}
+          onMouseMove={onMove}
+          onMouseLeave={() => setPointer((p) => ({ ...p, active: false }))}
+          className="relative mx-auto w-full max-w-[860px] pb-16"
+        >
+          {/* glass dome arch */}
+          <svg
+            aria-hidden
+            viewBox="0 0 400 260"
+            preserveAspectRatio="none"
+            className="pointer-events-none absolute inset-x-[3%] top-[6%] h-[84%] w-[94%] text-forest/20"
+          >
+            <path d="M8 258 A192 192 0 0 1 392 258" fill="none" stroke="currentColor" strokeWidth="0.8" />
+            <path d="M52 258 A148 148 0 0 1 348 258" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.7" />
+            <path d="M104 258 A96 96 0 0 1 296 258" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.5" />
+            <line x1="200" y1="66" x2="200" y2="258" stroke="currentColor" strokeWidth="0.4" opacity="0.4" />
+            <line x1="60" y1="150" x2="340" y2="150" stroke="currentColor" strokeWidth="0.4" opacity="0.3" />
+          </svg>
+
+          <div className={reduced ? "" : "egrow-breathe"}>
+            {DOME_ROWS.map((row, ri) => {
+              const rowLift = reduced ? 0 : scrollProg * (26 - ri * 9);
+              return (
+                <div
+                  key={ri}
+                  className="flex items-end justify-center"
+                  style={{
+                    gap: unit * 0.16,
+                    marginTop: ri === 0 ? 0 : unit * 0.14,
+                    transform: `translate3d(0, ${rowLift}px, 0)`,
+                    transition: "transform 120ms linear",
+                  }}
+                >
+                  {row.map((cell, ci) => {
+                    const p = DOME_PHOTOS[cell.idx];
+                    return (
+                      <DomePanel
+                        key={p.src}
+                        photo={p}
+                        cell={cell}
+                        row={ri}
+                        order={ci}
+                        unit={unit}
+                        pointer={pointer}
+                        visible={inView}
+                        dimmed={hover !== null && hover !== cell.idx}
+                        onHover={(v) => setHover(v ? cell.idx : null)}
+                        onOpen={() => setOpen(cell.idx)}
+                        reduced={reduced}
+                      />
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* dome floor */}
           <div
             aria-hidden
-            className="absolute inset-0 rounded-full border border-forest/15"
-            style={{ background: "radial-gradient(circle at 50% 35%, rgba(255,255,255,0.6), rgba(238,241,232,0.15))" }}
+            className="pointer-events-none mx-auto mt-6 h-px w-[86%]"
+            style={{ background: "linear-gradient(90deg, transparent, rgba(47,79,58,0.28), transparent)" }}
           />
-          {ring.map((p, i) => {
-            const angle = (i * (360 / ring.length) - 90) * (Math.PI / 180);
-            const x = 50 + 39 * Math.cos(angle);
-            const y = 50 + 39 * Math.sin(angle);
-            const on = hover === i;
-            return (
-              <button
-                key={p.src}
-                type="button"
-                onClick={() => setOpen(i + 1)}
-                onMouseEnter={() => setHover(i)}
-                onMouseLeave={() => setHover(null)}
-                className="group absolute -translate-x-1/2 -translate-y-1/2"
-                style={{ left: `${x}%`, top: `${y}%`, zIndex: on ? 30 : 10 }}
-              >
-                <span
-                  className={`block overflow-hidden rounded-[4px] border-4 border-ivory shadow-moss-drop transition-all duration-500 ${
-                    on ? "scale-[1.18] shadow-clay" : ""
-                  }`}
-                  style={{ transform: `rotate(${(i % 2 ? 1 : -1) * 3}deg)` }}
-                >
-                  <img src={p.src} alt={p.caption} loading="lazy" className="h-[128px] w-[128px] object-cover" />
-                </span>
-                <span className="mt-2 block text-center text-[0.6rem] uppercase tracking-[0.16em] text-forest/60 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-                  {p.caption}
-                </span>
-              </button>
-            );
-          })}
-          <button
-            type="button"
-            onClick={() => setOpen(0)}
-            className="group absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2"
-          >
-            <span className="block overflow-hidden rounded-full border-8 border-ivory shadow-clay transition-transform duration-700 group-hover:scale-105">
-              <img src={DOME_PHOTOS[0].src} alt={DOME_PHOTOS[0].caption} loading="lazy" className="h-[220px] w-[220px] object-cover" />
-            </span>
-          </button>
         </div>
 
-        {/* mobile grid */}
-        <div className="grid grid-cols-2 gap-3 md:hidden">
-          {DOME_PHOTOS.map((p, i) => (
-            <button
-              key={p.src}
-              type="button"
-              onClick={() => setOpen(i)}
-              className="overflow-hidden rounded-[4px] border-4 border-ivory shadow-moss-drop"
-            >
-              <img src={p.src} alt={p.caption} loading="lazy" className="h-40 w-full object-cover" />
-            </button>
-          ))}
-        </div>
-
-        <div className="mt-14 flex flex-wrap items-center gap-6">
+        <div className="mt-10 flex flex-wrap items-center gap-6">
           <Magnetic href="https://instagram.com" className="btn-clay">Follow Our Journey →</Magnetic>
           <span className="hand-note rotate-[-4deg]">shot on ordinary mornings</span>
         </div>

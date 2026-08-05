@@ -349,3 +349,34 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .ken-burns, .spin-slow, .word-reveal > span, .mask-wipe { animation: none !important; opacity: 1 !important; clip-path: none !important; }
 }
+
+/* ---- greenhouse dome ambience ---- */
+@keyframes egrowBreathe {
+  0%, 100% { transform: translate3d(0, -3px, 0); }
+  50% { transform: translate3d(0, 3px, 0); }
+}
+.egrow-breathe { animation: egrowBreathe 9s cubic-bezier(0.45, 0, 0.55, 1) infinite; will-change: transform; }
+
+@keyframes egrowPollen {
+  0% { transform: translate3d(0, 0, 0); opacity: 0; }
+  12% { opacity: 1; }
+  100% { transform: translate3d(40px, -85vh, 0); opacity: 0; }
+}
+.egrow-pollen { animation-name: egrowPollen; animation-timing-function: linear; animation-iteration-count: infinite; }
+
+@keyframes egrowSunray {
+  0%, 100% { transform: translate3d(-8%, 0, 0) rotate(-14deg); opacity: 0.35; }
+  50% { transform: translate3d(8%, 0, 0) rotate(-10deg); opacity: 0.6; }
+}
+.egrow-sunray::before {
+  content: "";
+  position: absolute;
+  inset: -20% -10%;
+  background: linear-gradient(100deg, transparent 30%, rgba(255,255,240,0.55) 44%, transparent 52%, transparent 66%, rgba(255,255,240,0.35) 74%, transparent 82%);
+  animation: egrowSunray 18s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .egrow-breathe, .egrow-pollen, .egrow-sunray::before { animation: none !important; }
+}
