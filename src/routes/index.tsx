@@ -1528,7 +1528,8 @@ function Gallery() {
     let raf = 0;
     const measure = () => {
       const w = domeRef.current?.clientWidth ?? 900;
-      setUnit(Math.max(84, Math.min(168, w / 4.6)));
+      const divisor = w < 700 ? 4.15 : 4.6;
+      setUnit(Math.max(78, Math.min(168, w / divisor)));
       const el = sectionRef.current;
       if (el) {
         const r = el.getBoundingClientRect();
@@ -1621,7 +1622,7 @@ function Gallery() {
             aria-hidden
             viewBox="0 0 400 260"
             preserveAspectRatio="none"
-            className="pointer-events-none absolute inset-x-0 top-[2%] h-[92%] w-full text-forest/20"
+            className="pointer-events-none absolute inset-x-[3%] top-[6%] h-[84%] w-[94%] text-forest/20"
           >
             <path d="M8 258 A192 192 0 0 1 392 258" fill="none" stroke="currentColor" strokeWidth="0.8" />
             <path d="M52 258 A148 148 0 0 1 348 258" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.7" />
