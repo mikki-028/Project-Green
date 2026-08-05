@@ -1364,6 +1364,15 @@ const DOME_ROWS: { idx: number; x: number; size: number; depth: number }[][] = [
   ],
 ];
 
+const POLLEN = Array.from({ length: 18 }, (_, i) => ({
+  l: (i * 37) % 100,
+  b: 20 + ((i * 53) % 120),
+  s: 2 + ((i * 7) % 3),
+  d: 22 + ((i * 11) % 18),
+  delay: (i * 3.3) % 20,
+  o: 0.25 + ((i * 13) % 30) / 100,
+}));
+
 function useReducedMotion() {
   const [reduced, setReduced] = useState(false);
   useEffect(() => {
