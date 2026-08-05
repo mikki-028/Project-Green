@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import DomeGallery from "@/components/DomeGallery";
 import { useEffect, useRef, useState } from "react";
 import heroVideo from "@/assets/nature_1.mp4.asset.json";
 import heroVideoMobile from "@/assets/hero-video-mobile.mp4";
@@ -1345,65 +1346,10 @@ const DOME_PHOTOS = [
   { src: ph9.url, caption: "Yellow bloom, dark eye" },
 ];
 function Gallery() {
-  const [open, setOpen] = useState<number | null>(null);
-  const [hover, setHover] = useState<number | null>(null);
-  const [pointer, setPointer] = useState({ x: 0, y: 0, active: false });
-  const [scrollProg, setScrollProg] = useState(0);
-  const [inView, setInView] = useState(false);
-  const [unit, setUnit] = useState(150);
   const sectionRef = useRef<HTMLElement>(null);
-  const domeRef = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
-
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) setInView(true);
-      },
-      { threshold: 0.15 },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
-  useEffect(() => {
-    let raf = 0;
-    const measure = () => {
-      const w = domeRef.current?.clientWidth ?? 900;
-      const divisor = w < 700 ? 4.15 : 4.6;
-      setUnit(Math.max(78, Math.min(168, w / divisor)));
-      const el = sectionRef.current;
-      if (el) {
-        const r = el.getBoundingClientRect();
-        const p = 1 - (r.top + r.height / 2) / (window.innerHeight + r.height / 2);
-        setScrollProg(Math.max(-1, Math.min(1, (p - 0.5) * 2)));
-      }
-      raf = 0;
-    };
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(measure);
-    };
-    measure();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      if (raf) cancelAnimationFrame(raf);
-    };
-  }, []);
-
-  const onMove = (e: React.MouseEvent) => setPointer({ x: e.clientX, y: e.clientY, active: true });
 
   return (
-    <section
-      ref={sectionRef}
-      id="gallery"
-      className="grain relative overflow-hidden bg-sage py-24 md:py-28"
-    >
-      {/* greenhouse blueprint grid */}
+    <section ref={sectionRef} id="gallery" className="grain relative overflow-hidden bg-sage py-24 md:py-28">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-[0.10]"
@@ -1412,33 +1358,7 @@ function Gallery() {
             "repeating-linear-gradient(90deg, rgba(47,79,58,0.5) 0 1px, transparent 1px 130px), repeating-linear-gradient(0deg, rgba(47,79,58,0.35) 0 1px, transparent 1px 130px)",
         }}
       />
-      {/* morning light behind the dome */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(70% 55% at 50% 42%, rgba(255,253,244,0.85), rgba(238,241,232,0.25) 55%, transparent 78%)",
-        }}
-      />
       <div aria-hidden className="egrow-sunray pointer-events-none absolute inset-0 overflow-hidden" />
-      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-        {POLLEN.map((p, i) => (
-          <span
-            key={i}
-            className="egrow-pollen absolute rounded-full bg-ivory"
-            style={{
-              left: `${p.l}%`,
-              bottom: `-${p.b}px`,
-              width: p.s,
-              height: p.s,
-              animationDuration: `${p.d}s`,
-              animationDelay: `${p.delay}s`,
-              opacity: p.o,
-            }}
-          />
-        ))}
-      </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-7 lg:px-12">
         <div className="mb-12 grid grid-cols-1 items-end gap-3 md:grid-cols-2">
@@ -1450,74 +1370,21 @@ function Gallery() {
             />
           </div>
           <p className="max-w-md text-charcoal/80 md:justify-self-end">
-            Real photographs from our nursery — benches, blooms and handmade pots, arranged the way you'd walk through them.
+            Drag to spin the dome, tap any frame to open it — real photographs from our nursery.
           </p>
         </div>
 
-        {/* the dome */}
-        <div
-          ref={domeRef}
-          onMouseMove={onMove}
-          onMouseLeave={() => setPointer((p) => ({ ...p, active: false }))}
-          className="relative mx-auto w-full max-w-[860px] pb-16"
-        >
-          {/* glass dome arch */}
-          <svg
-            aria-hidden
-            viewBox="0 0 400 260"
-            preserveAspectRatio="none"
-            className="pointer-events-none absolute inset-x-[3%] top-[6%] h-[84%] w-[94%] text-forest/20"
-          >
-            <path d="M8 258 A192 192 0 0 1 392 258" fill="none" stroke="currentColor" strokeWidth="0.8" />
-            <path d="M52 258 A148 148 0 0 1 348 258" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.7" />
-            <path d="M104 258 A96 96 0 0 1 296 258" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.5" />
-            <line x1="200" y1="66" x2="200" y2="258" stroke="currentColor" strokeWidth="0.4" opacity="0.4" />
-            <line x1="60" y1="150" x2="340" y2="150" stroke="currentColor" strokeWidth="0.4" opacity="0.3" />
-          </svg>
-
-          <div className={reduced ? "" : "egrow-breathe"}>
-            {DOME_ROWS.map((row, ri) => {
-              const rowLift = reduced ? 0 : scrollProg * (26 - ri * 9);
-              return (
-                <div
-                  key={ri}
-                  className="flex items-end justify-center"
-                  style={{
-                    gap: unit * 0.16,
-                    marginTop: ri === 0 ? 0 : unit * 0.14,
-                    transform: `translate3d(0, ${rowLift}px, 0)`,
-                    transition: "transform 120ms linear",
-                  }}
-                >
-                  {row.map((cell, ci) => {
-                    const p = DOME_PHOTOS[cell.idx];
-                    return (
-                      <DomePanel
-                        key={p.src}
-                        photo={p}
-                        cell={cell}
-                        row={ri}
-                        order={ci}
-                        unit={unit}
-                        pointer={pointer}
-                        visible={inView}
-                        dimmed={hover !== null && hover !== cell.idx}
-                        onHover={(v) => setHover(v ? cell.idx : null)}
-                        onOpen={() => setOpen(cell.idx)}
-                        reduced={reduced}
-                      />
-                    );
-                  })}
-                </div>
-              );
-            })}
-          </div>
-
-          {/* dome floor */}
-          <div
-            aria-hidden
-            className="pointer-events-none mx-auto mt-6 h-px w-[86%]"
-            style={{ background: "linear-gradient(90deg, transparent, rgba(47,79,58,0.28), transparent)" }}
+        <div className="relative mx-auto h-[520px] w-full max-w-[980px] md:h-[640px]">
+          <DomeGallery
+            images={DOME_PHOTOS.map((p) => ({ src: p.src, alt: p.caption }))}
+            grayscale={false}
+            overlayBlurColor="#EEF1E8"
+            imageBorderRadius="18px"
+            openedImageBorderRadius="18px"
+            openedImageWidth="380px"
+            openedImageHeight="380px"
+            fit={0.62}
+            minRadius={420}
           />
         </div>
 
@@ -1526,15 +1393,6 @@ function Gallery() {
           <span className="hand-note rotate-[-4deg]">shot on ordinary mornings</span>
         </div>
       </div>
-
-      {open !== null && (
-        <div className="fixed inset-0 z-[90] grid place-items-center bg-ink/90 p-6 backdrop-blur-sm" onClick={() => setOpen(null)}>
-          <figure className="text-center">
-            <img src={DOME_PHOTOS[open].src} alt={DOME_PHOTOS[open].caption} className="max-h-[80vh] max-w-[90vw] rounded-[4px] object-contain shadow-2xl" />
-            <figcaption className="mt-4 text-[0.65rem] uppercase tracking-[0.2em] text-ivory/70">{DOME_PHOTOS[open].caption}</figcaption>
-          </figure>
-        </div>
-      )}
     </section>
   );
 }
