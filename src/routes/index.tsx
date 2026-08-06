@@ -1843,7 +1843,7 @@ function BotanicalJournal() {
   const playFlip = usePaperFlipSound();
   const touchStartX = useRef<number | null>(null);
 
-  const FLIP_MS = 900;
+  const FLIP_MS = 1150;
 
   const goTo = (target: number) => {
     if (flipping) return;
