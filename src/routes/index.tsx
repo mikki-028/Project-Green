@@ -1747,7 +1747,7 @@ function Footer() {
         </div>
         <FooterCol title="Explore" items={["About Us","Our Plants","Pottery","Plant Care","Gallery","Visit Us"]} />
         <FooterCol title="Services" items={["Plant Guidance","Space Transformations","Custom Planting","Workshops"]} />
-        <FooterCol title="Contact" items={["hello@egrow.com","+91 98765 43210","123 Greenway","Green City, 1100"]} />
+        <FooterCol title="Contact" items={[EGROW.email, EGROW.phones[0].display, ...EGROW.address.lines]} />
       </div>
       <div className="border-t border-ivory/15">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-6 py-4 text-xs leading-snug text-ivory/60">
