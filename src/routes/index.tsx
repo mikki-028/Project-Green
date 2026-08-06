@@ -417,7 +417,7 @@ function ActionDock() {
     },
     {
       label: "WhatsApp",
-      href: "https://wa.me/919999999999",
+      href: whatsappUrl(),
       hover: "group-hover:-translate-y-1",
       icon: (
         <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor">
@@ -427,7 +427,7 @@ function ActionDock() {
     },
     {
       label: "Instagram",
-      href: "https://instagram.com",
+      href: EGROW.instagram,
       hover: "group-hover:drop-shadow-[0_0_10px_rgba(180,83,42,0.9)]",
       icon: (
         <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.6">
@@ -446,7 +446,7 @@ function ActionDock() {
             key={a.label}
             href={a.href}
             target={a.href.startsWith("http") ? "_blank" : undefined}
-            rel="noreferrer"
+            rel={a.href.startsWith("http") ? "noopener noreferrer" : undefined}
             aria-label={a.label}
             className="group flex items-center justify-end gap-0 overflow-hidden rounded-full bg-ivory/70 px-3 py-3 text-forest transition-all duration-500 hover:bg-clay hover:text-ivory"
           >
