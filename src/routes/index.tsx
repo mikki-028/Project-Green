@@ -2058,49 +2058,95 @@ function FlippingSheet({
 }) {
   // Which side of the spread is turning
   const turningRight = direction === "next";
+  const ease = "cubic-bezier(0.34, 0.02, 0.2, 1)";
   // Face content — we show just the relevant half of each page
   return (
     <div
       className={`absolute inset-y-0 z-20 ${turningRight ? "right-0 left-1/2" : "left-0 right-1/2"}`}
       style={{ perspective: "2400px" }}
     >
+      {/* shadow the turning sheet casts onto the page underneath */}
+      <div
+        aria-hidden
+        className="egrow-cast pointer-events-none absolute inset-0 z-10"
+        style={{
+          transformOrigin: turningRight ? "left center" : "right center",
+          animationDuration: `${durationMs}ms`,
+          background: turningRight
+            ? "linear-gradient(to right, rgba(24,30,20,0.5), rgba(24,30,20,0.18) 45%, rgba(24,30,20,0) 85%)"
+            : "linear-gradient(to left, rgba(24,30,20,0.5), rgba(24,30,20,0.18) 45%, rgba(24,30,20,0) 85%)",
+          filter: "blur(6px)",
+        }}
+      />
       <div
         className="relative h-full w-full"
         style={{
           transformStyle: "preserve-3d",
           transformOrigin: turningRight ? "left center" : "right center",
-          animation: `${turningRight ? "egrow-flip-next" : "egrow-flip-prev"} ${durationMs}ms cubic-bezier(0.55, 0.05, 0.35, 1) forwards`,
+          willChange: "transform",
+          animation: `${turningRight ? "egrow-flip-next" : "egrow-flip-prev"} ${durationMs}ms ${ease} forwards`,
+          filter: "drop-shadow(0 18px 28px rgba(28,38,26,0.32))",
         }}
       >
         {/* FRONT face (outgoing) */}
         <div
-          className="absolute inset-0 overflow-hidden bg-[#f5efdf]"
-          style={{ backfaceVisibility: "hidden" }}
+          className="paper-fiber absolute inset-0 overflow-hidden bg-[#f5efdf]"
+          style={{
+            backfaceVisibility: "hidden",
+            borderRadius: turningRight ? "2px 5px 5px 2px" : "5px 2px 2px 5px",
+            boxShadow: turningRight
+              ? "inset 12px 0 22px -18px rgba(40,50,35,0.75), inset -2px 0 0 rgba(255,255,255,0.5)"
+              : "inset -12px 0 22px -18px rgba(40,50,35,0.75), inset 2px 0 0 rgba(255,255,255,0.5)",
+          }}
         >
           <HalfFace page={front} side={turningRight ? "right" : "left"} />
-          {/* travelling shadow */}
+          {/* page thickness along the free edge */}
           <div
-            className="pointer-events-none absolute inset-0"
+            aria-hidden
+            className="pointer-events-none absolute inset-y-0 w-[6px]"
             style={{
+              ...(turningRight ? { right: 0 } : { left: 0 }),
               background: turningRight
-                ? "linear-gradient(to right, rgba(0,0,0,0) 60%, rgba(0,0,0,0.18) 100%)"
-                : "linear-gradient(to left, rgba(0,0,0,0) 60%, rgba(0,0,0,0.18) 100%)",
+                ? "linear-gradient(to right, rgba(0,0,0,0.05), rgba(233,224,199,0.95))"
+                : "linear-gradient(to left, rgba(0,0,0,0.05), rgba(233,224,199,0.95))",
             }}
+          />
+          {/* natural paper bend along the free edge */}
+          <div
+            aria-hidden
+            className="egrow-curl pointer-events-none absolute inset-y-0 w-[34%]"
+            style={{
+              ...(turningRight ? { right: 0 } : { left: 0 }),
+              animationDuration: `${durationMs}ms`,
+              background: turningRight
+                ? "linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.45) 55%, rgba(60,68,50,0.28) 100%)"
+                : "linear-gradient(to left, rgba(255,255,255,0) 0%, rgba(255,255,255,0.45) 55%, rgba(60,68,50,0.28) 100%)",
+            }}
+          />
+          {/* dynamic lighting sweeping across the folding page */}
+          <div
+            aria-hidden
+            className="egrow-sheen pointer-events-none absolute inset-0"
+            style={{ animationDuration: `${durationMs}ms` }}
           />
         </div>
         {/* BACK face (incoming) */}
         <div
-          className="absolute inset-0 overflow-hidden bg-[#f5efdf]"
-          style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
+          className="paper-fiber absolute inset-0 overflow-hidden bg-[#f5efdf]"
+          style={{
+            backfaceVisibility: "hidden",
+            transform: "rotateY(180deg)",
+            borderRadius: turningRight ? "5px 2px 2px 5px" : "2px 5px 5px 2px",
+            boxShadow: turningRight
+              ? "inset -12px 0 22px -18px rgba(40,50,35,0.7)"
+              : "inset 12px 0 22px -18px rgba(40,50,35,0.7)",
+          }}
         >
           <HalfFace page={back} side={turningRight ? "left" : "right"} />
           <div
-            className="pointer-events-none absolute inset-0"
-            style={{
-              background: turningRight
-                ? "linear-gradient(to left, rgba(0,0,0,0) 60%, rgba(0,0,0,0.15) 100%)"
-                : "linear-gradient(to right, rgba(0,0,0,0) 60%, rgba(0,0,0,0.15) 100%)",
-            }}
+            aria-hidden
+            className="egrow-sheen pointer-events-none absolute inset-0"
+            style={{ animationDuration: `${durationMs}ms`, animationDirection: "reverse" }}
           />
         </div>
       </div>
