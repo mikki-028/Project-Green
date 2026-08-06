@@ -315,16 +315,26 @@ function Nav() {
         className={`mx-auto flex w-full max-w-6xl items-center justify-between rounded-full border transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
           scrolled
             ? "border-white/50 bg-ivory/70 px-4 py-1.5 shadow-[0_14px_40px_-18px_rgba(20,17,13,0.45)] backdrop-blur-2xl md:px-6 md:py-2 text-forest"
-            : "border-white/25 bg-white/10 px-4 py-2 shadow-[0_16px_44px_-22px_rgba(20,17,13,0.5)] backdrop-blur-xl md:px-7 md:py-2.5 text-ivory"
+            : "border-white/35 bg-ink/25 px-4 py-2 shadow-[0_18px_50px_-20px_rgba(20,17,13,0.7)] backdrop-blur-xl md:px-7 md:py-2.5 text-ivory"
         }`}
       >
         <a href="#home" className="flex shrink-0 items-center gap-2.5">
           <img
             src={logoImg.url}
             alt="Egrow Plants logo"
-            className={`rounded-full object-cover transition-all duration-700 ${scrolled ? "h-9 w-9" : "h-11 w-11"}`}
+            className={`object-contain transition-all duration-700 ${
+              scrolled
+                ? "h-11 w-11"
+                : "h-[3.25rem] w-[3.25rem] drop-shadow-[0_3px_10px_rgba(0,0,0,0.45)]"
+            }`}
           />
-          <span className={`font-serif font-semibold leading-none tracking-[-0.02em] transition-all duration-700 ${scrolled ? "text-xl" : "text-2xl"}`}>
+          <span
+            className={`font-serif leading-none tracking-[-0.02em] transition-all duration-700 ${
+              scrolled
+                ? "text-[1.45rem] font-semibold"
+                : "text-[1.8rem] font-bold [text-shadow:0_2px_12px_rgba(20,17,13,0.55)]"
+            }`}
+          >
             Egrow
           </span>
         </a>
@@ -334,7 +344,7 @@ function Nav() {
             aria-hidden
             className={`absolute top-1/2 -z-0 h-8 -translate-y-1/2 rounded-full transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
               pill.ready ? "opacity-100" : "opacity-0"
-            } ${scrolled ? "bg-forest/10" : "bg-white/20"}`}
+            } ${scrolled ? "bg-forest/10" : "bg-white/25"}`}
             style={{ left: pill.left, width: pill.width }}
           />
           {NAV_ITEMS.map((n) => (
@@ -345,7 +355,15 @@ function Nav() {
                 itemRefs.current[n.id] = el;
               }}
               className={`relative z-10 whitespace-nowrap rounded-full px-4 py-2 text-[0.72rem] uppercase tracking-[0.14em] transition-colors duration-500 ${
-                active === n.id ? (scrolled ? "text-forest" : "text-ivory") : "opacity-65 hover:opacity-100"
+                scrolled ? "" : "[text-shadow:0_1px_8px_rgba(20,17,13,0.5)]"
+              } ${
+                active === n.id
+                  ? scrolled
+                    ? "text-forest"
+                    : "text-ivory"
+                  : scrolled
+                    ? "opacity-65 hover:opacity-100"
+                    : "opacity-85 hover:opacity-100"
               }`}
             >
               {n.label}
