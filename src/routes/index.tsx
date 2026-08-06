@@ -17,7 +17,8 @@ import pPeace from "@/assets/plant-peace-lily.jpg";
 import pSnake from "@/assets/plant-snake.jpg";
 import botanicalBg from "@/assets/botanical-stories-bg.png.asset.json";
 import pPothos from "@/assets/plant-pothos.jpg";
-import logoImg from "@/assets/egrow-2.png.asset.json";
+import logoImg from "@/assets/egrow-logo.png.asset.json";
+import { EGROW, whatsappUrl, mapsUrl, telUrl, mailUrl } from "@/lib/site-links";
 import ph3 from "@/assets/egrow-3.png.asset.json";
 import ph4 from "@/assets/egrow-4.png.asset.json";
 import ph5 from "@/assets/egrow-5.png.asset.json";
@@ -315,16 +316,26 @@ function Nav() {
         className={`mx-auto flex w-full max-w-6xl items-center justify-between rounded-full border transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
           scrolled
             ? "border-white/50 bg-ivory/70 px-4 py-1.5 shadow-[0_14px_40px_-18px_rgba(20,17,13,0.45)] backdrop-blur-2xl md:px-6 md:py-2 text-forest"
-            : "border-white/25 bg-white/10 px-4 py-2 shadow-[0_16px_44px_-22px_rgba(20,17,13,0.5)] backdrop-blur-xl md:px-7 md:py-2.5 text-ivory"
+            : "border-white/35 bg-ink/25 px-4 py-2 shadow-[0_18px_50px_-20px_rgba(20,17,13,0.7)] backdrop-blur-xl md:px-7 md:py-2.5 text-ivory"
         }`}
       >
         <a href="#home" className="flex shrink-0 items-center gap-2.5">
           <img
             src={logoImg.url}
             alt="Egrow Plants logo"
-            className={`rounded-full object-cover transition-all duration-700 ${scrolled ? "h-9 w-9" : "h-11 w-11"}`}
+            className={`object-contain transition-all duration-700 ${
+              scrolled
+                ? "h-11 w-11"
+                : "h-[3.25rem] w-[3.25rem] drop-shadow-[0_3px_10px_rgba(0,0,0,0.45)]"
+            }`}
           />
-          <span className={`font-serif font-semibold leading-none tracking-[-0.02em] transition-all duration-700 ${scrolled ? "text-xl" : "text-2xl"}`}>
+          <span
+            className={`font-serif leading-none tracking-[-0.02em] transition-all duration-700 ${
+              scrolled
+                ? "text-[1.45rem] font-semibold"
+                : "text-[1.8rem] font-bold [text-shadow:0_2px_12px_rgba(20,17,13,0.55)]"
+            }`}
+          >
             Egrow
           </span>
         </a>
@@ -334,7 +345,7 @@ function Nav() {
             aria-hidden
             className={`absolute top-1/2 -z-0 h-8 -translate-y-1/2 rounded-full transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
               pill.ready ? "opacity-100" : "opacity-0"
-            } ${scrolled ? "bg-forest/10" : "bg-white/20"}`}
+            } ${scrolled ? "bg-forest/10" : "bg-white/25"}`}
             style={{ left: pill.left, width: pill.width }}
           />
           {NAV_ITEMS.map((n) => (
@@ -345,7 +356,15 @@ function Nav() {
                 itemRefs.current[n.id] = el;
               }}
               className={`relative z-10 whitespace-nowrap rounded-full px-4 py-2 text-[0.72rem] uppercase tracking-[0.14em] transition-colors duration-500 ${
-                active === n.id ? (scrolled ? "text-forest" : "text-ivory") : "opacity-65 hover:opacity-100"
+                scrolled ? "" : "[text-shadow:0_1px_8px_rgba(20,17,13,0.5)]"
+              } ${
+                active === n.id
+                  ? scrolled
+                    ? "text-forest"
+                    : "text-ivory"
+                  : scrolled
+                    ? "opacity-65 hover:opacity-100"
+                    : "opacity-85 hover:opacity-100"
               }`}
             >
               {n.label}
@@ -399,7 +418,7 @@ function ActionDock() {
     },
     {
       label: "WhatsApp",
-      href: "https://wa.me/919999999999",
+      href: whatsappUrl(),
       hover: "group-hover:-translate-y-1",
       icon: (
         <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor">
@@ -409,7 +428,7 @@ function ActionDock() {
     },
     {
       label: "Instagram",
-      href: "https://instagram.com",
+      href: EGROW.instagram,
       hover: "group-hover:drop-shadow-[0_0_10px_rgba(180,83,42,0.9)]",
       icon: (
         <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.6">
@@ -428,7 +447,7 @@ function ActionDock() {
             key={a.label}
             href={a.href}
             target={a.href.startsWith("http") ? "_blank" : undefined}
-            rel="noreferrer"
+            rel={a.href.startsWith("http") ? "noopener noreferrer" : undefined}
             aria-label={a.label}
             className="group flex items-center justify-end gap-0 overflow-hidden rounded-full bg-ivory/70 px-3 py-3 text-forest transition-all duration-500 hover:bg-clay hover:text-ivory"
           >
@@ -1345,20 +1364,75 @@ const DOME_PHOTOS = [
   { src: ph11.url, caption: "Daisies, morning light" },
   { src: ph9.url, caption: "Yellow bloom, dark eye" },
 ];
+const GALLERY_DUST = Array.from({ length: 26 }, (_, i) => ({
+  left: (i * 37) % 100,
+  bottom: -8 - ((i * 13) % 40),
+  size: 2 + ((i * 7) % 4),
+  duration: 16 + ((i * 5) % 14),
+  delay: (i * 1.7) % 16,
+  opacity: 0.25 + ((i % 5) * 0.12),
+}));
+
 function Gallery() {
   const sectionRef = useRef<HTMLElement>(null);
 
   return (
-    <section ref={sectionRef} id="gallery" className="grain relative overflow-hidden bg-sage py-24 md:py-28">
+    <section
+      ref={sectionRef}
+      id="gallery"
+      className="grain relative overflow-hidden py-24 md:py-28"
+      style={{
+        background:
+          "radial-gradient(120% 80% at 50% 18%, #2c4433 0%, #22362a 45%, #182620 75%, #121b17 100%)",
+      }}
+    >
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.10]"
+        className="pointer-events-none absolute inset-0 opacity-[0.07]"
         style={{
           backgroundImage:
-            "repeating-linear-gradient(90deg, rgba(47,79,58,0.5) 0 1px, transparent 1px 130px), repeating-linear-gradient(0deg, rgba(47,79,58,0.35) 0 1px, transparent 1px 130px)",
+            "repeating-linear-gradient(90deg, rgba(220,238,215,0.5) 0 1px, transparent 1px 130px), repeating-linear-gradient(0deg, rgba(220,238,215,0.35) 0 1px, transparent 1px 130px)",
         }}
       />
-      <div aria-hidden className="egrow-sunray pointer-events-none absolute inset-0 overflow-hidden" />
+      <div aria-hidden className="egrow-sunray pointer-events-none absolute inset-0 overflow-hidden opacity-30" />
+
+      {/* soft spotlight from above */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-[70%]"
+        style={{
+          background:
+            "conic-gradient(from 180deg at 50% -10%, transparent 0deg, rgba(226,240,204,0.16) 172deg, rgba(226,240,204,0.16) 188deg, transparent 360deg)",
+          filter: "blur(28px)",
+        }}
+      />
+
+      {/* floating dust and pollen caught in the light */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+        {GALLERY_DUST.map((d, i) => (
+          <span
+            key={i}
+            className="egrow-dust absolute rounded-full bg-[#f4f7e4]"
+            style={{
+              left: `${d.left}%`,
+              bottom: `${d.bottom}%`,
+              width: d.size,
+              height: d.size,
+              opacity: d.opacity,
+              animationDuration: `${d.duration}s`,
+              animationDelay: `${d.delay}s`,
+              boxShadow: "0 0 8px rgba(244,247,228,0.8)",
+            }}
+          />
+        ))}
+      </div>
+
+      {/* vignette */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{ background: "radial-gradient(70% 60% at 50% 45%, transparent 40%, rgba(8,14,11,0.62) 100%)" }}
+      />
 
       <div className="relative z-10 mx-auto max-w-7xl px-7 lg:px-12">
         <div className="mb-12 grid grid-cols-1 items-end gap-3 md:grid-cols-2">
@@ -1366,19 +1440,34 @@ function Gallery() {
             <Eyebrow>Greenhouse Gallery</Eyebrow>
             <RevealHeading
               text="Step Inside / The Dome."
-              className="mt-3 font-serif text-[2.8rem] font-semibold leading-[0.95] tracking-[-0.04em] md:text-[4.6rem]"
+              className="mt-3 font-serif text-[2.8rem] font-semibold leading-[0.95] tracking-[-0.04em] !text-ivory md:text-[4.6rem]"
             />
           </div>
-          <p className="max-w-md text-charcoal/80 md:justify-self-end">
+          <p className="max-w-md text-ivory/70 md:justify-self-end">
             Drag to spin the dome, tap any frame to open it — real photographs from our nursery.
           </p>
         </div>
 
         <div className="relative mx-auto h-[520px] w-full max-w-[980px] md:h-[640px]">
+          {/* radial light behind the sphere */}
+          <div
+            aria-hidden
+            className="egrow-glow pointer-events-none absolute left-1/2 top-1/2 h-[86%] w-[86%] -translate-x-1/2 -translate-y-1/2 rounded-full"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(198,226,176,0.30) 0%, rgba(120,160,120,0.16) 42%, transparent 72%)",
+              filter: "blur(38px)",
+            }}
+          />
+          {/* grounding shadow under the sphere */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute bottom-[6%] left-1/2 h-16 w-[62%] -translate-x-1/2 rounded-[50%] bg-[#060b08]/55 blur-2xl"
+          />
           <DomeGallery
             images={DOME_PHOTOS.map((p) => ({ src: p.src, alt: p.caption }))}
             grayscale={false}
-            overlayBlurColor="#EEF1E8"
+            overlayBlurColor="#141f1a"
             imageBorderRadius="18px"
             openedImageBorderRadius="18px"
             openedImageWidth="380px"
@@ -1389,8 +1478,8 @@ function Gallery() {
         </div>
 
         <div className="mt-10 flex flex-wrap items-center gap-6">
-          <Magnetic href="https://instagram.com" className="btn-clay">Follow Our Journey →</Magnetic>
-          <span className="hand-note rotate-[-4deg]">shot on ordinary mornings</span>
+          <Magnetic href={EGROW.instagram} className="btn-clay">Follow Our Journey →</Magnetic>
+          <span className="hand-note rotate-[-4deg] !text-[#e6c6ac]">shot on ordinary mornings</span>
         </div>
       </div>
     </section>
@@ -1493,78 +1582,146 @@ function Reviews() {
 
 /* ---------------- Plan Visit ---------------- */
 
+function ContactIcon({ name }: { name: "pin" | "phone" | "mail" | "clock" | "user" | "wa" }) {
+  const common = { fill: "none", stroke: "currentColor", strokeWidth: 1.5, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
+  return (
+    <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" {...common}>
+      {name === "pin" && (<><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11Z" /><circle cx="12" cy="10" r="2.6" /></>)}
+      {name === "phone" && <path d="M6.5 3h3l1.5 4-2 1.4a12 12 0 0 0 5.6 5.6L16 12l4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 3.5 5.2 2 2 0 0 1 5.5 3Z" />}
+      {name === "mail" && (<><rect x="3" y="5" width="18" height="14" rx="2.5" /><path d="m3.6 6.8 8.4 6 8.4-6" /></>)}
+      {name === "clock" && (<><circle cx="12" cy="12" r="8.5" /><path d="M12 7.2V12l3 1.8" /></>)}
+      {name === "user" && (<><circle cx="12" cy="8.5" r="3.6" /><path d="M4.8 20a7.2 7.2 0 0 1 14.4 0" /></>)}
+      {name === "wa" && <path d="M20 11.7a8 8 0 0 1-11.8 7L4 20l1.4-4a8 8 0 1 1 14.6-4.3Z" />}
+    </svg>
+  );
+}
+
+function ContactBlock({
+  icon, label, children, href, note,
+}: {
+  icon: "pin" | "phone" | "mail" | "clock" | "user" | "wa";
+  label: string;
+  children: React.ReactNode;
+  href?: string;
+  note?: string;
+}) {
+  const Wrapper: React.ElementType = href ? "a" : "div";
+  return (
+    <Wrapper
+      {...(href ? { href, ...(href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {}) } : {})}
+      className="group relative flex gap-4 rounded-[6px] border border-forest/10 bg-ivory/80 p-5 transition-all duration-500 hover:-translate-y-1 hover:border-clay/35 hover:bg-white hover:shadow-[0_22px_44px_-26px_rgba(126,52,23,0.55)]"
+    >
+      <span className="mt-0.5 grid h-10 w-10 shrink-0 place-items-center rounded-full bg-sage text-forest transition-colors duration-500 group-hover:bg-clay group-hover:text-ivory">
+        <ContactIcon name={icon} />
+      </span>
+      <div className="min-w-0">
+        <div className="text-[0.66rem] uppercase tracking-[0.18em] text-olive">{label}</div>
+        <div className="mt-1 text-[0.95rem] leading-snug text-charcoal">{children}</div>
+        {note && <div className="mt-1 text-xs text-charcoal/55">{note}</div>}
+      </div>
+    </Wrapper>
+  );
+}
+
 function PlanVisit() {
   return (
     <section id="visit" className="grain relative py-28 scroll-mt-16">
       <a id="contact" className="absolute -top-8" />
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
         <div className="relative mb-14 max-w-3xl">
-          <Eyebrow>Let's Plan Your Green Space</Eyebrow>
+          <Eyebrow>Get In Touch</Eyebrow>
           <RevealHeading
             text="Let's Plan / Your Green Space."
             className="mt-3 font-serif text-[2.9rem] font-semibold leading-[0.93] tracking-[-0.04em] md:text-[5rem]"
           />
           <Stamp className="absolute -top-6 right-0 hidden rotate-[7deg] lg:grid" />
-          <p className="mt-3 text-charcoal/80">
-            We'd love to welcome you. Visit our nursery or reach out to plan your perfect green space — we'll bring the plants, pottery and expertise.
-          </p>
         </div>
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-12">
-          {/* visit card */}
-          <div className="shadow-moss-drop md:col-span-4 rotate-[-1.2deg] rounded-[4px] bg-ivory p-7">
-            <div className="font-serif text-2xl font-medium text-forest">Visit Us</div>
-            <p className="mt-2 text-sm leading-snug text-charcoal/75">Come explore our nursery and experience the joy of greenery.</p>
-            <ul className="mt-3 space-y-2 text-sm leading-snug">
-              <li className="flex items-start gap-3"><Leaf className="mt-0.5 h-4 w-4 text-olive" /> 123 Greenway, Nature Street, Green City, 1100</li>
-              <li className="flex items-start gap-3"><Leaf className="mt-0.5 h-4 w-4 text-olive" /> +91 98765 43210</li>
-              <li className="flex items-start gap-3"><Leaf className="mt-0.5 h-4 w-4 text-olive" /> hello@egrow.com</li>
-              <li className="flex items-start gap-3"><Leaf className="mt-0.5 h-4 w-4 text-olive" /> 9:00 AM – 7:00 PM (Everyday)</li>
-            </ul>
-            <div className="mt-5 flex flex-wrap gap-3">
-              <Magnetic href="#" className="btn-clay">Get Directions</Magnetic>
-              <a href="https://wa.me/919876543210" className="btn-ghost">WhatsApp</a>
-            </div>
-          </div>
-          {/* map */}
-          <div className="shadow-moss-drop md:col-span-4 relative min-h-[420px] overflow-hidden rounded-[4px] md:mt-10">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,#c7d9bd,transparent_60%),radial-gradient(circle_at_70%_70%,#a8c69f,transparent_60%),linear-gradient(135deg,#eef1e8,#dfe7d5)]" />
-            <svg className="absolute inset-0 h-full w-full opacity-40" viewBox="0 0 400 400" fill="none">
-              <path d="M0 250 Q100 200 200 260 T400 220" stroke="#6B8E5A" strokeWidth="1.5" />
-              <path d="M0 120 Q120 180 220 130 T400 160" stroke="#6B8E5A" strokeWidth="1.2" />
-              <path d="M100 0 L120 400" stroke="#6B8E5A" strokeWidth="0.6" />
-              <path d="M260 0 L280 400" stroke="#6B8E5A" strokeWidth="0.6" />
-            </svg>
-            <div className="absolute left-1/2 top-1/2 grid -translate-x-1/2 -translate-y-1/2 place-items-center">
-              <div className="grid h-12 w-12 place-items-center rounded-full bg-forest text-ivory shadow-lg">
-                <Leaf className="h-6 w-6" />
+
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-14">
+          {/* LEFT — brand identity */}
+          <div className="lg:col-span-5">
+            <div className="shadow-clay relative rotate-[-0.8deg] rounded-[6px] bg-forest p-9 text-ivory">
+              <div className="flex items-center gap-4">
+                <img src={logoImg.url} alt="Egrow Plants logo" className="h-16 w-16 object-contain" />
+                <div>
+                  <div className="font-serif text-3xl font-semibold leading-none !text-ivory">{EGROW.name}</div>
+                  <div className="mt-1.5 text-[0.68rem] uppercase tracking-[0.22em] text-moss">{EGROW.tagline}</div>
+                </div>
               </div>
-              <div className="mt-3 rounded-full bg-ivory px-4 py-1.5 text-xs text-forest shadow">Egrow Nursery</div>
+              <p className="mt-7 text-[0.98rem] leading-relaxed text-ivory/80">
+                We're a family-run nursery in Sahibabad growing healthy, hardy plants for Indian homes — paired with
+                handcrafted pottery and honest advice. Whether it's a single windowsill or an entire terrace, we'll help
+                you build something that keeps growing long after you've taken it home.
+              </p>
+              <p className="hand-note mt-6 !text-moss">— come by, we'll put the kettle on</p>
+              <div className="mt-8 border-t border-ivory/15 pt-5 text-xs leading-relaxed text-ivory/55">
+                {EGROW.parent}
+              </div>
             </div>
           </div>
-          {/* form */}
-          <div className="shadow-moss-drop md:col-span-4 rotate-[1deg] rounded-[4px] bg-ivory p-7">
-            <div className="font-serif text-2xl font-medium text-forest">Book a Visit</div>
-            <p className="mt-2 text-sm leading-snug text-charcoal/75">Choose your preferred date and let's meet.</p>
-            <form className="mt-3 space-y-3 text-sm leading-snug" onSubmit={(e) => e.preventDefault()}>
-              <Field label="Your Name" placeholder="Enter your name" />
-              <Field label="Phone Number" placeholder="Enter phone number" />
-              <Field label="Preferred Date" placeholder="Select date" type="date" />
-              <button className="btn-clay w-full justify-center">Book My Visit</button>
-            </form>
+
+          {/* RIGHT — contact blocks */}
+          <div className="lg:col-span-7">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="sm:col-span-2">
+                <ContactBlock icon="pin" label="Visit The Nursery" href={mapsUrl()} note="Tap to open in Google Maps">
+                  {EGROW.address.lines.map((l) => (
+                    <div key={l}>{l}</div>
+                  ))}
+                </ContactBlock>
+              </div>
+
+              {EGROW.phones.map((p, i) => (
+                <ContactBlock
+                  key={p.raw}
+                  icon="phone"
+                  label={i === 0 ? "Call Us" : "Alternate Line"}
+                  href={telUrl(p.raw)}
+                >
+                  {p.display}
+                </ContactBlock>
+              ))}
+
+              <ContactBlock icon="mail" label="Email" href={mailUrl()}>
+                {EGROW.email}
+              </ContactBlock>
+
+              <ContactBlock icon="user" label={EGROW.manager.role}>
+                {EGROW.manager.name}
+              </ContactBlock>
+
+              <div className="sm:col-span-2">
+                <ContactBlock icon="clock" label="Open Hours" note="Open every day, including Sundays">
+                  9:00 AM – 7:00 PM
+                </ContactBlock>
+              </div>
+            </div>
+
+            <div className="mt-7 flex flex-wrap items-center gap-4">
+              <Magnetic href={whatsappUrl("Hi Egrow Plants! I'd like to transform my space — can you help?")} className="btn-clay">
+                Let's Transform Your Space →
+              </Magnetic>
+              <a
+                href={mapsUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-ghost"
+              >
+                View on Google Maps
+              </a>
+              <a
+                href={EGROW.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-link"
+              >
+                @egrow_plants
+              </a>
+            </div>
           </div>
         </div>
       </div>
     </section>
-  );
-}
-
-function Field({ label, placeholder, type = "text" }: { label: string; placeholder: string; type?: string }) {
-  return (
-    <label className="block">
-      <span className="text-xs uppercase tracking-widest text-charcoal/60">{label}</span>
-      <input type={type} placeholder={placeholder}
-        className="mt-2 w-full rounded-full border border-forest/15 bg-ivory px-4 py-3 text-sm text-charcoal outline-none focus:border-olive transition" />
-    </label>
   );
 }
 
@@ -1590,7 +1747,7 @@ function Footer() {
         </div>
         <FooterCol title="Explore" items={["About Us","Our Plants","Pottery","Plant Care","Gallery","Visit Us"]} />
         <FooterCol title="Services" items={["Plant Guidance","Space Transformations","Custom Planting","Workshops"]} />
-        <FooterCol title="Contact" items={["hello@egrow.com","+91 98765 43210","123 Greenway","Green City, 1100"]} />
+        <FooterCol title="Contact" items={[EGROW.email, EGROW.phones[0].display, ...EGROW.address.lines]} />
       </div>
       <div className="border-t border-ivory/15">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-6 py-4 text-xs leading-snug text-ivory/60">
@@ -1824,7 +1981,7 @@ function BotanicalJournal() {
   const playFlip = usePaperFlipSound();
   const touchStartX = useRef<number | null>(null);
 
-  const FLIP_MS = 900;
+  const FLIP_MS = 1150;
 
   const goTo = (target: number) => {
     if (flipping) return;
@@ -2039,49 +2196,95 @@ function FlippingSheet({
 }) {
   // Which side of the spread is turning
   const turningRight = direction === "next";
+  const ease = "cubic-bezier(0.34, 0.02, 0.2, 1)";
   // Face content — we show just the relevant half of each page
   return (
     <div
       className={`absolute inset-y-0 z-20 ${turningRight ? "right-0 left-1/2" : "left-0 right-1/2"}`}
       style={{ perspective: "2400px" }}
     >
+      {/* shadow the turning sheet casts onto the page underneath */}
+      <div
+        aria-hidden
+        className="egrow-cast pointer-events-none absolute inset-0 z-10"
+        style={{
+          transformOrigin: turningRight ? "left center" : "right center",
+          animationDuration: `${durationMs}ms`,
+          background: turningRight
+            ? "linear-gradient(to right, rgba(24,30,20,0.5), rgba(24,30,20,0.18) 45%, rgba(24,30,20,0) 85%)"
+            : "linear-gradient(to left, rgba(24,30,20,0.5), rgba(24,30,20,0.18) 45%, rgba(24,30,20,0) 85%)",
+          filter: "blur(6px)",
+        }}
+      />
       <div
         className="relative h-full w-full"
         style={{
           transformStyle: "preserve-3d",
           transformOrigin: turningRight ? "left center" : "right center",
-          animation: `${turningRight ? "egrow-flip-next" : "egrow-flip-prev"} ${durationMs}ms cubic-bezier(0.55, 0.05, 0.35, 1) forwards`,
+          willChange: "transform",
+          animation: `${turningRight ? "egrow-flip-next" : "egrow-flip-prev"} ${durationMs}ms ${ease} forwards`,
+          filter: "drop-shadow(0 18px 28px rgba(28,38,26,0.32))",
         }}
       >
         {/* FRONT face (outgoing) */}
         <div
-          className="absolute inset-0 overflow-hidden bg-[#f5efdf]"
-          style={{ backfaceVisibility: "hidden" }}
+          className="paper-fiber absolute inset-0 overflow-hidden bg-[#f5efdf]"
+          style={{
+            backfaceVisibility: "hidden",
+            borderRadius: turningRight ? "2px 5px 5px 2px" : "5px 2px 2px 5px",
+            boxShadow: turningRight
+              ? "inset 12px 0 22px -18px rgba(40,50,35,0.75), inset -2px 0 0 rgba(255,255,255,0.5)"
+              : "inset -12px 0 22px -18px rgba(40,50,35,0.75), inset 2px 0 0 rgba(255,255,255,0.5)",
+          }}
         >
           <HalfFace page={front} side={turningRight ? "right" : "left"} />
-          {/* travelling shadow */}
+          {/* page thickness along the free edge */}
           <div
-            className="pointer-events-none absolute inset-0"
+            aria-hidden
+            className="pointer-events-none absolute inset-y-0 w-[6px]"
             style={{
+              ...(turningRight ? { right: 0 } : { left: 0 }),
               background: turningRight
-                ? "linear-gradient(to right, rgba(0,0,0,0) 60%, rgba(0,0,0,0.18) 100%)"
-                : "linear-gradient(to left, rgba(0,0,0,0) 60%, rgba(0,0,0,0.18) 100%)",
+                ? "linear-gradient(to right, rgba(0,0,0,0.05), rgba(233,224,199,0.95))"
+                : "linear-gradient(to left, rgba(0,0,0,0.05), rgba(233,224,199,0.95))",
             }}
+          />
+          {/* natural paper bend along the free edge */}
+          <div
+            aria-hidden
+            className="egrow-curl pointer-events-none absolute inset-y-0 w-[34%]"
+            style={{
+              ...(turningRight ? { right: 0 } : { left: 0 }),
+              animationDuration: `${durationMs}ms`,
+              background: turningRight
+                ? "linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.45) 55%, rgba(60,68,50,0.28) 100%)"
+                : "linear-gradient(to left, rgba(255,255,255,0) 0%, rgba(255,255,255,0.45) 55%, rgba(60,68,50,0.28) 100%)",
+            }}
+          />
+          {/* dynamic lighting sweeping across the folding page */}
+          <div
+            aria-hidden
+            className="egrow-sheen pointer-events-none absolute inset-0"
+            style={{ animationDuration: `${durationMs}ms` }}
           />
         </div>
         {/* BACK face (incoming) */}
         <div
-          className="absolute inset-0 overflow-hidden bg-[#f5efdf]"
-          style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
+          className="paper-fiber absolute inset-0 overflow-hidden bg-[#f5efdf]"
+          style={{
+            backfaceVisibility: "hidden",
+            transform: "rotateY(180deg)",
+            borderRadius: turningRight ? "5px 2px 2px 5px" : "2px 5px 5px 2px",
+            boxShadow: turningRight
+              ? "inset -12px 0 22px -18px rgba(40,50,35,0.7)"
+              : "inset 12px 0 22px -18px rgba(40,50,35,0.7)",
+          }}
         >
           <HalfFace page={back} side={turningRight ? "left" : "right"} />
           <div
-            className="pointer-events-none absolute inset-0"
-            style={{
-              background: turningRight
-                ? "linear-gradient(to left, rgba(0,0,0,0) 60%, rgba(0,0,0,0.15) 100%)"
-                : "linear-gradient(to right, rgba(0,0,0,0) 60%, rgba(0,0,0,0.15) 100%)",
-            }}
+            aria-hidden
+            className="egrow-sheen pointer-events-none absolute inset-0"
+            style={{ animationDuration: `${durationMs}ms`, animationDirection: "reverse" }}
           />
         </div>
       </div>
