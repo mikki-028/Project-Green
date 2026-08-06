@@ -18,6 +18,7 @@ import pSnake from "@/assets/plant-snake.jpg";
 import botanicalBg from "@/assets/botanical-stories-bg.png.asset.json";
 import pPothos from "@/assets/plant-pothos.jpg";
 import logoImg from "@/assets/egrow-logo.png.asset.json";
+import { EGROW, whatsappUrl, mapsUrl, telUrl, mailUrl } from "@/lib/site-links";
 import ph3 from "@/assets/egrow-3.png.asset.json";
 import ph4 from "@/assets/egrow-4.png.asset.json";
 import ph5 from "@/assets/egrow-5.png.asset.json";
