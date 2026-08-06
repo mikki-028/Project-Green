@@ -1364,20 +1364,75 @@ const DOME_PHOTOS = [
   { src: ph11.url, caption: "Daisies, morning light" },
   { src: ph9.url, caption: "Yellow bloom, dark eye" },
 ];
+const GALLERY_DUST = Array.from({ length: 26 }, (_, i) => ({
+  left: (i * 37) % 100,
+  bottom: -8 - ((i * 13) % 40),
+  size: 2 + ((i * 7) % 4),
+  duration: 16 + ((i * 5) % 14),
+  delay: (i * 1.7) % 16,
+  opacity: 0.25 + ((i % 5) * 0.12),
+}));
+
 function Gallery() {
   const sectionRef = useRef<HTMLElement>(null);
 
   return (
-    <section ref={sectionRef} id="gallery" className="grain relative overflow-hidden bg-sage py-24 md:py-28">
+    <section
+      ref={sectionRef}
+      id="gallery"
+      className="grain relative overflow-hidden py-24 md:py-28"
+      style={{
+        background:
+          "radial-gradient(120% 80% at 50% 18%, #2c4433 0%, #22362a 45%, #182620 75%, #121b17 100%)",
+      }}
+    >
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.10]"
+        className="pointer-events-none absolute inset-0 opacity-[0.07]"
         style={{
           backgroundImage:
-            "repeating-linear-gradient(90deg, rgba(47,79,58,0.5) 0 1px, transparent 1px 130px), repeating-linear-gradient(0deg, rgba(47,79,58,0.35) 0 1px, transparent 1px 130px)",
+            "repeating-linear-gradient(90deg, rgba(220,238,215,0.5) 0 1px, transparent 1px 130px), repeating-linear-gradient(0deg, rgba(220,238,215,0.35) 0 1px, transparent 1px 130px)",
         }}
       />
-      <div aria-hidden className="egrow-sunray pointer-events-none absolute inset-0 overflow-hidden" />
+      <div aria-hidden className="egrow-sunray pointer-events-none absolute inset-0 overflow-hidden opacity-30" />
+
+      {/* soft spotlight from above */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-[70%]"
+        style={{
+          background:
+            "conic-gradient(from 180deg at 50% -10%, transparent 0deg, rgba(226,240,204,0.16) 172deg, rgba(226,240,204,0.16) 188deg, transparent 360deg)",
+          filter: "blur(28px)",
+        }}
+      />
+
+      {/* floating dust and pollen caught in the light */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+        {GALLERY_DUST.map((d, i) => (
+          <span
+            key={i}
+            className="egrow-dust absolute rounded-full bg-[#f4f7e4]"
+            style={{
+              left: `${d.left}%`,
+              bottom: `${d.bottom}%`,
+              width: d.size,
+              height: d.size,
+              opacity: d.opacity,
+              animationDuration: `${d.duration}s`,
+              animationDelay: `${d.delay}s`,
+              boxShadow: "0 0 8px rgba(244,247,228,0.8)",
+            }}
+          />
+        ))}
+      </div>
+
+      {/* vignette */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{ background: "radial-gradient(70% 60% at 50% 45%, transparent 40%, rgba(8,14,11,0.62) 100%)" }}
+      />
 
       <div className="relative z-10 mx-auto max-w-7xl px-7 lg:px-12">
         <div className="mb-12 grid grid-cols-1 items-end gap-3 md:grid-cols-2">
@@ -1385,19 +1440,34 @@ function Gallery() {
             <Eyebrow>Greenhouse Gallery</Eyebrow>
             <RevealHeading
               text="Step Inside / The Dome."
-              className="mt-3 font-serif text-[2.8rem] font-semibold leading-[0.95] tracking-[-0.04em] md:text-[4.6rem]"
+              className="mt-3 font-serif text-[2.8rem] font-semibold leading-[0.95] tracking-[-0.04em] !text-ivory md:text-[4.6rem]"
             />
           </div>
-          <p className="max-w-md text-charcoal/80 md:justify-self-end">
+          <p className="max-w-md text-ivory/70 md:justify-self-end">
             Drag to spin the dome, tap any frame to open it — real photographs from our nursery.
           </p>
         </div>
 
         <div className="relative mx-auto h-[520px] w-full max-w-[980px] md:h-[640px]">
+          {/* radial light behind the sphere */}
+          <div
+            aria-hidden
+            className="egrow-glow pointer-events-none absolute left-1/2 top-1/2 h-[86%] w-[86%] -translate-x-1/2 -translate-y-1/2 rounded-full"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(198,226,176,0.30) 0%, rgba(120,160,120,0.16) 42%, transparent 72%)",
+              filter: "blur(38px)",
+            }}
+          />
+          {/* grounding shadow under the sphere */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute bottom-[6%] left-1/2 h-16 w-[62%] -translate-x-1/2 rounded-[50%] bg-[#060b08]/55 blur-2xl"
+          />
           <DomeGallery
             images={DOME_PHOTOS.map((p) => ({ src: p.src, alt: p.caption }))}
             grayscale={false}
-            overlayBlurColor="#EEF1E8"
+            overlayBlurColor="#141f1a"
             imageBorderRadius="18px"
             openedImageBorderRadius="18px"
             openedImageWidth="380px"
@@ -1408,8 +1478,8 @@ function Gallery() {
         </div>
 
         <div className="mt-10 flex flex-wrap items-center gap-6">
-          <Magnetic href="https://instagram.com" className="btn-clay">Follow Our Journey →</Magnetic>
-          <span className="hand-note rotate-[-4deg]">shot on ordinary mornings</span>
+          <Magnetic href={EGROW.instagram} className="btn-clay">Follow Our Journey →</Magnetic>
+          <span className="hand-note rotate-[-4deg] !text-[#e6c6ac]">shot on ordinary mornings</span>
         </div>
       </div>
     </section>
