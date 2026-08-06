@@ -1582,78 +1582,146 @@ function Reviews() {
 
 /* ---------------- Plan Visit ---------------- */
 
+function ContactIcon({ name }: { name: "pin" | "phone" | "mail" | "clock" | "user" | "wa" }) {
+  const common = { fill: "none", stroke: "currentColor", strokeWidth: 1.5, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
+  return (
+    <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" {...common}>
+      {name === "pin" && (<><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11Z" /><circle cx="12" cy="10" r="2.6" /></>)}
+      {name === "phone" && <path d="M6.5 3h3l1.5 4-2 1.4a12 12 0 0 0 5.6 5.6L16 12l4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 3.5 5.2 2 2 0 0 1 5.5 3Z" />}
+      {name === "mail" && (<><rect x="3" y="5" width="18" height="14" rx="2.5" /><path d="m3.6 6.8 8.4 6 8.4-6" /></>)}
+      {name === "clock" && (<><circle cx="12" cy="12" r="8.5" /><path d="M12 7.2V12l3 1.8" /></>)}
+      {name === "user" && (<><circle cx="12" cy="8.5" r="3.6" /><path d="M4.8 20a7.2 7.2 0 0 1 14.4 0" /></>)}
+      {name === "wa" && <path d="M20 11.7a8 8 0 0 1-11.8 7L4 20l1.4-4a8 8 0 1 1 14.6-4.3Z" />}
+    </svg>
+  );
+}
+
+function ContactBlock({
+  icon, label, children, href, note,
+}: {
+  icon: "pin" | "phone" | "mail" | "clock" | "user" | "wa";
+  label: string;
+  children: React.ReactNode;
+  href?: string;
+  note?: string;
+}) {
+  const Wrapper: React.ElementType = href ? "a" : "div";
+  return (
+    <Wrapper
+      {...(href ? { href, ...(href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {}) } : {})}
+      className="group relative flex gap-4 rounded-[6px] border border-forest/10 bg-ivory/80 p-5 transition-all duration-500 hover:-translate-y-1 hover:border-clay/35 hover:bg-white hover:shadow-[0_22px_44px_-26px_rgba(126,52,23,0.55)]"
+    >
+      <span className="mt-0.5 grid h-10 w-10 shrink-0 place-items-center rounded-full bg-sage text-forest transition-colors duration-500 group-hover:bg-clay group-hover:text-ivory">
+        <ContactIcon name={icon} />
+      </span>
+      <div className="min-w-0">
+        <div className="text-[0.66rem] uppercase tracking-[0.18em] text-olive">{label}</div>
+        <div className="mt-1 text-[0.95rem] leading-snug text-charcoal">{children}</div>
+        {note && <div className="mt-1 text-xs text-charcoal/55">{note}</div>}
+      </div>
+    </Wrapper>
+  );
+}
+
 function PlanVisit() {
   return (
     <section id="visit" className="grain relative py-28 scroll-mt-16">
       <a id="contact" className="absolute -top-8" />
       <div className="mx-auto max-w-7xl px-8 lg:px-12">
         <div className="relative mb-14 max-w-3xl">
-          <Eyebrow>Let's Plan Your Green Space</Eyebrow>
+          <Eyebrow>Get In Touch</Eyebrow>
           <RevealHeading
             text="Let's Plan / Your Green Space."
             className="mt-3 font-serif text-[2.9rem] font-semibold leading-[0.93] tracking-[-0.04em] md:text-[5rem]"
           />
           <Stamp className="absolute -top-6 right-0 hidden rotate-[7deg] lg:grid" />
-          <p className="mt-3 text-charcoal/80">
-            We'd love to welcome you. Visit our nursery or reach out to plan your perfect green space — we'll bring the plants, pottery and expertise.
-          </p>
         </div>
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-12">
-          {/* visit card */}
-          <div className="shadow-moss-drop md:col-span-4 rotate-[-1.2deg] rounded-[4px] bg-ivory p-7">
-            <div className="font-serif text-2xl font-medium text-forest">Visit Us</div>
-            <p className="mt-2 text-sm leading-snug text-charcoal/75">Come explore our nursery and experience the joy of greenery.</p>
-            <ul className="mt-3 space-y-2 text-sm leading-snug">
-              <li className="flex items-start gap-3"><Leaf className="mt-0.5 h-4 w-4 text-olive" /> 123 Greenway, Nature Street, Green City, 1100</li>
-              <li className="flex items-start gap-3"><Leaf className="mt-0.5 h-4 w-4 text-olive" /> +91 98765 43210</li>
-              <li className="flex items-start gap-3"><Leaf className="mt-0.5 h-4 w-4 text-olive" /> hello@egrow.com</li>
-              <li className="flex items-start gap-3"><Leaf className="mt-0.5 h-4 w-4 text-olive" /> 9:00 AM – 7:00 PM (Everyday)</li>
-            </ul>
-            <div className="mt-5 flex flex-wrap gap-3">
-              <Magnetic href="#" className="btn-clay">Get Directions</Magnetic>
-              <a href="https://wa.me/919876543210" className="btn-ghost">WhatsApp</a>
-            </div>
-          </div>
-          {/* map */}
-          <div className="shadow-moss-drop md:col-span-4 relative min-h-[420px] overflow-hidden rounded-[4px] md:mt-10">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,#c7d9bd,transparent_60%),radial-gradient(circle_at_70%_70%,#a8c69f,transparent_60%),linear-gradient(135deg,#eef1e8,#dfe7d5)]" />
-            <svg className="absolute inset-0 h-full w-full opacity-40" viewBox="0 0 400 400" fill="none">
-              <path d="M0 250 Q100 200 200 260 T400 220" stroke="#6B8E5A" strokeWidth="1.5" />
-              <path d="M0 120 Q120 180 220 130 T400 160" stroke="#6B8E5A" strokeWidth="1.2" />
-              <path d="M100 0 L120 400" stroke="#6B8E5A" strokeWidth="0.6" />
-              <path d="M260 0 L280 400" stroke="#6B8E5A" strokeWidth="0.6" />
-            </svg>
-            <div className="absolute left-1/2 top-1/2 grid -translate-x-1/2 -translate-y-1/2 place-items-center">
-              <div className="grid h-12 w-12 place-items-center rounded-full bg-forest text-ivory shadow-lg">
-                <Leaf className="h-6 w-6" />
+
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-14">
+          {/* LEFT — brand identity */}
+          <div className="lg:col-span-5">
+            <div className="shadow-clay relative rotate-[-0.8deg] rounded-[6px] bg-forest p-9 text-ivory">
+              <div className="flex items-center gap-4">
+                <img src={logoImg.url} alt="Egrow Plants logo" className="h-16 w-16 object-contain" />
+                <div>
+                  <div className="font-serif text-3xl font-semibold leading-none !text-ivory">{EGROW.name}</div>
+                  <div className="mt-1.5 text-[0.68rem] uppercase tracking-[0.22em] text-moss">{EGROW.tagline}</div>
+                </div>
               </div>
-              <div className="mt-3 rounded-full bg-ivory px-4 py-1.5 text-xs text-forest shadow">Egrow Nursery</div>
+              <p className="mt-7 text-[0.98rem] leading-relaxed text-ivory/80">
+                We're a family-run nursery in Sahibabad growing healthy, hardy plants for Indian homes — paired with
+                handcrafted pottery and honest advice. Whether it's a single windowsill or an entire terrace, we'll help
+                you build something that keeps growing long after you've taken it home.
+              </p>
+              <p className="hand-note mt-6 !text-moss">— come by, we'll put the kettle on</p>
+              <div className="mt-8 border-t border-ivory/15 pt-5 text-xs leading-relaxed text-ivory/55">
+                {EGROW.parent}
+              </div>
             </div>
           </div>
-          {/* form */}
-          <div className="shadow-moss-drop md:col-span-4 rotate-[1deg] rounded-[4px] bg-ivory p-7">
-            <div className="font-serif text-2xl font-medium text-forest">Book a Visit</div>
-            <p className="mt-2 text-sm leading-snug text-charcoal/75">Choose your preferred date and let's meet.</p>
-            <form className="mt-3 space-y-3 text-sm leading-snug" onSubmit={(e) => e.preventDefault()}>
-              <Field label="Your Name" placeholder="Enter your name" />
-              <Field label="Phone Number" placeholder="Enter phone number" />
-              <Field label="Preferred Date" placeholder="Select date" type="date" />
-              <button className="btn-clay w-full justify-center">Book My Visit</button>
-            </form>
+
+          {/* RIGHT — contact blocks */}
+          <div className="lg:col-span-7">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="sm:col-span-2">
+                <ContactBlock icon="pin" label="Visit The Nursery" href={mapsUrl()} note="Tap to open in Google Maps">
+                  {EGROW.address.lines.map((l) => (
+                    <div key={l}>{l}</div>
+                  ))}
+                </ContactBlock>
+              </div>
+
+              {EGROW.phones.map((p, i) => (
+                <ContactBlock
+                  key={p.raw}
+                  icon="phone"
+                  label={i === 0 ? "Call Us" : "Alternate Line"}
+                  href={telUrl(p.raw)}
+                >
+                  {p.display}
+                </ContactBlock>
+              ))}
+
+              <ContactBlock icon="mail" label="Email" href={mailUrl()}>
+                {EGROW.email}
+              </ContactBlock>
+
+              <ContactBlock icon="user" label={EGROW.manager.role}>
+                {EGROW.manager.name}
+              </ContactBlock>
+
+              <div className="sm:col-span-2">
+                <ContactBlock icon="clock" label="Open Hours" note="Open every day, including Sundays">
+                  9:00 AM – 7:00 PM
+                </ContactBlock>
+              </div>
+            </div>
+
+            <div className="mt-7 flex flex-wrap items-center gap-4">
+              <Magnetic href={whatsappUrl("Hi Egrow Plants! I'd like to transform my space — can you help?")} className="btn-clay">
+                Let's Transform Your Space →
+              </Magnetic>
+              <a
+                href={mapsUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-ghost"
+              >
+                View on Google Maps
+              </a>
+              <a
+                href={EGROW.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-link"
+              >
+                @egrow_plants
+              </a>
+            </div>
           </div>
         </div>
       </div>
     </section>
-  );
-}
-
-function Field({ label, placeholder, type = "text" }: { label: string; placeholder: string; type?: string }) {
-  return (
-    <label className="block">
-      <span className="text-xs uppercase tracking-widest text-charcoal/60">{label}</span>
-      <input type={type} placeholder={placeholder}
-        className="mt-2 w-full rounded-full border border-forest/15 bg-ivory px-4 py-3 text-sm text-charcoal outline-none focus:border-olive transition" />
-    </label>
   );
 }
 
